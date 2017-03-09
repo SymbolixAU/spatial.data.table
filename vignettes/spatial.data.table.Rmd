@@ -2,9 +2,11 @@
 title: "Spatial Data Table"
 author: "D Cooley"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Spatial Data Table Vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +19,7 @@ Spatial Data Table is a package.
 
 ```{r nearestPoints}
 
-
+library(spatial.data.table)
 library(googleway)
 library(data.table)
 

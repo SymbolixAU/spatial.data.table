@@ -1,6 +1,6 @@
 ## ----nearestPoints-------------------------------------------------------
 
-
+library(spatial.data.table)
 library(googleway)
 library(data.table)
 
