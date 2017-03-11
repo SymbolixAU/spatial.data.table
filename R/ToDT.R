@@ -103,7 +103,7 @@ spToDT.SpatialPolygons <- function(sp){
 
 		data.table::data.table(
 			id = slot(sp@polygons[[x]], "ID"),
-			coords = slot(slot(sp@polygons[[x]], "Lines")[[1]], "coords"),
+			coords = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "coords"),
 			ringDir = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "ringDir"),
 			hole = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "hole")
 		)
