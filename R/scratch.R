@@ -60,3 +60,44 @@
 
 # spToDT(sp)
 
+
+# library(data.table)
+#
+# dt <- data.table(x = c(-1,1,1,-1,-1), y = c(-1,-1,1,1,-1), ptx = c(0.5), pty = c(0.5))
+# plot(dt$x, dt$y,"l")
+#
+#
+# ## x & y denote our polygon (V of points)
+# ## ptx and pty denote our point (P point)
+#
+#
+# dt[, vy_lte_py := y <= pty]
+# dt[, vy1_gte_y := shift(y, type = "lead") > pty]
+#
+#
+# dt[, vy1_lte_py := shift(y, type = "lead") <= pty]
+#
+# dt[, isLeft := isLeft(x, y, shift(x, type = "lead"), shift(y, type = "lead"), ptx, pty)]
+#
+#
+# dt[vy_lte_py == TRUE & vy1_gte_y & isLeft > 0]
+# ## wn +1
+#
+# dt[vy_lte_py == FALSE & vy1_lte_py == TRUE & isLeft < 0]
+# ## wn -1
+#
+# ## else wn == 0
+#
+# isLeft <- function(p0x, p0y, p1x, p1y, p2x, p2y){
+# 	return((p1x - p0x) * (p2y - p0y) - (p2x - p0x) * (p1y - p0y))
+# }
+
+
+
+
+
+
+
+
+
+

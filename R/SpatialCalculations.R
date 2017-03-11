@@ -33,7 +33,7 @@ dtHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
 #'
 #' Calculates the initial bearing between two pairs of latitude / longitude coordinates
 #'
-#' @notes The initial bearing is sometimes called the 'forward azimuth', which if followed in a straight line along a great-circle arc will take you from teh start point to the end point
+#' @note The initial bearing is sometimes called the 'forward azimuth', which if followed in a straight line along a great-circle arc will take you from teh start point to the end point
 #' @param latFrom latitude from
 #' @param lonFrom longitude from
 #' @param latTo latitude to
