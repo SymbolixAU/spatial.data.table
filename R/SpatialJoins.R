@@ -66,7 +66,82 @@ dtNearestPoints <- function(dt1, dt2,
 }
 
 
+#' Point In Polygon
+#'
+#' Determins if points lie within the boundaries of polygons
+#'
+#' @details
+#' Calculates the winding number (\url{https://en.wikipedia.org/wiki/Winding_number})
+#'
+#' @examples
+#' \dontrun{
+#'  ## example
+#' }
+#' @param dt_polygons \code{data.table} object containing the polygon coordinates
+#' @param polyColumns character vector of column names containing the id, x, y and hole fields (in that order)
+#' @param dt_points \code{data.table} object containing the point coordinates
+#' @param pointColumns character vector of column names containing the id, x and y fields (in that order)
+#' @return \code{data.table} giving the ids of the points and the polygons within which they fall
+#'
+#' @export
+PointInPolygon <- function(dt_polygons, polyColumns, dt_points, pointColumns){
+
+	if(!inherits(dt_polygons, "data.table")) setDT(dt_polygons)
+	if(!inherits(dt_points, "data.table")) setDT(dt_points)
+
+	## put every point against every polygon
+
+	dt_poly <- dt_polygons[, polyColumns, with = FALSE]
+	dt_point <- dt_points[, pointColumns, with = FALSE]
+
+	data.table::setnames(dt_poly, polyColumns, c("id", "lat", "lon", "hole"))
+	data.table::setnames(dt_point, pointColumns, c("point_id","lat","lon"))
+
+	dt_poly[, key := 1]
+	dt_point[, key := 1]
+
+	dt <- dt_poly[ dt_point, on = "key", allow.cartesian = T]
+
+	dt[, vy_lte_py := get("lon") <= get("i.lon")]
+	dt[, vy1_gte_y := shift(get("lon"), type = "lead") > get("i.lon"), by = c("id", "point_id")]
+	dt[, vy1_lte_py := shift(get("lon"), type = "lead") <= get("i.lon"), by = c("id", "point_id")]
+
+	dt[, isLeft := isLeft(i.lat, i.lon,
+												shift(lat, type = "lead"),
+												shift(lon, type = "lead"), lat, lon),
+		 by = .(id, point_id)]
+
+	# ## wn +1
+	# dt[vy_lte_py & vy1_gte_y & isLeft > 0, .N, by = .(id, point_id)]
+	#
+	# ## wn -1
+	# dt[!vy_lte_py & vy1_lte_py  & isLeft < 0, .N, by = .(id, point_id)]
+	dt <- merge( x = dt[vy_lte_py & vy1_gte_y & isLeft > 0, .N, by = c("id", "point_id", "hole")],
+							 y = dt[!vy_lte_py & vy1_lte_py  & isLeft < 0, .N, by = c("id", "point_id", "hole")],
+							 by = c("id", "point_id", "hole"),
+							 all = TRUE,
+							 sort = F
+	)
+
+	## last enclosure can't be a hole
+	dt[
+		(is.na(N.x) | is.na(N.y) | N.x != N.y), c("id", "point_id","hole")
+		]
+
+	## if the point is in a 'hole', then it's NOT in the polygon
 
 
+}
+
+#' Is Left
+#'
+#' Tests if a point is Left|On|Right of an infinite line
+#' Returns:
+#'  > 0 : P2 is left of the line through P0, P1
+#'  = 0 : P2 is on the line
+#'  < 0 : P2 is right of the line through P0, P1
+isLeft <- function(p0x, p0y, p1x, p1y, p2x, p2y){
+	return((p1x - p0x) * (p2y - p0y) - (p2x - p0x) * (p1y - p0y))
+}
 
 
