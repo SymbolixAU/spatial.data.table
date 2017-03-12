@@ -91,7 +91,6 @@ spToDT.Polygons <- function(sp){
 			id = slot(sp, "ID"),
 			coords = slot(sp@Polygons[[x]], "coords")
 		)
-
 	})))
 }
 
@@ -101,13 +100,16 @@ spToDT.SpatialPolygons <- function(sp){
 
 	return(data.table::rbindlist(lapply(1:length(sp), function(x){
 
-		data.table::data.table(
-			id = slot(sp@polygons[[x]], "ID"),
-			coords = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "coords"),
-			ringDir = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "ringDir"),
-			hole = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "hole")
-		)
+		data.table::rbindlist(lapply(1:length(sp@polygons[[x]]@Polygons), function(y){
 
+			data.table::data.table(
+				id = slot(sp@polygons[[x]], "ID"),
+				lineId = y,
+				coords = slot(sp@polygons[[x]]@Polygons[[y]], "coords"),
+				ringDir = slot(sp@polygons[[x]]@Polygons[[y]], "ringDir"),
+				hole = slot(sp@polygons[[x]]@Polygons[[y]], "hole")
+			)
+		}))
 	})))
 }
 
@@ -120,14 +122,20 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 
 	return(data.table::rbindlist(lapply(1:length(sp), function(x){
 
-		data.table::data.table(
-			id = slot(sp@polygons[[x]], "ID"),
-			coords = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "coords"),
-			ringDir = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "ringDir"),
-			hole = slot(slot(sp@polygons[[x]], "Polygons")[[1]], "hole"),
-			data = slot(sp, "data")[x, ]
-			)
-		})))
+		data.table::rbindlist(lapply(1:length(sp@polygons[[x]]@Polygons), function(y){
+
+			data.table::data.table(
+				id = slot(sp@polygons[[x]], "ID"),
+				lineId = y,
+				coords = slot(sp@polygons[[x]]@Polygons[[y]], "coords"),
+				ringDir = slot(sp@polygons[[x]]@Polygons[[y]], "ringDir"),
+				hole = slot(sp@polygons[[x]]@Polygons[[y]], "hole"),
+				data = slot(sp, "data")[x, ]
+				)
+
+		}))
+	})))
+
 }
 
 
