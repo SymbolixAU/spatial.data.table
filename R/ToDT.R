@@ -138,10 +138,30 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 
 }
 
+#' @export
+spToDT.sf <- function(sp){
+
+	message("TODO : simple features")
+	# dataCols <- setdiff(names(sp), "geometry")
+	# ## the first polygon is an exterior ring, the following ones are holes
+	#
+	# dt <- data.table::as.data.table(sp)
+	# lapply(1:nrow(dt), function(x){
+	#
+	# 	lapply(dt[x, geometry], function(y){
+	# 		data.table::data.table(
+	#
+	# 		)
+	# 	})
+	#
+	# })
+}
+
 
 #' @export
-spToDT.default <- function(sp) stop(paste0("I don't know how to convert objects of class ", class(sp)[[1]]))
-
+spToDT.default <- function(sp){
+	stop(paste0("I don't know how to convert objects of class ", paste0(class(sp), collapse = " ,")))
+}
 
 spToDTMessage <- function(sp){
 	message(paste0("dropping projection attribute: ", slot(slot(sp, "proj4string"), "projargs")))

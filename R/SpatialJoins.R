@@ -78,7 +78,7 @@ dtNearestPoints <- function(dt1, dt2,
 #'  ## example
 #' }
 #' @param dt_polygons \code{data.table} object containing the polygon coordinates
-#' @param polyColumns character vector of column names containing the id, x, y and hole fields (in that order)
+#' @param polyColumns character vector of column names containing the id, lineId, x, y and hole fields (in that order)
 #' @param dt_points \code{data.table} object containing the point coordinates
 #' @param pointColumns character vector of column names containing the id, x and y fields (in that order)
 #' @return \code{data.table} giving the ids of the points and the polygons within which they fall
@@ -86,15 +86,15 @@ dtNearestPoints <- function(dt1, dt2,
 #' @export
 PointInPolygon <- function(dt_polygons, polyColumns, dt_points, pointColumns){
 
-	if(!inherits(dt_polygons, "data.table")) setDT(dt_polygons)
-	if(!inherits(dt_points, "data.table")) setDT(dt_points)
+	if(!inherits(dt_polygons, "data.table")) data.table::setDT(dt_polygons)
+	if(!inherits(dt_points, "data.table")) data.table::setDT(dt_points)
 
 	## put every point against every polygon
 
 	dt_poly <- dt_polygons[, polyColumns, with = FALSE]
 	dt_point <- dt_points[, pointColumns, with = FALSE]
 
-	data.table::setnames(dt_poly, polyColumns, c("id", "lat", "lon", "hole"))
+	data.table::setnames(dt_poly, polyColumns, c("id","lineId", "lat", "lon", "hole"))
 	data.table::setnames(dt_point, pointColumns, c("point_id","lat","lon"))
 
 	dt_poly[, key := 1]
@@ -103,29 +103,28 @@ PointInPolygon <- function(dt_polygons, polyColumns, dt_points, pointColumns){
 	dt <- dt_poly[ dt_point, on = "key", allow.cartesian = T]
 
 	dt[, vy_lte_py := get("lon") <= get("i.lon")]
-	dt[, vy1_gte_y := shift(get("lon"), type = "lead") > get("i.lon"), by = c("id", "point_id")]
-	dt[, vy1_lte_py := shift(get("lon"), type = "lead") <= get("i.lon"), by = c("id", "point_id")]
+	dt[, vy1_gte_y := shift(get("lon"), type = "lead") > get("i.lon"), by = c("id", "lineId", "point_id")]
+	dt[, vy1_lte_py := shift(get("lon"), type = "lead") <= get("i.lon"), by = c("id","lineId", "point_id")]
 
 	dt[, isLeft := isLeft(i.lat, i.lon,
 												shift(lat, type = "lead"),
 												shift(lon, type = "lead"), lat, lon),
-		 by = .(id, point_id)]
+		 by = .(id, lineId, point_id)]
 
 	# ## wn +1
 	# dt[vy_lte_py & vy1_gte_y & isLeft > 0, .N, by = .(id, point_id)]
 	#
 	# ## wn -1
 	# dt[!vy_lte_py & vy1_lte_py  & isLeft < 0, .N, by = .(id, point_id)]
-	dt <- merge( x = dt[vy_lte_py & vy1_gte_y & isLeft > 0, .N, by = c("id", "point_id", "hole")],
-							 y = dt[!vy_lte_py & vy1_lte_py  & isLeft < 0, .N, by = c("id", "point_id", "hole")],
-							 by = c("id", "point_id", "hole"),
+	dt <- merge( x = dt[vy_lte_py & vy1_gte_y & isLeft > 0, .N, by = c("id","lineId", "point_id", "hole")],
+							 y = dt[!vy_lte_py & vy1_lte_py  & isLeft < 0, .N, by = c("id","lineId", "point_id", "hole")],
+							 by = c("id","lineId", "point_id", "hole"),
 							 all = TRUE,
-							 sort = F
-	)
+							 sort = F)
 
 	## last enclosure can't be a hole
 	dt[
-		(is.na(N.x) | is.na(N.y) | N.x != N.y), c("id", "point_id","hole")
+		(is.na(N.x) | is.na(N.y) | N.x != N.y), c("id", "lineId", "point_id","hole")
 		]
 
 	## if the point is in a 'hole', then it's NOT in the polygon
