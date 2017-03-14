@@ -23,6 +23,9 @@ bearing in degrees
 \description{
 Calculates the initial bearing between two pairs of latitude / longitude coordinates
 }
+\note{
+The initial bearing is sometimes called the 'forward azimuth', which if followed in a straight line along a great-circle arc will take you from teh start point to the end point
+}
 \examples{
 dtBearing(0,0,0,52)
 
