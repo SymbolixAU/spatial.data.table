@@ -1,16 +1,27 @@
-#
 # library(rgdal)
+# library(rgeos)
+# library(sf)
 # library(spatial.data.table)
 # library(data.table)
 # library(googleway)
 
+
 # sf <- st_read("~/Documents/Data/Shapefiles/1259030001_sla11aaust_shape/SLA11aAust.shp")
-#
+
 # shp <- readOGR("../../Data/Shapefiles/1259030001_sla11aaust_shape",
 # 							 layer = "SLA11aAust")
 #
-# shp_vic <- subset(shp, shp@data$STATE_CODE == 2)
+# sf <- st_read("~/Documents/Data/Shapefiles/1270055003_lga_2011_aust_shape/LGA_2011_AUST.shp")
+#
+# shp <- readOGR("../../Data/Shapefiles/1270055003_lga_2011_aust_shape/",
+# 							 layer = "LGA_2011_AUST")
+#
+# shp_vic <- subset(shp, shp@data$STE_CODE11 == 2)
 # # plot(shp_vic)
+#
+# sf_vic <- st_as_sf(shp_vic)
+#
+# spToDT(sf_vic)
 #
 # shp_fis <- subset(shp, shp@data$SLA_CODE11 == 255208529)
 # plot(shp_fis)

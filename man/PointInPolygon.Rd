@@ -9,7 +9,7 @@ PointInPolygon(dt_polygons, polyColumns, dt_points, pointColumns)
 \arguments{
 \item{dt_polygons}{\code{data.table} object containing the polygon coordinates}
 
-\item{polyColumns}{character vector of column names containing the id, x, y and hole fields (in that order)}
+\item{polyColumns}{character vector of column names containing the id, lineId, x, y and hole fields (in that order)}
 
 \item{dt_points}{\code{data.table} object containing the point coordinates}
 

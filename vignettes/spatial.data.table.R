@@ -29,15 +29,15 @@ pl <- sapply(1:nrow(dt_nearest), function(x){
 dt_nearest[, polyline := pl ]
 
 
-mapKey <- symbolix.utils::mapKey()
+# mapKey <- symbolix.utils::mapKey()
 
-google_map(key = mapKey) %>%
-	#add_circles(data = dt_route, lat = "shape_pt_lat", lon = "shape_pt_lon", fill_colour = "#FF00FF", stroke_weight = 0) %>%
-	add_markers(data = dt_stops, lat = "stop_lat", lon = "stop_lon") %>%
-	add_polylines(data = dt_route, lat = "shape_pt_lat", lon = "shape_pt_lon") %>%
-	add_circles(data = dt_nearest, lat = "shape_pt_lat.x", lon = "shape_pt_lon.x", stroke_weight = 0, radius = 20) %>%
-	add_polylines(data = dt_nearest, polyline = "polyline", stroke_colour = "#000000")
-	#add_circles(data = dt_stops, lat = "stop_lat", lon = "stop_lon", fill_colour = "#00FF00", stroke_weight = 0) 
+# google_map(key = mapKey) %>%
+# 	#add_circles(data = dt_route, lat = "shape_pt_lat", lon = "shape_pt_lon", fill_colour = "#FF00FF", stroke_weight = 0) %>%
+# 	add_markers(data = dt_stops, lat = "stop_lat", lon = "stop_lon") %>%
+# 	add_polylines(data = dt_route, lat = "shape_pt_lat", lon = "shape_pt_lon") %>%
+# 	add_circles(data = dt_nearest, lat = "shape_pt_lat.x", lon = "shape_pt_lon.x", stroke_weight = 0, radius = 20) %>%
+# 	add_polylines(data = dt_nearest, polyline = "polyline", stroke_colour = "#000000")
+# 	#add_circles(data = dt_stops, lat = "stop_lat", lon = "stop_lon", fill_colour = "#00FF00", stroke_weight = 0) 
 
 
 
