@@ -1,4 +1,17 @@
 
+#' Check For ID
+#'
+#' Checks the existence of an 'ID' column in the data. If it exits,
+#' an 'ID.sdt' is appended
+CheckForID <- function(x){
+
+	if('ID' %in% x){
+		## finds any columns with 'ID.sdt', and if exists,
+		## creates a new column name with .x
+
+	}
+
+}
 
 find_lat_column = function(names, msg, stopOnFailure = TRUE) {
 

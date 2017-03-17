@@ -1,6 +1,6 @@
 #' spToDT
 #'
-#' Converts Spatial objects (from package \code{sp}) into a \code{data.table}
+#' Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
 #'
 #' @param sp Spatial Object
 #' @export
@@ -144,13 +144,14 @@ spToDT.sf <- function(sf){
 	message("sf")
 	dataCols <- setdiff(names(sf), attr(sf, 'sf_column'))
 	dt <- data.table::as.data.table(sf)[, dataCols, with = F]
-	dt[, .id := .I]
+
+	dt[, id := .I]
 
 	geom <- sf::st_geometry(sf)
 
 	dt_geom <- GeomToDT(geom)
 
-	return(dt[ dt_geom, on = c(".id"), nomatch = 0])
+	return(dt[ dt_geom, on = c(id = ".id"), nomatch = 0])
 }
 
 #' @export
@@ -159,17 +160,37 @@ GeomToDT <- function(geom) UseMethod("GeomToDT")
 #' @export
 GeomToDT.sfc_LINESTRING <- function(geom){
 
-	print(str(geom))
 	data.table::rbindlist(
 		lapply(geom, function(x){
 			data.table::as.data.table(unlist(x))
-			})
-		, idcol = TRUE)
+			}), idcol = TRUE)
+}
+
+#' @export
+GeomToDT.sfc_MULTIPOLYGON <- function(geom){
+
+	data.table::rbindlist(
+
+		lapply(geom, function(x){
+
+			data.table::rbindlist(
+				lapply(1:length(x), function(y){
+
+					data.table::data.table(
+						lineId = y,
+						lat = x[[y]][[1]][,2],
+						lon = x[[y]][[1]][,1],
+						hole = (y > 1)[c(T, F)]
+						)
+					})
+				)
+		}), idcol = T
+	)
 }
 
 #' @export
 GeomToDT.default <- function(geom){
-	message("default")
+	message(paste0("Many apologies, I don't know how to handle objects of class ", class(geom)))
 }
 
 

@@ -96,10 +96,6 @@
 # sf <- sf::read_sf("~/Documents/SVNStuff/Clients/HT0_HydroTasmania/MRBU_MRWF_BUS_surveys/Data/Received_BUSData/GIS/Roads_line.shp")
 # spToDT(sf)
 #
-#
-# geomToDT <- function(geom) UseMethod("GeomToDT")
-# geomToDT(geom)
-#
 # map_key <- symbolix.utils::mapKey()
 #
 # google_map(key = map_key) %>%
@@ -107,7 +103,14 @@
 #
 #
 # filename <- system.file("gpkg/nc.gpkg", package="sf")
-# nc <- st_read(filename, "nc.gpkg", crs = 4267)
+# nc <- sf::st_read(filename, "nc.gpkg", crs = 4267)
+#
+# geom <- sf::st_geometry(nc)
+# class(geom)
+#
+# dt.nc <- spToDT(nc)
+
+
 #
 # str(nc)
 # nc$geom

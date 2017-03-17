@@ -1,4 +1,5 @@
 #' @import data.table
+#' @import sf
 NULL
 
 

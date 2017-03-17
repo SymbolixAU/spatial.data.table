@@ -10,6 +10,6 @@ spToDT(sp)
 \item{sp}{Spatial Object}
 }
 \description{
-Converts Spatial objects (from package \code{sp}) into a \code{data.table}
+Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
 }
 
