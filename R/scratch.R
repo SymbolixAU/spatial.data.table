@@ -93,7 +93,49 @@
 # }
 
 
-
+# sf <- sf::read_sf("~/Documents/SVNStuff/Clients/HT0_HydroTasmania/MRBU_MRWF_BUS_surveys/Data/Received_BUSData/GIS/Roads_line.shp")
+# spToDT(sf)
+#
+#
+# geomToDT <- function(geom) UseMethod("GeomToDT")
+# geomToDT(geom)
+#
+# map_key <- symbolix.utils::mapKey()
+#
+# google_map(key = map_key) %>%
+# 	add_polylines(data = shp)
+#
+#
+# filename <- system.file("gpkg/nc.gpkg", package="sf")
+# nc <- st_read(filename, "nc.gpkg", crs = 4267)
+#
+# str(nc)
+# nc$geom
+#
+# class(nc$geom)
+# str(nc$geom)
+# nc$geom[[1]][[1]]
+#
+# geomCol <- attr(sf, "sf_column")
+#
+# class(sf[[geomCol]])
+#
+# as.data.frame(sf[[geomCol]])
+#
+# geom <- st_geometry(sf)
+#
+# class(geom)
+#
+# length(geom)
+#
+# lst <- lapply(geom, function(x){
+# 	unlist(x)
+# })
+#
+# lapply(lst, function(x){
+# 	coords = data.frame(lat = x[,2],
+# 											lon = x[,1])
+# })
 
 
 

@@ -139,22 +139,37 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 }
 
 #' @export
-spToDT.sf <- function(sp){
+spToDT.sf <- function(sf){
 
-	message("TODO : simple features")
-	# dataCols <- setdiff(names(sp), "geometry")
-	# ## the first polygon is an exterior ring, the following ones are holes
-	#
-	# dt <- data.table::as.data.table(sp)
-	# lapply(1:nrow(dt), function(x){
-	#
-	# 	lapply(dt[x, geometry], function(y){
-	# 		data.table::data.table(
-	#
-	# 		)
-	# 	})
-	#
-	# })
+	message("sf")
+	dataCols <- setdiff(names(sf), attr(sf, 'sf_column'))
+	dt <- data.table::as.data.table(sf)[, dataCols, with = F]
+	dt[, .id := .I]
+
+	geom <- sf::st_geometry(sf)
+
+	dt_geom <- GeomToDT(geom)
+
+	return(dt[ dt_geom, on = c(".id"), nomatch = 0])
+}
+
+#' @export
+GeomToDT <- function(geom) UseMethod("GeomToDT")
+
+#' @export
+GeomToDT.sfc_LINESTRING <- function(geom){
+
+	print(str(geom))
+	data.table::rbindlist(
+		lapply(geom, function(x){
+			data.table::as.data.table(unlist(x))
+			})
+		, idcol = TRUE)
+}
+
+#' @export
+GeomToDT.default <- function(geom){
+	message("default")
 }
 
 
