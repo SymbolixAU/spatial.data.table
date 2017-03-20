@@ -141,7 +141,6 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 #' @export
 spToDT.sf <- function(sf){
 
-	message("sf")
 	dataCols <- setdiff(names(sf), attr(sf, 'sf_column'))
 	dt <- data.table::as.data.table(sf)[, dataCols, with = F]
 

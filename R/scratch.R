@@ -109,8 +109,8 @@
 # class(geom)
 #
 # dt.nc <- spToDT(nc)
-
-
+#
+#
 #
 # str(nc)
 # nc$geom
@@ -124,6 +124,9 @@
 # class(sf[[geomCol]])
 #
 # as.data.frame(sf[[geomCol]])
+
+# sf <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
+# sf <- st_linestring(sf)
 #
 # geom <- st_geometry(sf)
 #
@@ -132,17 +135,38 @@
 # length(geom)
 #
 # lst <- lapply(geom, function(x){
-# 	unlist(x)
+# 	m <- unlist(x)
+# 	googleway::encode_pl(m[,2],m[,1])
 # })
 #
 # lapply(lst, function(x){
 # 	coords = data.frame(lat = x[,2],
 # 											lon = x[,1])
 # })
-
-
-
-
-
+#
+#
+## encoding polylines
+# library(data.table)
+# library(sp)
+#
+# dt_route <- as.data.table(tram_route)
+# dt_route[1:25, id := 1]
+# dt_route[26:55, id := 2]
+#
+# lst <- lapply(1:2, function(x){
+# 	Lines(Line(dt_route[id == x, .(shape_pt_lon, shape_pt_lat)]), ID = x)
+# })
+#
+# sp <- SpatialLines(lst)
+#
+# sf <- sf::st_as_sf(sp)
+#
+# dt <- EncodeSF(sf)
+#
+# mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = dt, polyline = "polyline")
+#
 
 
