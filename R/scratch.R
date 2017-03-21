@@ -169,4 +169,24 @@
 # 	add_polylines(data = dt, polyline = "polyline")
 #
 
+library(sf)
+s1 <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
+ls <- st_linestring(s1)
+
+s2 <- rbind(c(0.2,3), c(0.2,4), c(1,4.8), c(2,4.8))
+s3 <- rbind(c(0,4.4), c(0.6,5))
+mls <- st_multilinestring(list(s1,s2,s3))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
