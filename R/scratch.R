@@ -217,10 +217,59 @@
 #
 # google_map(key = map_key, data = dt_poly) %>%
 # 	add_polygons(polyline = "polyline")
-
-
-
-
+#
+#
+#
+#
+#
+#
+# I have an `sp` SpatialPolygonsDataFrame object located on my github page https://github.com/SymbolixAU/spatial.data.table/blob/master/data/shp_tiwi.rds
+#
+# ```
+# library(sp)
+# library(sf)
+#
+# shp_tiwi <- readRDS("~/Downloads/shp_tiwi.rds")
+#
+# class(shp_tiwi)
+#
+# # [1] "SpatialPolygonsDataFrame"
+# # attr(,"package")
+# # [1] "sp"
+#
+# ```
+#
+# The shape file consists of 141 polygons, where polygons 2:5 are holes
+# ```
+# length(shp_tiwi@polygons[[1]]@Polygons)
+# # [1] 141
+#
+# str(shp_tiwi@polygons[[1]]@Polygons[[1]])
+# str(shp_tiwi@polygons[[1]]@Polygons[[2]])
+# str(shp_tiwi@polygons[[1]]@Polygons[[3]])
+#
+# sapply(shp_tiwi@polygons[[1]]@Polygons, function(x) x@hole)
+#
+# # [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+# # [29] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+# # [57] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+# # [85] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+# # [113] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+# # [141] FALSE
+#
+# ```
+#
+# ```
+# sf_tiwi <- sf::st_as_sf(shp_tiwi)
+# geom <- st_geometry(sf_tiwi)
+# ```
+#
+# length(geom[[1]][[1]])
+#
+# length(geom[[1]][[137]])
+#
+#
+# sf <- sf_tiwi
 
 
 
