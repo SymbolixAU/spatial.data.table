@@ -169,18 +169,54 @@
 # 	add_polylines(data = dt, polyline = "polyline")
 #
 
-library(sf)
-s1 <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
-ls <- st_linestring(s1)
-
-s2 <- rbind(c(0.2,3), c(0.2,4), c(1,4.8), c(2,4.8))
-s3 <- rbind(c(0,4.4), c(0.6,5))
-mls <- st_multilinestring(list(s1,s2,s3))
-
-
+# library(sf)
+# s1 <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
+# ls <- st_linestring(s1)
+#
+# s2 <- rbind(c(0.2,3), c(0.2,4), c(1,4.8), c(2,4.8))
+# s3 <- rbind(c(0,4.4), c(0.6,5))
+# mls <- st_multilinestring(list(s1,s2,s3))
 
 
-
+#
+# ## encoding polygons with holes
+# library(rgdal)
+# library(sf)
+# shp_postcode <- readOGR(dsn = path.expand("~/Documents/SVNStuff/Clients/CCC_CalvaryCommunityCare/DataStore/Received/1270055003_poa_2011_aust_shape"), layer = "POA_2011_AUST")
+#
+# sf <- st_as_sf(shp_postcode)
+#
+# dt <- spToDT(sf)
+#
+# ## hole postcode
+# ## 3168
+#
+# ## multiple rings
+# ## 0822
+#
+# shp_tiwi <- shp_postcode[shp_postcode$POA_CODE == "0822", ]
+#
+# save(shp_tiwi, file = "~/Documents/github/spatial.data.table/shp_tiwi")
+#
+# sf_hole <- sf[sf$POA_CODE == "3168",]
+# sf_multi <- sf[sf$POA_CODE == "0822",]
+#
+# shp_demo <- shp_postcode[shp_postcode$POA_CODE %in% c("3168","0822"),]
+#
+# geom_hole <- st_geometry(sf_hole)
+# geom_multi <- st_geometry(sf_multi)
+#
+# dt[POA_CODE == "3168"]
+#
+# dt_poly <- EncodeSF(sf)
+#
+# # dt_plot <- unique(dt_poly[POA_CODE == "0822", .(POA_NAME, polyline)])
+#
+#
+# map_key <- symbolix.utils::mapKey()
+#
+# google_map(key = map_key, data = dt_poly) %>%
+# 	add_polygons(polyline = "polyline")
 
 
 

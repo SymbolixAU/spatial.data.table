@@ -17,7 +17,8 @@ EncodeSF <- function(sf){
 
 	dt_geom <- EncodePolyline(geom)
 
-	return(dt[ dt_geom, on = c(id = ".id"), nomatch = 0])
+	return(dt_geom)
+	#return(dt[ dt_geom, on = c(id = ".id"), nomatch = 0])
 
 }
 
@@ -45,7 +46,7 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom){
 		lapply(geom, function(x){
 
 			data.table::rbindlist(
-				lapply(1:length(x), function(y){
+				lapply(1:length(x[[1]]), function(y){
 
 					data.table::data.table(
 						lineId = y,

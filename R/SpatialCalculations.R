@@ -109,17 +109,6 @@ dtMidpoint <- function(latFrom, lonFrom, latTo, lonTo){
 	return(list(toDegrees(theta), toDegrees(lambda)))
 }
 
-dtIntermediatePoint <- function(latFrom, lonFrom, latTo, lonTo, fractionAlong = 0.5){
-
-	latTo <- toRadians(latTo)
-	latFrom <- toRadians(latFrom)
-	lonTo <- toRadians(lonTo)
-	lonFrom <- toRadians(lonFrom)
-	phi <- ( distance / r )
-
-	a <- sin( (1-franctionAlong) *  )
-
-}
 
 
 #' dt destination

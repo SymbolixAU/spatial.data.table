@@ -168,6 +168,8 @@ GeomToDT.sfc_LINESTRING <- function(geom){
 #' @export
 GeomToDT.sfc_MULTIPOLYGON <- function(geom){
 
+	## a polygon consists of (Ext_ring, hole, hole, hole, ...)
+	## a multipolygon consists of ((polygon),(polygon),(polygon))
 	data.table::rbindlist(
 
 		lapply(geom, function(x){
