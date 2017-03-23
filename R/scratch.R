@@ -178,8 +178,8 @@
 # mls <- st_multilinestring(list(s1,s2,s3))
 
 
-#
-# ## encoding polygons with holes
+
+## encoding polygons with holes
 # library(rgdal)
 # library(sf)
 # shp_postcode <- readOGR(dsn = path.expand("~/Documents/SVNStuff/Clients/CCC_CalvaryCommunityCare/DataStore/Received/1270055003_poa_2011_aust_shape"), layer = "POA_2011_AUST")
@@ -187,6 +187,8 @@
 # sf <- st_as_sf(shp_postcode)
 #
 # dt <- spToDT(sf)
+#
+# dt_poly <- EncodeSF(sf)
 #
 # ## hole postcode
 # ## 3168
@@ -213,11 +215,32 @@
 # # dt_plot <- unique(dt_poly[POA_CODE == "0822", .(POA_NAME, polyline)])
 #
 #
+
 # map_key <- symbolix.utils::mapKey()
 #
-# google_map(key = map_key, data = dt_poly) %>%
-# 	add_polygons(polyline = "polyline")
+# dt_poly <- aggregate(polyline ~ .id, data = dt_poly, list)
+# data.table::setDT(dt_poly)
 #
+# google_map(key = map_key, data = dt_poly[5, ]) %>%
+# 	add_polygons(polyline = "polyline", info_window = ".id")
+#
+# sf_tiwi <- st_as_sf(shp_tiwi)
+#
+# dt_tiwi <- EncodeSF(sf_tiwi)
+#
+# dt_tiwi <- aggregate(polyline ~ .id, data = dt_tiwi, list)
+# data.table::setDT(dt_tiwi)
+#
+#
+# google_map(key = map_key, data = dt_tiwi) %>%
+# 	add_polygons(polyline = "polyline", info_window = ".id")
+
+
+#
+#
+#
+# geom <- st_geometry(sf)
+# geom_tiwi <- st_geometry(sf_tiwi)
 #
 #
 #
@@ -244,10 +267,6 @@
 # length(shp_tiwi@polygons[[1]]@Polygons)
 # # [1] 141
 #
-# str(shp_tiwi@polygons[[1]]@Polygons[[1]])
-# str(shp_tiwi@polygons[[1]]@Polygons[[2]])
-# str(shp_tiwi@polygons[[1]]@Polygons[[3]])
-#
 # sapply(shp_tiwi@polygons[[1]]@Polygons, function(x) x@hole)
 #
 # # [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
@@ -270,6 +289,63 @@
 #
 #
 # sf <- sf_tiwi
+#
+#
+#
+# exterior <- data.frame(lat = c(3, -3, -3, 3, 3),
+# 											 lon = c(3, 3, -3, -3, 3))
+#
+# hole1 <- data.frame(lat = c(0, 0, 1, 1, 0),
+# 										lon = c(0, 1, 1, 0, 0))
+#
+#
+# exterior2 <- data.frame(lat = c(4, 5, 5, 4, 4),
+# 												lon = c(0, 0, 1, 1, 0))
+#
+# df = data.frame(ID = c(1, 2))
+# row.names(df) <- c(1,2)
+#
+# sp <- SpatialPolygonsDataFrame(
+# 	SpatialPolygons(
+# 		list(
+# 			Polygons(list(
+# 				Polygon(exterior, hole = FALSE),
+# 				Polygon(hole1, hole = TRUE)),
+# 				ID = 1
+# 				),
+# 			Polygons(list(
+# 				Polygon(exterior2, hole = FALSE)
+# 			),
+# 			ID = 2
+# 			)
+# 			)
+# 	),
+# 	data = df
+# )
+#
+#
+# sf::st_as_sf(sp)
+#
+#
+# nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#
+# class(nc)
+#
+#
+# nc1 <- nc[1, ]
+#
+# geom <- st_geometry(nc)
+# geom1 <- st_geometry(nc1)
+
+
+
+
+
+
+
+
+
+
 
 
 

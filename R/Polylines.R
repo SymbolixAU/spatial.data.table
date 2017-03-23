@@ -46,14 +46,14 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom){
 		lapply(geom, function(x){
 
 			data.table::rbindlist(
-				lapply(1:length(x), function(y){
 
-					data.table::data.table(
-						lineId = y,
-						polyline = googleway::encode_pl(x[[y]][[1]][,2],
-																						x[[y]][[1]][,1]),
-						hole = (y > 1)[c(T, F)]
-					)
+				lapply(x, function(y){
+					pl <- sapply(y, function(z){
+						googleway::encode_pl(z[,2], z[,1])
+					})
+					lineId <- seq_along(pl)
+					hole = lineId > 1
+					data.table::data.table(lineId = lineId, polyline = pl, hole = hole)
 				})
 			)
 		}), idcol = T
