@@ -38,6 +38,17 @@ encodePolyline.sfc_LINESTRING <- function(geom){
 																	polyline = pl))
 }
 
+encodePolyline.sfc_POLYGON <- function(geom){
+
+	lapply(geom, function(x){
+
+		pl <- sapply(x, function(y){
+			googleway::encode_pl(y[,2],y[,1])
+		})
+	})
+
+}
+
 #' @export
 encodePolyline.sfc_MULTIPOLYGON <- function(geom){
 

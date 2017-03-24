@@ -221,8 +221,17 @@
 # dt_poly <- aggregate(polyline ~ .id, data = dt_poly, list)
 # data.table::setDT(dt_poly)
 #
-# google_map(key = map_key, data = dt_poly[5, ]) %>%
-# 	add_polygons(polyline = "polyline", info_window = ".id")
+# library(googleway)
+# library(data.table)
+# google_map(key = map_key, data = dt_poly[1:2]) %>%
+# 	add_polygons(polyline = "polyline", info_window = ".id", mouse_over = ".id")
+#
+#
+# library(leaflet)
+#
+# leaflet() %>%
+# 	addTiles() %>%
+# 	addPolygons(data = shp_postcode[1:1000, ])
 #
 # sf_tiwi <- st_as_sf(shp_tiwi)
 #
@@ -324,7 +333,7 @@
 # )
 #
 #
-# sf::st_as_sf(sp)
+# sf <- sf::st_as_sf(sp)
 #
 #
 # nc <- st_read(system.file("shape/nc.shp", package = "sf"))
