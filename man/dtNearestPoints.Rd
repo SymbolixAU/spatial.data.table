@@ -39,4 +39,3 @@ dtNearestPoints(dt1 = copy(dt_route),
   dt2Coords = c("stop_lat","stop_lon"))
 
 }
-

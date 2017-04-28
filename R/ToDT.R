@@ -157,6 +157,18 @@ spToDT.sf <- function(sf){
 GeomToDT <- function(geom) UseMethod("GeomToDT")
 
 #' @export
+GeomToDT.sfc_POINT <- function(geom){
+
+	lst <- sapply(geom, `[`)
+
+	data.table::data.table(.id = seq_along(lst),
+												 lon = lst[1,],
+												 lat = lst[2, ])
+
+}
+
+
+#' @export
 GeomToDT.sfc_LINESTRING <- function(geom){
 
 	data.table::rbindlist(
@@ -191,7 +203,7 @@ GeomToDT.sfc_MULTIPOLYGON <- function(geom){
 
 #' @export
 GeomToDT.default <- function(geom){
-	message(paste0("Many apologies, I don't know how to handle objects of class ", class(geom)))
+	message(paste0("Many apologies, I don't know how to handle objects of class ", class(geom)[[1]]))
 }
 
 

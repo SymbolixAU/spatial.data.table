@@ -347,11 +347,22 @@
 # geom1 <- st_geometry(nc1)
 
 
+## SF POINTS
 
-
-
-
-
+# library(sf)
+#
+# sf_point <- readRDS("~/Downloads/melb_centroid.rds")
+#
+#
+# spToDT(sf_point)
+#
+# library(data.table)
+#
+# geom <- st_geometry(sf_point)
+#
+#
+#
+# as.data.table(t(lst))
 
 
 
