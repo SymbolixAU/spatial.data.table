@@ -44,20 +44,20 @@
 # 								dt2 = copy(dt_stops),
 # 								dt1Coords = c("shape_pt_lat", "shape_pt_lon"),
 # 								dt2Coords = c("stop_lat","stop_lon"))
-
+#
 #
 # sp <- Line(dt_route[, .(shape_pt_lon, shape_pt_lat)])
-
+#
 # spToDT(sp)
-
+#
 # sp <- Lines(sp, ID = "id")
-
+#
 # spToDT(sp)
-
+#
 # sp <- SpatialLines(list(sp))
 #
 # class(sp)
-
+#
 # spToDT(sp)
 
 
@@ -102,8 +102,9 @@
 # 	add_polylines(data = shp)
 #
 #
-# filename <- system.file("gpkg/nc.gpkg", package="sf")
-# nc <- sf::st_read(filename, "nc.gpkg", crs = 4267)
+# library(spatial.data.table)
+# library(sf)
+# nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #
 # geom <- sf::st_geometry(nc)
 # class(geom)
@@ -128,6 +129,8 @@
 # sf <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
 # sf <- st_linestring(sf)
 #
+# spToDT(sf)
+#
 # geom <- st_geometry(sf)
 #
 # class(geom)
@@ -144,22 +147,25 @@
 # 											lon = x[,1])
 # })
 #
-#
-## encoding polylines
+# #
+# encoding polylines
 # library(data.table)
 # library(sp)
+# library(googleway)
 #
-# dt_route <- as.data.table(tram_route)
-# dt_route[1:25, id := 1]
-# dt_route[26:55, id := 2]
+# dt_stops <- as.data.table(tram_stops)
+# dt_stops[1:25, id := 1]
+# dt_stops[26:51, id := 2]
 #
 # lst <- lapply(1:2, function(x){
-# 	Lines(Line(dt_route[id == x, .(shape_pt_lon, shape_pt_lat)]), ID = x)
+# 	Lines(Line(dt_stops[id == x, .(stop_lon, stop_lat)]), ID = x)
 # })
 #
 # sp <- SpatialLines(lst)
 #
-# sf <- sf::st_as_sf(sp)
+# sf_tramRoute <- sf::st_as_sf(sp)
+#
+# spdf <- SpatialLinesDataFrame(sp, data = dt_stops)
 #
 # dt <- EncodeSF(sf)
 #
@@ -245,62 +251,9 @@
 # 	add_polygons(polyline = "polyline", info_window = ".id")
 
 
-#
-#
-#
-# geom <- st_geometry(sf)
-# geom_tiwi <- st_geometry(sf_tiwi)
-#
-#
-#
-#
-#
-# I have an `sp` SpatialPolygonsDataFrame object located on my github page https://github.com/SymbolixAU/spatial.data.table/blob/master/data/shp_tiwi.rds
-#
-# ```
-# library(sp)
-# library(sf)
-#
-# shp_tiwi <- readRDS("~/Downloads/shp_tiwi.rds")
-#
-# class(shp_tiwi)
-#
-# # [1] "SpatialPolygonsDataFrame"
-# # attr(,"package")
-# # [1] "sp"
-#
-# ```
-#
-# The shape file consists of 141 polygons, where polygons 2:5 are holes
-# ```
-# length(shp_tiwi@polygons[[1]]@Polygons)
-# # [1] 141
-#
-# sapply(shp_tiwi@polygons[[1]]@Polygons, function(x) x@hole)
-#
-# # [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-# # [29] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-# # [57] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-# # [85] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-# # [113] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-# # [141] FALSE
-#
-# ```
-#
-# ```
-# sf_tiwi <- sf::st_as_sf(shp_tiwi)
-# geom <- st_geometry(sf_tiwi)
-# ```
-#
-# length(geom[[1]][[1]])
-#
-# length(geom[[1]][[137]])
-#
-#
-# sf <- sf_tiwi
-#
-#
-#
+
+
+
 # exterior <- data.frame(lat = c(3, -3, -3, 3, 3),
 # 											 lon = c(3, 3, -3, -3, 3))
 #
@@ -347,8 +300,7 @@
 # geom1 <- st_geometry(nc1)
 
 
-## SF POINTS
-
+## sfc_POINTS
 # library(sf)
 #
 # sf_point <- readRDS("~/Downloads/melb_centroid.rds")

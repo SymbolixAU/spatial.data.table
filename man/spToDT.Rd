@@ -12,3 +12,9 @@ spToDT(sp)
 \description{
 Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
 }
+\examples{
+{
+
+
+}
+}

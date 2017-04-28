@@ -3,6 +3,11 @@
 #' Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
 #'
 #' @param sp Spatial Object
+#'
+#' @examples{
+#'
+#'
+#' }
 #' @export
 spToDT <- function(sp) UseMethod("spToDT")
 
