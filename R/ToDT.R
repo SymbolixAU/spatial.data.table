@@ -50,6 +50,14 @@
 #' spdf <- SpatialPolygonsDataFrame(sppl, data = data.frame(ID = c("bermuda")), match.ID = FALSE)
 #' dt <- spToDT(spdf)
 #'
+#'
+#'
+#'
+#' ## sf Polygons
+#' sf <- sf::st_as_sf(spdf)
+#' dt <- spToDT(sf)
+#'
+#'
 #' }
 #' @export
 spToDT <- function(sp) UseMethod("spToDT")
@@ -220,8 +228,8 @@ GeomToDT.sfc_POINT <- function(geom){
 	lst <- sapply(geom, `[`)
 
 	data.table::data.table(.id = seq_along(lst),
-												 lon = lst[1,],
-												 lat = lst[2, ])
+												 coords.V1 = lst[1,],
+												 coords.V2 = lst[2, ])
 
 }
 
@@ -235,6 +243,28 @@ GeomToDT.sfc_LINESTRING <- function(geom){
 			}), idcol = TRUE)
 }
 
+GeomToDT.sfc_POLYGON <- function(geom){
+
+	data.table::rbindlist(
+
+		lapply(geom, function(x){
+
+			data.table::rbindlist(
+				lapply(1:length(x), function(y){
+
+					data.table::data.table(
+						lineId = y,
+						coords.V1 = x[[y]][,1],
+					  coords.V2 = x[[y]][,2],
+						hole = (y > 1)[c(T, F)]
+					)
+				})
+			)
+		}), idcol = T
+	)
+
+}
+
 #' @export
 GeomToDT.sfc_MULTIPOLYGON <- function(geom){
 
@@ -245,12 +275,13 @@ GeomToDT.sfc_MULTIPOLYGON <- function(geom){
 		lapply(geom, function(x){
 
 			data.table::rbindlist(
+
 				lapply(1:length(x), function(y){
 
 					data.table::data.table(
 						lineId = y,
-						lat = x[[y]][[1]][,2],
-						lon = x[[y]][[1]][,1],
+						coords.V1 = x[[y]][[1]][,1],
+						coords.V2 = x[[y]][[1]][,2],
 						hole = (y > 1)[c(T, F)]
 						)
 					})

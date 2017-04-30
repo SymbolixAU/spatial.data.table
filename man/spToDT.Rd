@@ -58,5 +58,13 @@ dt <- spToDT(sppl)
 spdf <- SpatialPolygonsDataFrame(sppl, data = data.frame(ID = c("bermuda")), match.ID = FALSE)
 dt <- spToDT(spdf)
 
+
+
+
+## sf Polygons
+sf <- sf::st_as_sf(spdf)
+dt <- spToDT(sf)
+
+
 }
 }
