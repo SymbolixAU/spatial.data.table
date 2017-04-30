@@ -4,20 +4,21 @@
 #'
 #' @param sp Spatial Object
 #'
-#' @examples{
+#' @examples
+#' \dontrun{
 #'
-#' ## SpatialPointsDataFrame
 #' library(googleway)
 #' library(sp)
 #'
+#' ## SpatialPointsDataFrame
 #' sp <- SpatialPointsDataFrame(coords = tram_stops[, c("stop_lon", "stop_lat")], data = tram_stops)
 #' dt <- spToDT(sp)
 #'
-#' ## sp Line
+#' ## spLine
 #' spLine <- Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")])
 #' dt <- spToDT(spLine)
 #'
-#' ## sp Lines
+#' ## spLines
 #' spLines <- Lines(Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")]), ID = 1)
 #' dt <- spToDT(spLines)
 #'
@@ -29,9 +30,17 @@
 #' spdf <- SpatialLinesDataFrame(spLines, data = data.frame(route = 35, operator = "Yarra Trams"))
 #' dt <- spToDT(spdf)
 #'
+#' ## Polygons
+#' df <- data.frame(lat = c(25.774, 18.466, 32.321, 28.745, 29.570, 27.339),
+#'                  lon = c(-80.190, -66.118, -64.757, -70.579, -67.514, -66.668),
+#'                  id = c(rep('outer', 3), rep('inner', 3)))
+#' pl_outer <- Polygon(df[df$id == "outer", c("lat", "lon")])
+#' pl_inner <- Polygon(df[df$id == "inner", c("lat", "lon")])
 #'
+#' dt <- spToDT(pl_outer)
 #'
-#'
+#' pl <- Polygons(list(pl_outer, pl_inner), ID = "bermuda")
+#' dt <- spToDT(pl)
 #'
 #' }
 #' @export
@@ -116,13 +125,17 @@ spToDT.Polygon <- function(sp){
 #' @export
 spToDT.Polygons <- function(sp){
 
-	return(data.table::rbindlist(lapply(1:length(sp), function(x){
+	return(data.table::rbindlist(
 
-		data.table::data.table(
-			id = slot(sp, "ID"),
-			coords = slot(sp@Polygons[[x]], "coords")
-		)
-	})))
+		lapply(1:length(sp@Polygons), function(x){
+
+			data.table::data.table(
+				id = slot(sp, "ID"),
+				lineId = x,
+				coords = slot(sp@Polygons[[x]], "coords")
+				)
+			})
+	))
 }
 
 #' @export
