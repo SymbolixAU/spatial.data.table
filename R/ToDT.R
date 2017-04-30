@@ -119,7 +119,11 @@ spToDT.SpatialPointsDataFrame <- function(sp){
 
 #' @export
 spToDT.Polygon <- function(sp){
-	return(data.table::data.table(coords = slot(sp, "coords")))
+	return(
+		data.table::data.table(coords = slot(sp, "coords"),
+													 hole = slot(sp, "hole"),
+													 ringDir = slot(sp, "ringDir"))
+		)
 }
 
 #' @export
@@ -132,6 +136,8 @@ spToDT.Polygons <- function(sp){
 			data.table::data.table(
 				id = slot(sp, "ID"),
 				lineId = x,
+				hole = slot(sp@Polygons[[x]], "hole"),
+				ringDir = slot(sp@Polygons[[x]], "ringDir"),
 				coords = slot(sp@Polygons[[x]], "coords")
 				)
 			})
