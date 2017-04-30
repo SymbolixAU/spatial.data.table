@@ -30,17 +30,25 @@
 #' spdf <- SpatialLinesDataFrame(spLines, data = data.frame(route = 35, operator = "Yarra Trams"))
 #' dt <- spToDT(spdf)
 #'
-#' ## Polygons
+#' ## Polygon
 #' df <- data.frame(lat = c(25.774, 18.466, 32.321, 28.745, 29.570, 27.339),
 #'                  lon = c(-80.190, -66.118, -64.757, -70.579, -67.514, -66.668),
 #'                  id = c(rep('outer', 3), rep('inner', 3)))
 #' pl_outer <- Polygon(df[df$id == "outer", c("lat", "lon")])
-#' pl_inner <- Polygon(df[df$id == "inner", c("lat", "lon")])
-#'
 #' dt <- spToDT(pl_outer)
 #'
+#' ## Polygons
+#' pl_inner <- Polygon(df[df$id == "inner", c("lat", "lon")])
 #' pl <- Polygons(list(pl_outer, pl_inner), ID = "bermuda")
 #' dt <- spToDT(pl)
+#'
+#' ## SpatialPolygons
+#' sppl <- SpatialPolygons(list(pl))
+#' dt <- spToDT(sppl)
+#'
+#' ## SpatialPolygonsDataFrame
+#' spdf <- SpatialPolygonsDataFrame(sppl, data = data.frame(ID = c("bermuda")), match.ID = FALSE)
+#' dt <- spToDT(spdf)
 #'
 #' }
 #' @export
