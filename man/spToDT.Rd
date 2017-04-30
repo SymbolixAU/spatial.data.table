@@ -15,6 +15,32 @@ Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{da
 \examples{
 {
 
+## SpatialPointsDataFrame
+library(googleway)
+library(sp)
+
+sp <- SpatialPointsDataFrame(coords = tram_stops[, c("stop_lon", "stop_lat")], data = tram_stops)
+dt <- spToDT(sp)
+
+## sp Line
+spLine <- Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")])
+dt <- spToDT(spLine)
+
+## sp Lines
+spLines <- Lines(Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")]), ID = 1)
+dt <- spToDT(spLines)
+
+## SpatialLines
+spLines <- SpatialLines(list(Lines(Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")]), ID = 1)))
+dt <- spToDT(spLines)
+
+## SpatialLinesDataFrame
+spdf <- SpatialLinesDataFrame(spLines, data = data.frame(route = 35, operator = "Yarra Trams"))
+dt <- spToDT(spdf)
+
+
+
+
 
 }
 }

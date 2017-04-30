@@ -21,7 +21,7 @@
 #
 # spToDT(spdf)
 
-
+# library(data.table)
 # library(sp)
 # library(googleway)
 #
@@ -44,21 +44,7 @@
 # 								dt2 = copy(dt_stops),
 # 								dt1Coords = c("shape_pt_lat", "shape_pt_lon"),
 # 								dt2Coords = c("stop_lat","stop_lon"))
-#
-#
-# sp <- Line(dt_route[, .(shape_pt_lon, shape_pt_lat)])
-#
-# spToDT(sp)
-#
-# sp <- Lines(sp, ID = "id")
-#
-# spToDT(sp)
-#
-# sp <- SpatialLines(list(sp))
-#
-# class(sp)
-#
-# spToDT(sp)
+
 
 
 # library(data.table)
@@ -173,7 +159,7 @@
 #
 # google_map(key = mapKey) %>%
 # 	add_polylines(data = dt, polyline = "polyline")
-#
+
 
 # library(sf)
 # s1 <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
