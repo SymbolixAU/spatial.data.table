@@ -65,6 +65,11 @@ dt <- spToDT(spdf)
 sf <- sf::st_as_sf(spdf)
 dt <- spToDT(sf)
 
+## sf MULTIPOINT
+p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
+mp <- st_multipoint(p)
+dt <- spToDT(mp)
+
 
 }
 }

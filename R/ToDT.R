@@ -57,6 +57,11 @@
 #' sf <- sf::st_as_sf(spdf)
 #' dt <- spToDT(sf)
 #'
+#' ## sf MULTIPOINT
+#' p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
+#' mp <- st_multipoint(p)
+#' dt <- spToDT(mp)
+#'
 #'
 #' }
 #' @export
@@ -219,6 +224,15 @@ spToDT.sf <- function(sf){
 	return(dt[ dt_geom, on = c(id = ".id"), nomatch = 0])
 }
 
+
+#' @export
+spToDT.sfg <- function(sf){
+	dt_geom <- GeomToDT(sf::st_geometry(sf))
+	return(dt_geom)
+}
+
+
+
 #' @export
 GeomToDT <- function(geom) UseMethod("GeomToDT")
 
@@ -233,6 +247,18 @@ GeomToDT.sfc_POINT <- function(geom){
 
 }
 
+#' @export
+GeomToDT.sfc_MULTIPOINT <- function(geom){
+
+	lst <- lapply(geom, `[`)
+
+	data.table::rbindlist(
+		lapply(lst, function(x){
+			data.table::as.data.table(x)
+		}), idcol = TRUE
+	)
+}
+
 
 #' @export
 GeomToDT.sfc_LINESTRING <- function(geom){
@@ -243,6 +269,7 @@ GeomToDT.sfc_LINESTRING <- function(geom){
 			}), idcol = TRUE)
 }
 
+#' @export
 GeomToDT.sfc_POLYGON <- function(geom){
 
 	data.table::rbindlist(
@@ -262,8 +289,13 @@ GeomToDT.sfc_POLYGON <- function(geom){
 			)
 		}), idcol = T
 	)
-
 }
+
+## TODO:
+## MULTIPOINT
+## MULTILINESTRING
+## GEOMETRYCOLLECTION
+
 
 #' @export
 GeomToDT.sfc_MULTIPOLYGON <- function(geom){
