@@ -304,7 +304,19 @@
 
 
 
-
+# polys <- st_as_sfc(c("POLYGON((0 0 , 0 1 , 1 1 , 1 0, 0 0))",
+# 										 "POLYGON((0 0 , 0 2 , 2 2 , 2 0, 0 0 ))",
+# 										 "POLYGON((0 0 , 0 -1 , -1 -1 , -1 0, 0 0))")) %>%
+# 	st_sf()
+#
+# pts <- st_as_sfc(c("POINT(0.5 0.5)",
+# 									 "POINT(0.6 0.6)",
+# 									 "POINT(3 3)")) %>%
+# 	st_sf()
+#
+# polys
+# pts
+#
 
 
 

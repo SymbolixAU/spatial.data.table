@@ -34,3 +34,4 @@ dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
 dt[, distance := dt.haversine(lat1, lon1, lat2, lon2)]
 
 }
+

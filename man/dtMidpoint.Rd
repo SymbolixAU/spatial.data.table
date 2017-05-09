@@ -34,3 +34,4 @@ dt[, c("latMid", "lonMid") := dtMidpoint(lat, lon, lat2, lon2)]
 
 
 }
+

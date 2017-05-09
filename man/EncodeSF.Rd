@@ -9,3 +9,4 @@ EncodeSF(sf)
 \description{
 Converts coordinates from feature objects (\code{sf}) into encoded polylines
 }
+

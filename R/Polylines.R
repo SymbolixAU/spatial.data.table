@@ -7,9 +7,11 @@ EncodeSF <- function(sf){
 
 	dataCols <- setdiff(names(sf), attr(sf, 'sf_column'))
 	if(length(dataCols) == 0){
-		dt <- data.table(id = 1:nrow(sf))
+		dt <- data.table::data.table(id = 1:nrow(sf))
 	}else{
 		dt <- data.table::as.data.table(sf)[, dataCols, with = F]
+		## TODO:
+		## accept an ID column
 		dt[, id := .I]
 	}
 
@@ -40,13 +42,15 @@ encodePolyline.sfc_LINESTRING <- function(geom){
 
 encodePolyline.sfc_POLYGON <- function(geom){
 
-	lapply(geom, function(x){
-
-		pl <- sapply(x, function(y){
-			googleway::encode_pl(y[,2],y[,1])
-		})
-	})
-
+	data.table::rbindlist(
+		lapply(geom, function(x){
+				data.table::data.table(
+					polyline = sapply(x, function(y){
+						googleway::encode_pl(y[,2],y[,1])
+						})
+				)
+		}), idcol = T
+	)
 }
 
 #' @export
