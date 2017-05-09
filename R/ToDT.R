@@ -213,9 +213,15 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 spToDT.sf <- function(sf){
 
 	dataCols <- setdiff(names(sf), attr(sf, 'sf_column'))
-	dt <- data.table::as.data.table(sf)[, dataCols, with = F]
 
-	dt[, id := .I]
+	if(length(dataCols) == 0){
+		dt <- data.table::data.table(id = 1:nrow(sf))
+	}else{
+		dt <- data.table::as.data.table(sf)[, dataCols, with = F]
+		## TODO:
+		## accept an ID column
+		dt[, id := .I]
+	}
 
 	geom <- sf::st_geometry(sf)
 

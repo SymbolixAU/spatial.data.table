@@ -314,9 +314,13 @@
 # 									 "POINT(3 3)")) %>%
 # 	st_sf()
 #
-# polys
-# pts
+# dt_polys <- spToDT(polys)
+# dt_pts <- spToDT(pts)
 #
+# PointInPolygon(dt_polygons = dt_polys,
+# 							 polyColumns = c("id", "lineId", "coords.V1", "coords.V2", "hole"),
+# 							 dt_points = dt_pts,
+# 							 pointColumns = c("id", "coords.V1", "coords.V2"))
 
 
 
