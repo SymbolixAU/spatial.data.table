@@ -335,20 +335,29 @@
 # spatial.data.table:::dtAntipode(rev(LA))
 
 
-#4 gc2 <- greatCircle(AM, SF)
+### CPP
+
+## benchmarking cpp version of distHaversine
+# n <- 1000000
+# set.seed(20170511)
+# lats <- seq(-90, 90, by = 1)
+# lons <- seq(-180, 180, by = 1)
+# dt <- data.table(lat1 = sample(lats, size = n, replace = T),
+# 								 lon1 = sample(lons, size = n, replace = T),
+# 								 lat2 = sample(lats, size = n, replace = T),
+# 								 lon2 = sample(lons, size = n, replace = T))
 #
-# int <- gcIntersect(LA, NY, SF, AM)
-# int
-# antipodal(int[,1:2], int[,3:4])
+# dt <- dt[lat1 != lat2]
+# dt <- dt[lon1 != lon2]
 #
-# dtAntipodal(c(int[2], int[1]), c(int[4], int[3]))
-
-
-
-
-
-
-
+# dt2 <- copy(dt)
+#
+# library(microbenchmark)
+#
+# microbenchmark(
+# 	r = {dt[, distance := dtHaversine(lat1, lon1, lat2, lon2)]},
+# 	cpp = {dt1[, distance := cppHaversine(lat1, lon1, lat2, lon2)]}
+# )
 
 
 

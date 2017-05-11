@@ -14,7 +14,7 @@
 #'   lat2 = seq(-35, -34, by = 0.1),
 #'   lon2 = seq(145, 146, by = 0.1))
 #'
-#' dt[, distance := dt.haversine(lat1, lon1, lat2, lon2)]
+#' dt[, distance := dtHaversine(lat1, lon1, lat2, lon2)]
 #'
 #' @export
 dtHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
@@ -27,6 +27,30 @@ dtHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
 	a <- (sin(dLat/2)^2) + (cos(latFrom) * cos(latTo)) * (sin(dLon/2)^2)
 	return(2 * atan2(sqrt(a), sqrt(1 - a)) * r)
 }
+
+#' cpp haversine
+#'
+#' Calculates the Haversine distance between two points
+#'
+#' @param latFrom latitude
+#' @param lonFrom longitude
+#' @param latTo latitude
+#' @param lonTo latitude
+#' @param r radius of earth
+#' @return distance in metres
+#' @examples
+#' dt1 <- data.table(lat1 = seq(-38, -37, by = 0.1),
+#'   lon1 = seq(144, 145, by = 0.1),
+#'   lat2 = seq(-35, -34, by = 0.1),
+#'   lon2 = seq(145, 146, by = 0.1))
+#'
+#' dt1[, distance := cppHaversine(lat1, lon1, lat2, lon2)]
+#'
+#' @export
+cppHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
+	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r)
+}
+
 
 
 #' dt bearing
@@ -178,7 +202,8 @@ antipodeLon <- function(lon) return((lon %% 360) - 180)
 #'
 #' Returns an approximation of the radius of the earth in metres
 #'
-#' @example earthsRadius()
+#' @examples
+#' earthsRadius()
 #' @export
 earthsRadius <- function() return(6378137)
 
