@@ -141,10 +141,53 @@ dtDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius(
 	return(list(toDegrees(latTo), toDegrees(lonTo)))
 }
 
+#' dt Antipode
+#'
+#' Calculates the antipodal coordiantes for a given pair of coordinates
+#'
+#' @param lat latitude coordinate
+#' @param lon longitude coordinate
+#'
+#' @examples
+#' \dontrun{
+#'
+#'  dt <- data.table(lat = c(-37,-36,-35),
+#'                   lon = c(143,144,145))
+#'
+#'  ## return just the antipodes
+#'  dt[, dtAntipode(lat, lon)]
+#'
+#'  ## return a new columns of antipodes
+#'  dt[, c("AntLat", "AntLon") := dtAntipode(lat, lon)]
+#'
+#'
+#' }
+#'
+#' @return a list of length 2, the first element being the latitude coordinates,
+#' and the second element being the longitude coordinates
+#'
+#' @export
+dtAntipode <- function(lat, lon) {
+	return(list(antipodeLat(lat), antipodeLon(lon)))
+}
+
+antipodeLat <- function(lat) return(-lat)
+antipodeLon <- function(lon) return((lon %% 360) - 180)
 
 
+dtAntipodal <- function(latLon1, latLon2, tol = 1e-09){
+	lon1 <- normalizeLon(latLon1[2])
+	lon2 <- normalizeLon(latLon2[2])
+	diffLon <- abs(lon1 - lon2)
+	diffLat <- abs(latLon1[1] + latLon2[1])
+	return(
+		(diffLat < tol) & (abs(diffLon %% 360 - 180) < tol)
+	)
+}
 
-
+normalizeLon <- function(lon){
+	(lon + 180 ) %% 360 - 180
+}
 
 
 #' Earths Radius

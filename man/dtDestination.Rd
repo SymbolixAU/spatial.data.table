@@ -31,4 +31,3 @@ dt <- data.table::data.table(lat = 0, lon = 0)
 dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
 
 }
-

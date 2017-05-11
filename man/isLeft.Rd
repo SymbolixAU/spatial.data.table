@@ -13,4 +13,3 @@ Returns:
  = 0 : P2 is on the line
  < 0 : P2 is right of the line through P0, P1
 }
-

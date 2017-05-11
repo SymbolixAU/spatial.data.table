@@ -9,4 +9,3 @@ earthsRadius()
 \description{
 Returns the radius of the earth
 }
-

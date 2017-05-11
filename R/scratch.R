@@ -323,5 +323,34 @@
 # 							 pointColumns = c("id", "coords.V1", "coords.V2"))
 
 
+### Antipodes
+# library(geosphere)
+# LA <- c(-118.40, 33.95)
+# NY <- c(-73.78, 40.63)
+#
+# SF <- c(-122.44, 37.74)
+# AM <- c(4.75, 52.31)
+#
+# antipode(LA)
+# spatial.data.table:::dtAntipode(rev(LA))
+
+
+#4 gc2 <- greatCircle(AM, SF)
+#
+# int <- gcIntersect(LA, NY, SF, AM)
+# int
+# antipodal(int[,1:2], int[,3:4])
+#
+# dtAntipodal(c(int[2], int[1]), c(int[4], int[3]))
+
+
+
+
+
+
+
+
+
+
 
 
