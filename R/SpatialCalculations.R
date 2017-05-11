@@ -1,6 +1,6 @@
 #' dt haversine
-#' Calculates the Haversine distance between two points
 #'
+#' Calculates the Haversine distance between two points
 #'
 #' @param latFrom latitude
 #' @param lonFrom longitude
@@ -160,7 +160,6 @@ dtDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius(
 #'  ## return a new columns of antipodes
 #'  dt[, c("AntLat", "AntLon") := dtAntipode(lat, lon)]
 #'
-#'
 #' }
 #'
 #' @return a list of length 2, the first element being the latitude coordinates,
@@ -175,24 +174,11 @@ antipodeLat <- function(lat) return(-lat)
 antipodeLon <- function(lon) return((lon %% 360) - 180)
 
 
-dtAntipodal <- function(latLon1, latLon2, tol = 1e-09){
-	lon1 <- normalizeLon(latLon1[2])
-	lon2 <- normalizeLon(latLon2[2])
-	diffLon <- abs(lon1 - lon2)
-	diffLat <- abs(latLon1[1] + latLon2[1])
-	return(
-		(diffLat < tol) & (abs(diffLon %% 360 - 180) < tol)
-	)
-}
-
-normalizeLon <- function(lon){
-	(lon + 180 ) %% 360 - 180
-}
-
-
 #' Earths Radius
 #'
-#' Returns the radius of the earth
+#' Returns an approximation of the radius of the earth in metres
+#'
+#' @example earthsRadius()
 #' @export
 earthsRadius <- function() return(6378137)
 

@@ -2,8 +2,7 @@
 % Please edit documentation in R/SpatialCalculations.R
 \name{dtHaversine}
 \alias{dtHaversine}
-\title{dt haversine
-Calculates the Haversine distance between two points}
+\title{dt haversine}
 \usage{
 dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
 }
@@ -22,7 +21,6 @@ dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
 distance in metres
 }
 \description{
-dt haversine
 Calculates the Haversine distance between two points
 }
 \examples{

@@ -7,5 +7,5 @@
 earthsRadius()
 }
 \description{
-Returns the radius of the earth
+Returns an approximation of the radius of the earth in metres
 }

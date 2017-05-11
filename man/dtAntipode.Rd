@@ -30,7 +30,6 @@ Calculates the antipodal coordiantes for a given pair of coordinates
  ## return a new columns of antipodes
  dt[, c("AntLat", "AntLon") := dtAntipode(lat, lon)]
 
-
 }
 
 }
