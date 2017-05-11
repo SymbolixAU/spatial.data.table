@@ -7,6 +7,15 @@
 #' @param latTo latitude
 #' @param lonTo latitude
 #' @param r radius of earth
+#' @param tolerance numeric. See details
+#'
+#' @details
+#' \code{tolerance} - Floating-point precision can sometimes lead to the
+#' situation `sqrt(1 - 1.00000001)`, which will introduce NAs into the result.
+#'
+#' The tolerance value is used in `ifelse(a > 1 & a <= tolerance, 1, a)`
+#'
+#'
 #' @return distance in metres
 #' @examples
 #' dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
@@ -17,7 +26,10 @@
 #' dt[, distance := dtHaversine(lat1, lon1, lat2, lon2)]
 #'
 #' @export
-dtHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
+dtHaversine <- function(latFrom, lonFrom,
+												latTo, lonTo,
+												r = earthsRadius(),
+												tolerance = 1e+9){
 	latTo <- toRadians(latTo)
 	latFrom <- toRadians(latFrom)
 	lonTo <- toRadians(lonTo)
@@ -25,6 +37,7 @@ dtHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
 	dLat <- (latTo - latFrom)
 	dLon <- (lonTo - lonFrom)
 	a <- (sin(dLat/2)^2) + (cos(latFrom) * cos(latTo)) * (sin(dLon/2)^2)
+	a <- ifelse(a > 1 & a <= tolerance,1,a)
 	return(2 * atan2(sqrt(a), sqrt(1 - a)) * r)
 }
 
@@ -47,8 +60,9 @@ dtHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
 #' dt1[, distance := cppHaversine(lat1, lon1, lat2, lon2)]
 #'
 #' @export
-cppHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius()){
-	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r)
+cppHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
+												 tolerance = 1e+9){
+	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r,tolerance)
 }
 
 

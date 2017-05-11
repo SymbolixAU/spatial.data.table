@@ -4,7 +4,8 @@
 \alias{cppHaversine}
 \title{cpp haversine}
 \usage{
-cppHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
+cppHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
+  tolerance = 1e+09)
 }
 \arguments{
 \item{latFrom}{latitude}

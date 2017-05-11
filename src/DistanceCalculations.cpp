@@ -7,8 +7,7 @@ double toDegrees(double rad);
 // [[Rcpp::export]]
 NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom,
                              NumericVector latTo, NumericVector lonTo,
-                         double earthRadius) {
-
+                         double earthRadius, double tolerance) {
 
 	int n = latFrom.size();
 	NumericVector distance(n);
@@ -33,6 +32,9 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 		dlon = lont - lonf;
 
 		d = (sin(dlat/2) * sin(dlat/2)) + (cos(latf) * cos(latt)) * (sin(dlon/2) * sin(dlon/2));
+		if(d > 1 && d <= tolerance){
+			d = 1;
+		}
 		d = 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
 
 		distance[i] = d;

@@ -356,7 +356,7 @@
 #
 # microbenchmark(
 # 	r = {dt[, distance := dtHaversine(lat1, lon1, lat2, lon2)]},
-# 	cpp = {dt1[, distance := cppHaversine(lat1, lon1, lat2, lon2)]}
+# 	cpp = {dt2[, distance := cppHaversine(lat1, lon1, lat2, lon2)]}
 # )
 
 

@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // rcppDistanceHaversine
-NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double earthRadius);
-RcppExport SEXP spatial_data_table_rcppDistanceHaversine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP earthRadiusSEXP) {
+NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double earthRadius, double tolerance);
+RcppExport SEXP spatial_data_table_rcppDistanceHaversine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP earthRadiusSEXP, SEXP toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -16,7 +16,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type latTo(latToSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type lonTo(lonToSEXP);
     Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, earthRadius));
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance));
     return rcpp_result_gen;
 END_RCPP
 }

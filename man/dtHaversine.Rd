@@ -4,7 +4,8 @@
 \alias{dtHaversine}
 \title{dt haversine}
 \usage{
-dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
+dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
+  tolerance = 1e+09)
 }
 \arguments{
 \item{latFrom}{latitude}
@@ -16,12 +17,20 @@ dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
 \item{lonTo}{latitude}
 
 \item{r}{radius of earth}
+
+\item{tolerance}{numeric. See details}
 }
 \value{
 distance in metres
 }
 \description{
 Calculates the Haversine distance between two points
+}
+\details{
+\code{tolerance} - Floating-point precision can sometimes lead to the
+situation `sqrt(1 - 1.00000001)`, which will introduce NAs into the result.
+
+The tolerance value is used in `ifelse(a > 1 & a <= tolerance, 1, a)`
 }
 \examples{
 dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
