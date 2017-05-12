@@ -5,6 +5,52 @@ double toRadians(double deg);
 double toDegrees(double rad);
 
 // [[Rcpp::export]]
+Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
+                           NumericVector latTo, NumericVector lonTo){
+
+	int n = latFrom.size();
+//	NumericMatrix midpoint(n, 2);
+	NumericVector midpointLat(n);
+	NumericVector midpointLon(n);
+
+	double latf;
+	double latt;
+	double lonf;
+	double lont;
+
+	double Bx;
+	double By;
+
+	double theta;
+	double lambda;
+
+
+	for(int i = 0; i < n; i++){
+
+		latf = toRadians(latFrom[i]);
+		lonf = toRadians(lonFrom[i]);
+		latt = toRadians(latTo[i]);
+		lont = toRadians(lonTo[i]);
+
+		Bx = cos(latt) * cos(lont - lonf);
+		By = cos(latt) * sin(lont - lonf);
+
+		theta = atan2(sin(latf) + sin(latt), sqrt( ( (cos(latf) + Bx) * (cos(latf) + Bx) + (By*By) ) ) );
+		lambda = lonf + atan2(By, cos(latf) + Bx);
+
+//		midpoint[i, 1] = toDegrees(theta);
+//		midpoint[i, 2] = toDegrees(lambda)
+		midpointLat[i] = toDegrees(theta);
+		midpointLon[i] = toDegrees(lambda);
+
+	}
+
+	return Rcpp::List::create(midpointLat, midpointLon);
+
+}
+
+
+// [[Rcpp::export]]
 NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
                           NumericVector latTo, NumericVector lonTo,
                           bool compassBearing){
