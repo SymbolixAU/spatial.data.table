@@ -110,6 +110,57 @@ dtBearing <- function(latFrom, lonFrom, latTo, lonTo, compassBearing = FALSE){
 	return(ifelse(compassBearing, (toDegrees(atan2(Y, X)) + 360) %% 360, toDegrees(atan2(Y, X))))
 }
 
+
+#' cpp bearing
+#'
+#' Calculates the initial bearing between two pairs of latitude / longitude coordinates
+#'
+#' @note The initial bearing is sometimes called the 'forward azimuth', which if followed in a straight line along a great-circle arc will take you from teh start point to the end point
+#' @param latFrom latitude from
+#' @param lonFrom longitude from
+#' @param latTo latitude to
+#' @param lonTo longitude to
+#' @param compassBearing logical indicating whether to return the value in the range 0 - 360
+#' @return bearing in degrees
+#' @examples
+#' dtBearing(0,0,0,52)
+#' cppBearing(0,0,0,52)
+#'
+#' dtBearing(25, 0, 35, 0)
+#' cppBearing(25, 0, 35, 0)
+#'
+#' dtBearing(25, 0, -25, 0)
+#'
+#' dtBearing(0, 0, 0, -1)
+#' cppBearing(0, 0, 0, -1)
+#' dtBearing(0, 0, 0, -1, compassBearing = TRUE)
+#' cppBearing(0, 0, 0, -1, compassBearing = TRUE)
+#'
+#' dtBearing(0, 0, 1, -1)
+#' cppBearing(0, 0, 1, -1)
+#'
+#' dtBearing(0, 0, 0, 1)
+#' cppBearing(0, 0, 0, 1)
+#'
+#' dtBearing(0, 0, 1, -0.001)
+#' dtBearing(0, 0, 1, -0.001, compassBearing = TRUE)
+#'
+#' cppBearing(0, 0, 1, -0.001)
+#' cppBearing(0, 0, 1, -0.001, compassBearing = TRUE)
+#'
+#' dtBearing(-37,144,-38,145)
+#' cppBearing(-37,144,-38,145)
+#'
+#' @export
+cppBearing <- function(latFrom, lonFrom, latTo, lonTo, compassBearing = FALSE){
+
+	rcppBearing(latFrom, lonFrom, latTo, lonTo, compassBearing)
+
+}
+
+
+
+
 #' dt midpoint
 #'
 #' Finds the half-way point along the great circle path between two points

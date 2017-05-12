@@ -5,6 +5,51 @@ double toRadians(double deg);
 double toDegrees(double rad);
 
 // [[Rcpp::export]]
+NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
+                          NumericVector latTo, NumericVector lonTo,
+                          bool compassBearing){
+
+
+	int n = latFrom.size();
+	NumericVector bearing(n);
+
+	double latf;
+	double latt;
+	double lonf;
+	double lont;
+
+	double x;
+	double y;
+
+	double b;
+
+	for(int i = 0; i < n; i++){
+
+		latf = toRadians(latFrom[i]);
+		lonf = toRadians(lonFrom[i]);
+		latt = toRadians(latTo[i]);
+		lont = toRadians(lonTo[i]);
+
+		y = sin(lont - lonf) * cos(latt);
+		x = ( cos(latf) * sin(latt) ) - ( sin(latf) * cos(latt) * cos(lont - lonf) );
+
+		if(compassBearing == TRUE){
+			b = (toDegrees(atan2(y, x)) + 360);
+			// % operator is for integers
+			// fmod() is for doubles
+			b = fmod(b, 360);
+		}else{
+			b = toDegrees(atan2(y, x));
+		}
+		bearing[i] = b;
+	}
+
+	return bearing;
+
+}
+
+
+// [[Rcpp::export]]
 NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom,
                              NumericVector latTo, NumericVector lonTo,
                          double earthRadius, double tolerance) {

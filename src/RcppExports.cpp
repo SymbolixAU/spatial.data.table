@@ -5,6 +5,21 @@
 
 using namespace Rcpp;
 
+// rcppBearing
+NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, bool compassBearing);
+RcppExport SEXP spatial_data_table_rcppBearing(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP compassBearingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type latFrom(latFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type latTo(latToSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonTo(lonToSEXP);
+    Rcpp::traits::input_parameter< bool >::type compassBearing(compassBearingSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppBearing(latFrom, lonFrom, latTo, lonTo, compassBearing));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppDistanceHaversine
 NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double earthRadius, double tolerance);
 RcppExport SEXP spatial_data_table_rcppDistanceHaversine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP earthRadiusSEXP, SEXP toleranceSEXP) {
