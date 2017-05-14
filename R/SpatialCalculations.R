@@ -262,6 +262,36 @@ dtDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius(
 	return(list(toDegrees(latTo), toDegrees(lonTo)))
 }
 
+
+#' cpp destination
+#'
+#' Calculates the destination coordinates from a starting point, initial bearing and distance travelling along a (shortest distance) great circle arc
+#'
+#' @param latFrom latitude from (in degrees)
+#' @param lonFrom longitude from (in degrees)
+#' @param distance distance in metres
+#' @param bearing from north (in degrees)
+#' @param r radius of earth in metres
+#' @return list of latitude and longitude coordinates at the destination
+#' @examples
+#'
+#' dtDestination(0, 0, earthsRadius(), 90)
+#' cppDestination(0, 0, earthsRadius(), 90)
+#'
+#' dt <- data.table::data.table(lat = 0, lon = 0)
+#' dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
+#'
+#' @export
+cppDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius()){
+
+	rcppDestination(latFrom, lonFrom, distance, bearing, r);
+}
+
+
+
+
+
+
 #' dt Antipode
 #'
 #' Calculates the antipodal coordiantes for a given pair of coordinates

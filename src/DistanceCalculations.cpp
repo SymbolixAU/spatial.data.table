@@ -5,6 +5,43 @@ double toRadians(double deg);
 double toDegrees(double rad);
 
 // [[Rcpp::export]]
+Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom,
+                           NumericVector distance, NumericVector bearing,
+                           double earthRadius){
+
+int n = latFrom.size();
+	NumericVector destinationLat(n);
+	NumericVector destinationLon(n);
+
+	double latf;
+	double lonf;
+
+	double latt;
+	double lont;
+
+	double phi;
+	double bear;
+
+	for(int i = 0; i < n; i++){
+
+		latf = toRadians(latFrom[i]);
+		lonf = toRadians(lonFrom[i]);
+
+		bear = toRadians(bearing[i]);
+		phi = ( distance[i] / earthRadius );
+
+		latt = asin( ( sin(latf) * cos(phi) ) + ( cos(latf) * sin(phi) * cos(bear) ) );
+		lont = lonf + ( atan2( sin(bear) * sin(phi) * cos(latf), cos(phi) - ( sin(latf) * sin(latt) ) ) );
+
+		destinationLat[i] = toDegrees(latt);
+		destinationLon[i] = toDegrees(lont);
+	}
+
+	return Rcpp::List::create(destinationLat, destinationLon);
+}
+
+
+// [[Rcpp::export]]
 Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
                            NumericVector latTo, NumericVector lonTo){
 
@@ -38,8 +75,6 @@ Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
 		theta = atan2(sin(latf) + sin(latt), sqrt( ( (cos(latf) + Bx) * (cos(latf) + Bx) + (By*By) ) ) );
 		lambda = lonf + atan2(By, cos(latf) + Bx);
 
-//		midpoint[i, 1] = toDegrees(theta);
-//		midpoint[i, 2] = toDegrees(lambda)
 		midpointLat[i] = toDegrees(theta);
 		midpointLon[i] = toDegrees(lambda);
 

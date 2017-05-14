@@ -5,6 +5,21 @@
 
 using namespace Rcpp;
 
+// rcppDestination
+Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom, NumericVector distance, NumericVector bearing, double earthRadius);
+RcppExport SEXP spatial_data_table_rcppDestination(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP distanceSEXP, SEXP bearingSEXP, SEXP earthRadiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type latFrom(latFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type bearing(bearingSEXP);
+    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppDestination(latFrom, lonFrom, distance, bearing, earthRadius));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppMidpoint
 Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo);
 RcppExport SEXP spatial_data_table_rcppMidpoint(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP) {
