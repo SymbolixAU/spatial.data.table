@@ -29,8 +29,17 @@ dtMidpoint(25, 0, -25, 0)
 dtMidpoint(-37,144,-38,145)
 
 dtMidpoint(25, 0, 35, 0)
-dt <- data.table::data.table(lat = 25, lon = 0, lat2 = 35, lon2 = 0)
-dt[, c("latMid", "lonMid") := dtMidpoint(lat, lon, lat2, lon2)]
+
+n <- 10
+set.seed(20170511)
+lats <- -90:90
+lons <- -180:180
+dt <- data.table::data.table(lat1 = sample(lats, size = n, replace = T),
+                             lon1 = sample(lons, size = n, replace = T),
+                             lat2 = sample(lats, size = n, replace = T),
+                             lon2 = sample(lons, size = n, replace = T))
+
+dt[, c("latMid", "lonMid") := dtMidpoint(lat1, lon1, lat2, lon2)]
 
 
 }

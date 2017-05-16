@@ -1,3 +1,71 @@
+## ----libraries-----------------------------------------------------------
+library(microbenchmark)
+library(spatial.data.table)
+library(googleway)
+library(data.table)
+library(geosphere) ## for compariing results
+
+
+## ----dtHaversine---------------------------------------------------------
+
+
+n <- 10000
+set.seed(20170511)
+lats <- -90:90
+lons <- -180:180
+dt <- data.table::data.table(lat1 = sample(lats, size = n, replace = T),
+                             lon1 = sample(lons, size = n, replace = T),
+                             lat2 = sample(lats, size = n, replace = T),
+                             lon2 = sample(lons, size = n, replace = T))
+
+dt1 <- copy(dt)
+dt2 <- copy(dt)
+
+microbenchmark(
+	sdt = { dt1[, dtDistance := dtHaversine(lat1, lon1, lat2, lon2)]  },
+	geo = { dt2[, geoDistance := distHaversine(matrix(c(lon1, lat1), ncol = 2),
+                                   matrix(c(lon2, lat2), ncol = 2))]  }
+)
+
+dt1
+
+## ----bearing-------------------------------------------------------------
+
+n <- 10000
+set.seed(20170511)
+lats <- -90:90
+lons <- -180:180
+dt <- data.table::data.table(lat1 = sample(lats, size = n, replace = T),
+                             lon1 = sample(lons, size = n, replace = T),
+                             lat2 = sample(lats, size = n, replace = T),
+                             lon2 = sample(lons, size = n, replace = T))
+
+dt1 <- copy(dt)
+dt2 <- copy(dt)
+
+microbenchmark(
+	sdt = { dt1[, dtBearing := dtBearing(lat1, lon1, lat2, lon2)]  },
+	geo = { dt2[, geoBearing := bearing(matrix(c(lon1, lat1), ncol = 2),
+                                   matrix(c(lon2, lat2), ncol = 2))]  }
+)
+
+dt1
+
+
+## ----midpoint------------------------------------------------------------
+
+n <- 10000
+set.seed(20170511)
+lats <- -90:90
+lons <- -180:180
+dt <- data.table::data.table(lat1 = sample(lats, size = n, replace = T),
+                             lon1 = sample(lons, size = n, replace = T),
+                             lat2 = sample(lats, size = n, replace = T),
+                             lon2 = sample(lons, size = n, replace = T))
+
+dt[, c("midLat", "midLon") := dtMidpoint(lat1, lon1, lat2, lon2)] 
+dt
+
 ## ----nearestPoints-------------------------------------------------------
 
 library(spatial.data.table)
@@ -22,7 +90,7 @@ dt_nearest <- dtNearestPoints(dt1 = copy(dt_route),
 pl <- sapply(1:nrow(dt_nearest), function(x){
 	lats <- dt_nearest[x, c(shape_pt_lat.x, stop_lat.y)]
 	lons <- dt_nearest[x, c(shape_pt_lon.x, stop_lon.y)]
-	polyline = gepaf::encodePolyline(data.frame(lat = lats,lon = lons))
+	polyline = encode_pl(lat = lats,lon = lons)
 })
 
 

@@ -13,10 +13,12 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     data.table (>= 1.10.0),
-    sf
+    sf,
+    Rcpp
 Suggests:
     testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+LinkingTo: Rcpp

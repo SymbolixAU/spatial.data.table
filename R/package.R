@@ -1,3 +1,7 @@
+#' @useDynLib spatial.data.table
+#' @importFrom Rcpp sourceCpp
+NULL
+
 #' @import data.table
 #' @import sf
 NULL
