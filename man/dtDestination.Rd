@@ -27,7 +27,14 @@ Calculates the destination coordinates from a starting point, initial bearing an
 
 dtDestination(0, 0, earthsRadius(), 90)
 
-dt <- data.table::data.table(lat = 0, lon = 0)
+n <- 10
+set.seed(20170511)
+lats <- -90:90
+lons <- -180:180
+b <- 0:360
+dt <- data.table::data.table(lat = sample(lats, size = n, replace = T),
+                             lon = sample(lons, size = n, replace = T),
+                             bearing = sample(b, size = n, replace = T))
 dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
 
 }

@@ -30,41 +30,9 @@ dtHaversine <- function(latFrom, lonFrom,
 												latTo, lonTo,
 												r = earthsRadius(),
 												tolerance = 1e+9){
-	latTo <- toRadians(latTo)
-	latFrom <- toRadians(latFrom)
-	lonTo <- toRadians(lonTo)
-	lonFrom <- toRadians(lonFrom)
-	dLat <- (latTo - latFrom)
-	dLon <- (lonTo - lonFrom)
-	a <- (sin(dLat/2)^2) + (cos(latFrom) * cos(latTo)) * (sin(dLon/2)^2)
-	a <- ifelse(a > 1 & a <= tolerance,1,a)
-	return(2 * atan2(sqrt(a), sqrt(1 - a)) * r)
-}
 
-#' cpp haversine
-#'
-#' Calculates the Haversine distance between two points
-#'
-#' @param latFrom latitude
-#' @param lonFrom longitude
-#' @param latTo latitude
-#' @param lonTo latitude
-#' @param r radius of earth
-#' @return distance in metres
-#' @examples
-#' dt1 <- data.table(lat1 = seq(-38, -37, by = 0.1),
-#'   lon1 = seq(144, 145, by = 0.1),
-#'   lat2 = seq(-35, -34, by = 0.1),
-#'   lon2 = seq(145, 146, by = 0.1))
-#'
-#' dt1[, distance := cppHaversine(lat1, lon1, lat2, lon2)]
-#'
-#' @export
-cppHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
-												 tolerance = 1e+9){
-	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r,tolerance)
+	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r, tolerance)
 }
-
 
 
 #' dt bearing
@@ -99,64 +67,10 @@ cppHaversine <- function(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
 #'
 #' @export
 dtBearing <- function(latFrom, lonFrom, latTo, lonTo, compassBearing = FALSE){
-	latTo <- toRadians(latTo)
-	latFrom <- toRadians(latFrom)
-	lonTo <- toRadians(lonTo)
-	lonFrom <- toRadians(lonFrom)
-
-	Y <- sin(lonTo - lonFrom) * cos(latTo)
-	X <- ( cos(latFrom) * sin(latTo) ) - ( sin(latFrom) * cos(latTo) * cos(lonTo - lonFrom) )
-
-	return(ifelse(compassBearing, (toDegrees(atan2(Y, X)) + 360) %% 360, toDegrees(atan2(Y, X))))
-}
-
-
-#' cpp bearing
-#'
-#' Calculates the initial bearing between two pairs of latitude / longitude coordinates
-#'
-#' @note The initial bearing is sometimes called the 'forward azimuth', which if followed in a straight line along a great-circle arc will take you from teh start point to the end point
-#' @param latFrom latitude from
-#' @param lonFrom longitude from
-#' @param latTo latitude to
-#' @param lonTo longitude to
-#' @param compassBearing logical indicating whether to return the value in the range 0 - 360
-#' @return bearing in degrees
-#' @examples
-#' dtBearing(0,0,0,52)
-#' cppBearing(0,0,0,52)
-#'
-#' dtBearing(25, 0, 35, 0)
-#' cppBearing(25, 0, 35, 0)
-#'
-#' dtBearing(25, 0, -25, 0)
-#'
-#' dtBearing(0, 0, 0, -1)
-#' cppBearing(0, 0, 0, -1)
-#' dtBearing(0, 0, 0, -1, compassBearing = TRUE)
-#' cppBearing(0, 0, 0, -1, compassBearing = TRUE)
-#'
-#' dtBearing(0, 0, 1, -1)
-#' cppBearing(0, 0, 1, -1)
-#'
-#' dtBearing(0, 0, 0, 1)
-#' cppBearing(0, 0, 0, 1)
-#'
-#' dtBearing(0, 0, 1, -0.001)
-#' dtBearing(0, 0, 1, -0.001, compassBearing = TRUE)
-#'
-#' cppBearing(0, 0, 1, -0.001)
-#' cppBearing(0, 0, 1, -0.001, compassBearing = TRUE)
-#'
-#' dtBearing(-37,144,-38,145)
-#' cppBearing(-37,144,-38,145)
-#'
-#' @export
-cppBearing <- function(latFrom, lonFrom, latTo, lonTo, compassBearing = FALSE){
-
 	rcppBearing(latFrom, lonFrom, latTo, lonTo, compassBearing)
-
 }
+
+
 
 
 
@@ -178,58 +92,24 @@ cppBearing <- function(latFrom, lonFrom, latTo, lonTo, compassBearing = FALSE){
 #' dtMidpoint(-37,144,-38,145)
 #'
 #' dtMidpoint(25, 0, 35, 0)
-#' dt <- data.table::data.table(lat = 25, lon = 0, lat2 = 35, lon2 = 0)
-#' dt[, c("latMid", "lonMid") := dtMidpoint(lat, lon, lat2, lon2)]
+#'
+#' n <- 10
+#' set.seed(20170511)
+#' lats <- -90:90
+#' lons <- -180:180
+#' dt <- data.table::data.table(lat1 = sample(lats, size = n, replace = T),
+#'                              lon1 = sample(lons, size = n, replace = T),
+#'                              lat2 = sample(lats, size = n, replace = T),
+#'                              lon2 = sample(lons, size = n, replace = T))
+#'
+#' dt[, c("latMid", "lonMid") := dtMidpoint(lat1, lon1, lat2, lon2)]
 #'
 #'
 #' @export
 dtMidpoint <- function(latFrom, lonFrom, latTo, lonTo){
-	latTo <- toRadians(latTo)
-	latFrom <- toRadians(latFrom)
-	lonTo <- toRadians(lonTo)
-	lonFrom <- toRadians(lonFrom)
-
-	Bx <- cos(latTo) * cos(lonTo - lonFrom)
-	By <- cos(latTo) * sin(lonTo - lonFrom)
-
-	theta <- atan2(sin(latFrom) + sin(latTo), sqrt( ( (cos(latFrom) + Bx)^2 + By^2 ) ) )
-	lambda <- lonFrom + atan2(By, cos(latFrom) + Bx)
-
-	return(list(toDegrees(theta), toDegrees(lambda)))
-}
-
-#' cpp midpoint
-#'
-#' Finds the half-way point along the great circle path between two points
-#'
-#' @param latFrom latitude from
-#' @param lonFrom longitude from
-#' @param latTo latitude to
-#' @param lonTo longitude to
-#' @return list of the latitude & longitude coordinates at the midpoint along the line
-#' @examples
-#' dtMidpoint(0,0,0,52)
-#' cppMidpoint(0,0,0,52)
-#'
-#' dtMidpoint(25, 0, -25, 0)
-#' cppMidpoint(25, 0, -25, 0)
-#'
-#' dtMidpoint(-37,144,-38,145)
-#' cppMidpoint(-37,144,-38,145)
-#'
-#' dtMidpoint(25, 0, 35, 0)
-#' dt <- data.table::data.table(lat = 25, lon = 0, lat2 = 35, lon2 = 0)
-#' dt[, c("latMid", "lonMid") := dtMidpoint(lat, lon, lat2, lon2)]
-#'
-#' cppMidpoint(25, 0, 35, 0)
-#' dt <- data.table::data.table(lat = 25, lon = 0, lat2 = 35, lon2 = 0)
-#' dt[, c("latMid", "lonMid") := cppMidpoint(lat, lon, lat2, lon2)]
-#'
-#'
-#' @export
-cppMidpoint <- function(latFrom, lonFrom, latTo, lonTo){
 	rcppMidpoint(latFrom, lonFrom, latTo, lonTo)
 }
+
 
 
 #' dt destination
@@ -246,50 +126,20 @@ cppMidpoint <- function(latFrom, lonFrom, latTo, lonTo){
 #'
 #' dtDestination(0, 0, earthsRadius(), 90)
 #'
-#' dt <- data.table::data.table(lat = 0, lon = 0)
+#' n <- 10
+#' set.seed(20170511)
+#' lats <- -90:90
+#' lons <- -180:180
+#' b <- 0:360
+#' dt <- data.table::data.table(lat = sample(lats, size = n, replace = T),
+#'                              lon = sample(lons, size = n, replace = T),
+#'                              bearing = sample(b, size = n, replace = T))
 #' dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
 #'
 #' @export
 dtDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius()){
-	latFrom <- toRadians(latFrom)
-	lonFrom <- toRadians(lonFrom)
-	bearing <- toRadians(bearing)
-	phi <- ( distance / r )
-
-	latTo <- asin( ( sin(latFrom) * cos(phi) ) + ( cos(latFrom) * sin(phi) * cos(bearing) ) )
-	lonTo <- lonFrom + ( atan2( sin(bearing) * sin(phi) * cos(latFrom), cos(phi) - ( sin(latFrom) * sin(latTo) ) ) )
-
-	return(list(toDegrees(latTo), toDegrees(lonTo)))
-}
-
-
-#' cpp destination
-#'
-#' Calculates the destination coordinates from a starting point, initial bearing and distance travelling along a (shortest distance) great circle arc
-#'
-#' @param latFrom latitude from (in degrees)
-#' @param lonFrom longitude from (in degrees)
-#' @param distance distance in metres
-#' @param bearing from north (in degrees)
-#' @param r radius of earth in metres
-#' @return list of latitude and longitude coordinates at the destination
-#' @examples
-#'
-#' dtDestination(0, 0, earthsRadius(), 90)
-#' cppDestination(0, 0, earthsRadius(), 90)
-#'
-#' dt <- data.table::data.table(lat = 0, lon = 0)
-#' dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
-#'
-#' @export
-cppDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius()){
-
 	rcppDestination(latFrom, lonFrom, distance, bearing, r);
 }
-
-
-
-
 
 
 #' dt Antipode

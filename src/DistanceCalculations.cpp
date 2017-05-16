@@ -3,6 +3,7 @@ using namespace Rcpp;
 
 double toRadians(double deg);
 double toDegrees(double rad);
+double normaliseLonDeg(double deg);
 
 // [[Rcpp::export]]
 Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom,
@@ -61,7 +62,6 @@ Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
 	double theta;
 	double lambda;
 
-
 	for(int i = 0; i < n; i++){
 
 		latf = toRadians(latFrom[i]);
@@ -72,11 +72,11 @@ Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
 		Bx = cos(latt) * cos(lont - lonf);
 		By = cos(latt) * sin(lont - lonf);
 
-		theta = atan2(sin(latf) + sin(latt), sqrt( ( (cos(latf) + Bx) * (cos(latf) + Bx) + (By*By) ) ) );
+		theta = atan2(sin(latf) + sin(latt), sqrt( ( pow(cos(latf) + Bx, 2.0) + pow(By, 2.0) ) ) );
 		lambda = lonf + atan2(By, cos(latf) + Bx);
 
 		midpointLat[i] = toDegrees(theta);
-		midpointLon[i] = toDegrees(lambda);
+		midpointLon[i] = normaliseLonDeg(toDegrees(lambda));
 
 	}
 
@@ -178,3 +178,9 @@ double toRadians(double deg){
 double toDegrees(double rad){
 	return rad / (M_PI / 180);
 }
+
+double normaliseLonDeg(double deg){
+	return fmod(deg - 180.0, 360.0) + 180.0;
+}
+
+
