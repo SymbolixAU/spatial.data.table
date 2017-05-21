@@ -1,9 +1,12 @@
 #include <Rcpp.h>
+#include "spdt.h"
 using namespace Rcpp;
 
-double toRadians(double deg);
-double toDegrees(double rad);
-double normaliseLonDeg(double deg);
+
+
+//double toRadians(double deg);
+//double toDegrees(double rad);
+//double normaliseLonDeg(double deg);
 
 // [[Rcpp::export]]
 Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom,
@@ -25,17 +28,17 @@ int n = latFrom.size();
 
 	for(int i = 0; i < n; i++){
 
-		latf = toRadians(latFrom[i]);
-		lonf = toRadians(lonFrom[i]);
+		latf = spdt::toRadians(latFrom[i]);
+		lonf = spdt::toRadians(lonFrom[i]);
 
-		bear = toRadians(bearing[i]);
+		bear = spdt::toRadians(bearing[i]);
 		phi = ( distance[i] / earthRadius );
 
 		latt = asin( ( sin(latf) * cos(phi) ) + ( cos(latf) * sin(phi) * cos(bear) ) );
 		lont = lonf + ( atan2( sin(bear) * sin(phi) * cos(latf), cos(phi) - ( sin(latf) * sin(latt) ) ) );
 
-		destinationLat[i] = toDegrees(latt);
-		destinationLon[i] = toDegrees(lont);
+		destinationLat[i] = spdt::toDegrees(latt);
+		destinationLon[i] = spdt::toDegrees(lont);
 	}
 
 	return Rcpp::List::create(destinationLat, destinationLon);
@@ -64,10 +67,10 @@ Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
 
 	for(int i = 0; i < n; i++){
 
-		latf = toRadians(latFrom[i]);
-		lonf = toRadians(lonFrom[i]);
-		latt = toRadians(latTo[i]);
-		lont = toRadians(lonTo[i]);
+		latf = spdt::toRadians(latFrom[i]);
+		lonf = spdt::toRadians(lonFrom[i]);
+		latt = spdt::toRadians(latTo[i]);
+		lont = spdt::toRadians(lonTo[i]);
 
 		Bx = cos(latt) * cos(lont - lonf);
 		By = cos(latt) * sin(lont - lonf);
@@ -75,8 +78,8 @@ Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
 		theta = atan2(sin(latf) + sin(latt), sqrt( ( pow(cos(latf) + Bx, 2.0) + pow(By, 2.0) ) ) );
 		lambda = lonf + atan2(By, cos(latf) + Bx);
 
-		midpointLat[i] = toDegrees(theta);
-		midpointLon[i] = normaliseLonDeg(toDegrees(lambda));
+		midpointLat[i] = spdt::toDegrees(theta);
+		midpointLon[i] = spdt::normaliseLonDeg(spdt::toDegrees(lambda));
 
 	}
 
@@ -106,21 +109,21 @@ NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
 
 	for(int i = 0; i < n; i++){
 
-		latf = toRadians(latFrom[i]);
-		lonf = toRadians(lonFrom[i]);
-		latt = toRadians(latTo[i]);
-		lont = toRadians(lonTo[i]);
+		latf = spdt::toRadians(latFrom[i]);
+		lonf = spdt::toRadians(lonFrom[i]);
+		latt = spdt::toRadians(latTo[i]);
+		lont = spdt::toRadians(lonTo[i]);
 
 		y = sin(lont - lonf) * cos(latt);
 		x = ( cos(latf) * sin(latt) ) - ( sin(latf) * cos(latt) * cos(lont - lonf) );
 
 		if(compassBearing == TRUE){
-			b = (toDegrees(atan2(y, x)) + 360);
+			b = (spdt::toDegrees(atan2(y, x)) + 360);
 			// % operator is for integers
 			// fmod() is for doubles
 			b = fmod(b, 360);
 		}else{
-			b = toDegrees(atan2(y, x));
+			b = spdt::toDegrees(atan2(y, x));
 		}
 		bearing[i] = b;
 	}
@@ -149,10 +152,10 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 
 	for(int i = 0; i < n; i++){
 
-		latf = toRadians(latFrom[i]);
-		lonf = toRadians(lonFrom[i]);
-		latt = toRadians(latTo[i]);
-		lont = toRadians(lonTo[i]);
+		latf = spdt::toRadians(latFrom[i]);
+		lonf = spdt::toRadians(lonFrom[i]);
+		latt = spdt::toRadians(latTo[i]);
+		lont = spdt::toRadians(lonTo[i]);
 
 		dlat = latt - latf;
 		dlon = lont - lonf;
@@ -170,17 +173,5 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 
 }
 
-
-double toRadians(double deg){
-	return deg * (M_PI / 180);
-}
-
-double toDegrees(double rad){
-	return rad / (M_PI / 180);
-}
-
-double normaliseLonDeg(double deg){
-	return fmod(deg - 180.0, 360.0) + 180.0;
-}
 
 

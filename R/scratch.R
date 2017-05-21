@@ -361,5 +361,230 @@
 
 
 
+# ## points in polygon
+# # https://gis.stackexchange.com/questions/110117/counts-the-number-of-points-in-a-polygon-in-r
+#
+# library(raster)
+# library(sp)
+#
+# x <- getData('GADM', country='ITA', level=1)
+# class(x)
+# # [1] "SpatialPolygonsDataFrame"
+# # attr(,"package")
+# # [1] "sp"
+#
+# set.seed(1)
+# # sample random points
+# p <- spsample(x, n=300, type="random")
+# p <- SpatialPointsDataFrame(p, data.frame(id=1:300))
+#
+# proj4string(x)
+# # [1] " +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+# proj4string(p)
+# # [1] " +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+#
+# plot(x)
+# plot(p, col="red" , add=TRUE)
+#
+# res <- over(p, x)
+# table(res$NAME_1)
+#
+#
+# dt_x <- spToDT(x)
+# dt_p <- spToDT(p)
+#
+# dt_res <- PointInPolygon(dt_polygons = dt_x,
+# 												 polyColumns = c("id","lineId","coords.V2","coords.V1","hole"),
+# 												 dt_points = dt_p,
+# 												 pointColumns = c("data.id","coords.y","coords.x"))
+#
+#
+# dt_res[, .N, by = id][ unique(dt_x[, .(id, data.NAME_1)]), on = "id", nomatch = 0][order(data.NAME_1)]
+#
+#
+#
+#
+# # https://www.rdocumentation.org/packages/sp/versions/1.2-3/topics/over-methods
+#
+# r1 = cbind(c(180114, 180553, 181127, 181477, 181294, 181007, 180409,
+# 						 180162, 180114), c(332349, 332057, 332342, 333250, 333558, 333676,
+# 						 									 332618, 332413, 332349))
+# r2 = cbind(c(180042, 180545, 180553, 180314, 179955, 179142, 179437,
+# 						 179524, 179979, 180042), c(332373, 332026, 331426, 330889, 330683,
+# 						 													 331133, 331623, 332152, 332357, 332373))
+# r3 = cbind(c(179110, 179907, 180433, 180712, 180752, 180329, 179875,
+# 						 179668, 179572, 179269, 178879, 178600, 178544, 179046, 179110),
+# 					 c(331086, 330620, 330494, 330265, 330075, 330233, 330336, 330004,
+# 					 	329783, 329665, 329720, 329933, 330478, 331062, 331086))
+# r4 = cbind(c(180304, 180403,179632,179420,180304),
+# 					 c(332791, 333204, 333635, 333058, 332791))
+#
+# sr1=Polygons(list(Polygon(r1)),"r1")
+# sr2=Polygons(list(Polygon(r2)),"r2")
+# sr3=Polygons(list(Polygon(r3)),"r3")
+# sr4=Polygons(list(Polygon(r4)),"r4")
+# sr=SpatialPolygons(list(sr1,sr2,sr3,sr4))
+# srdf=SpatialPolygonsDataFrame(sr, data.frame(cbind(1:4,5:2),
+# 																						 row.names=c("r1","r2","r3","r4")))
+#
+# data(meuse)
+# coordinates(meuse) = ~x+y
+#
+# plot(meuse)
+# polygon(r1)
+# polygon(r2)
+# polygon(r3)
+# polygon(r4)
+# # retrieve mean heavy metal concentrations per polygon:
+# over(sr, meuse[,1:4], fn = mean)
+#
+# over(sr, meuse)
+#
+#
+# dt_sr <- spToDT(sr)
+# dt_meuse <- spToDT(meuse)
+# dt_meuse[, id := .I]
+#
+# PointInPolygon(dt_polygons = dt_sr,
+# 							 polyColumns = c("id","lineId","coords.V1","coords.V2", "hole"),
+# 							 dt_points = dt_meuse,
+# 							 pointColumns = c("id","coords.x","coords.y"))
+#
+#
+# # point.in.polygon(point.x = meuse@coords[,1],
+# # 								 point.y = meuse@coords[,2],
+# # 								 pol.x = sr@polygons[[1]]@Polygons[[1]]@coords[,1],
+# # 								 pol.y = sr@polygons[[1]]@Polygons[[1]]@coords[,2])
+#
+#
+# lapply(sr@polygons, function(x){
+# 	point.in.polygon(point.x = meuse@coords[,1],
+# 									 point.y = meuse@coords[,2],
+# 									 pol.x = x@Polygons[[1]]@coords[,1],
+# 									 pol.y = x@Polygons[[1]]@coords[,2])
+# })
+#
+#
+#
+# library(microbenchmark)
+#
+# microbenchmark(
+# 	dt = {
+# 		PointInPolygon(dt_polygons = dt_sr,
+# 									 polyColumns = c("id","lineId","coords.V1","coords.V2", "hole"),
+# 									 dt_points = dt_meuse,
+# 									 pointColumns = c("id","coords.x","coords.y"))
+#
+# 	},
+# 	sp = {
+#
+# 		lapply(sr@polygons, function(x){
+# 			point.in.polygon(point.x = meuse@coords[,1],
+# 											 point.y = meuse@coords[,2],
+# 											 pol.x = x@Polygons[[1]]@coords[,1],
+# 											 pol.y = x@Polygons[[1]]@coords[,2])
+# 		})
+#
+# 	}
+# )
+
+
+
+# # return the number of points in each polygon:
+# sapply(over(sr, geometry(meuse), returnList = TRUE), length)
+#
+# data(meuse.grid)
+# coordinates(meuse.grid) = ~x+y
+# gridded(meuse.grid) = TRUE
+#
+# over(sr, geometry(meuse))
+# over(sr, meuse)
+# over(sr, geometry(meuse), returnList = TRUE)
+# over(sr, meuse, returnList = TRUE)
+#
+# over(meuse, sr)
+# over(meuse, srdf)
+#
+# # same thing, with grid:
+# over(sr, meuse.grid)
+# over(sr, meuse.grid, fn = mean)
+# over(sr, meuse.grid, returnList = TRUE)
+#
+# over(meuse.grid, sr)
+# over(meuse.grid, srdf, fn = mean)
+# over(as(meuse.grid, "SpatialPoints"), sr)
+# over(as(meuse.grid, "SpatialPoints"), srdf)
+
+
+
+
+
+
+
+
+
+
+
+
+# ## http://stackoverflow.com/questions/21971447/check-if-point-is-in-spatial-object-which-consists-of-multiple-polygons-holes
+# library(maptools)
+# library(rgdal)
+# library(rgeos)
+# library(ggplot2)
+# library(sp)
+#
+# URL <- "http://www.geodatenzentrum.de/auftrag1/archiv/vektor/vg250_ebenen/2012/vg250_2012-01-01.utm32s.shape.ebenen.zip"
+# td <- tempdir()
+# setwd(td)
+# temp <- tempfile(fileext = ".zip")
+# download.file(URL, temp)
+# unzip(temp)
+#
+# # Get shape file
+# shp <- file.path(tempdir(),"vg250_0101.utm32s.shape.ebenen/vg250_ebenen/vg250_gem.shp")
+#
+# # Read in shape file
+# map <- readShapeSpatial(shp, proj4string = CRS("+init=epsg:25832"))
+#
+# # Transform the geocoding from UTM to Longitude/Latitude
+# map <- spTransform(map, CRS("+proj=longlat +datum=WGS84"))
+
+
+
+
+
+# # Pick an geographic area which consists of multiple polygons
+# # ---------------------------------------------------------------------------
+# # Output a frequency table of areas with N polygons
+# nPolys <- sapply(map@polygons, function(x)length(x@Polygons))
+#
+# # Get geographic area with the most polygons
+# polygon.with.max.polygons <- which(nPolys==max(nPolys))
+#
+# # Get shape for the geographic area with the most polygons
+# Poly.coords <- map[which(nPolys==max(nPolys)),]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# filename <- system.file("shape/nc.shp", package="sf")
+# nc <- st_read(filename)
+#
+# st_intersects(nc[1:5,], nc[1:4,])
+#
+# st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
+
 
 
