@@ -129,7 +129,6 @@ PointInPolygon <- function(dt_polygons, polyColumns, dt_points, pointColumns){
 
 	## if the point is in a 'hole', then it's NOT in the polygon
 
-
 }
 
 #' Is Left

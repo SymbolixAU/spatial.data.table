@@ -14,6 +14,8 @@ bool rcppIsPolygonClosed(double startX, double endX, double startY, double endY)
 	return (startX == endX && startY == endY);
 }
 
+double rcppWindingNumber(double pointX, double pointY,
+                         NumericVector vectorX, NumericVector vectorY);
 
 // Comparing a data.table of points and a data.table of polygons
 // - whcih points fall in which polygons
@@ -32,7 +34,42 @@ bool rcppIsPolygonClosed(double startX, double endX, double startY, double endY)
 // - for all the points
 
 
+/**
+ * rcpp Point In Polygon
+ *
+ * determins if a set of points are in a polygon
+ */
+// [[Rcpp::export]]
+NumericVector rcppPointsInPolygon(NumericVector pointsId,
+                                  NumericVector pointsX, NumericVector pointsY,
+                                  NumericVector vectorX, NumericVector vectorY){
 
+	int nPoints = pointsId.size();
+
+	NumericVector pointsInPolygon;
+	NumericVector polygonId;
+	NumericVector lineId;
+
+	//Rcpp::Rcout << "nPoints: " << nPoints << std::endl;
+
+	for (int thisPoint = 0; thisPoint < nPoints; thisPoint++){
+
+		//Rcpp::Rcout << "testing " << pointsId[thisPoint] << std::endl;
+
+		if (rcppWindingNumber(pointsX[thisPoint], pointsY[thisPoint],
+                        vectorX, vectorY) != 0 ){
+
+			//Rcpp::Rcout << "result: true " << pointsId[thisPoint] << std::endl;
+			pointsInPolygon.push_back(pointsId[thisPoint]);
+
+			}
+	}
+
+	return pointsInPolygon;
+	//return DataFrame::create(Named("polygonId") = polygonId,
+  //                        Named("lineId") = lineId,
+  //                        Named("pointId") = pointsInPolygon);
+}
 
 /**
  * Winding Number
@@ -47,44 +84,35 @@ bool rcppIsPolygonClosed(double startX, double endX, double startY, double endY)
  */
 // [[Rcpp::export]]
 double rcppWindingNumber(double pointX, double pointY,
-                     NumericVector vectorX, NumericVector vectorY,
-                     bool debugIsClosed, bool debugClosePoly){
+                     NumericVector vectorX, NumericVector vectorY){
 
 	int windingNumber = 0;  // winding number counter
+	int nVectorSize = vectorX.size() - 1;
 
 	// check if the polygon is closed
-	if(!isPolygonClosed(vectorX[0], vectorX[vectorX.size()],
-                       vectorY[0], vectorY[vectorY.size()])){
+	if(!isPolygonClosed(vectorX[0], vectorX[nVectorSize],
+                       vectorY[0], vectorY[nVectorSize])){
 
-		if (debugIsClosed == true){
-			return -1.0;
-		}else{
-			// close polygon
-			vectorX = ClosePolygon(vectorX);
-			vectorY = ClosePolygon(vectorY);
-			if( debugClosePoly == true){
-				// return the size of the new vector
-				return vectorX[vectorX.size()];
-			}
-		}
+		// close polygon
+		vectorX = ClosePolygon(vectorX);
+		vectorY = ClosePolygon(vectorY);
 	}
 
-	int n = vectorX.size(); // number of rows of the polygon vector
+
+	int n = vectorX.size() - 1; // number of rows of the polygon vector
 	// compute winding number
 
 	// loop all points in the polygon vector
-	for (int i = 0; i < n; i++){   //
+	for (int i = 0; i < n; i++){
 		if (vectorY[i] <= pointY){
 			if (vectorY[i + 1] > pointY){
-				//if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) > 0){
-				if ( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[0]) * (vectorY[i + 1] - vectorY[i])) > 0){
+				if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) > 0){
 					++windingNumber;
 				}
 			}
 		}else{
 			if (vectorY[i + 1] <= pointY){
-				//if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) < 0){
-				if( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[0]) * (vectorY[i + 1] - vectorY[i])) < 0){
+				if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) < 0){
 					--windingNumber;
 				}
 			}

@@ -9,10 +9,37 @@
 ## - some of the test-cases appear to struggle when the point is 'close' to the line
 ## -- however, I couldn't replicate this issue when using 'cppFunction()'
 
+## - use bounding box to reduce compuation
+## -
+
+## - only return points where the last 'PointsInPolygon' is not in a hole
+
+#' Points In Polygon
+#'
+#' Determins if a set of points fall within a polygon
+#'
+#' @details
+#' Calculates the winding number (\url{https://en.wikipedia.org/wiki/Winding_number})
+#'
+#' @examples
+#' \dontrun{
+#'  ## example
+#' }
+#' @param vectorX
+#' @param vectorY
+#' @param pointsX
+#' @param pointsY
+#'
+#' @export
+PointsInPolygon <- function(vectorX, vectorY, pointsX, pointsY, pointsIds){
+	rcppPointsInPolygon(pointsIds, pointsX, pointsY, vectorX, vectorY)
+}
+
 #' Winding Number
 #'
 #' Calculates the winding number for a point and polygon. Returns 0 when the point
-#' is outside the polygon
+#' is outside the polygon.
+#'
 #'
 #' @param pointX x-coordinate of a point
 #' @param pointY y-coordinate of a point
@@ -20,9 +47,8 @@
 #' @param polyY y-coordinates of thepolygon
 #'
 #' @export
-WindingNumber <- function(pointX, pointY, polyX, polyY,
-													debugIsClosed = FALSE, debugClosePoly = FALSE){
-	rcppWindingNumber(pointX, pointY, polyX, polyY, debugIsClosed, debugClosePoly)
+WindingNumber <- function(pointX, pointY, polyX, polyY){
+	rcppWindingNumber(pointX, pointY, polyX, polyY)
 
 }
 

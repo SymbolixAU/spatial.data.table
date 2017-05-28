@@ -90,9 +90,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppPointsInPolygon
+NumericVector rcppPointsInPolygon(NumericVector pointsId, NumericVector pointsX, NumericVector pointsY, NumericVector vectorX, NumericVector vectorY);
+RcppExport SEXP spatial_data_table_rcppPointsInPolygon(SEXP pointsIdSEXP, SEXP pointsXSEXP, SEXP pointsYSEXP, SEXP vectorXSEXP, SEXP vectorYSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pointsId(pointsIdSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pointsX(pointsXSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pointsY(pointsYSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type vectorX(vectorXSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type vectorY(vectorYSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppPointsInPolygon(pointsId, pointsX, pointsY, vectorX, vectorY));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppWindingNumber
-double rcppWindingNumber(double pointX, double pointY, NumericVector vectorX, NumericVector vectorY, bool debugIsClosed, bool debugClosePoly);
-RcppExport SEXP spatial_data_table_rcppWindingNumber(SEXP pointXSEXP, SEXP pointYSEXP, SEXP vectorXSEXP, SEXP vectorYSEXP, SEXP debugIsClosedSEXP, SEXP debugClosePolySEXP) {
+double rcppWindingNumber(double pointX, double pointY, NumericVector vectorX, NumericVector vectorY);
+RcppExport SEXP spatial_data_table_rcppWindingNumber(SEXP pointXSEXP, SEXP pointYSEXP, SEXP vectorXSEXP, SEXP vectorYSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -100,9 +115,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type pointY(pointYSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type vectorX(vectorXSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type vectorY(vectorYSEXP);
-    Rcpp::traits::input_parameter< bool >::type debugIsClosed(debugIsClosedSEXP);
-    Rcpp::traits::input_parameter< bool >::type debugClosePoly(debugClosePolySEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppWindingNumber(pointX, pointY, vectorX, vectorY, debugIsClosed, debugClosePoly));
+    rcpp_result_gen = Rcpp::wrap(rcppWindingNumber(pointX, pointY, vectorX, vectorY));
     return rcpp_result_gen;
 END_RCPP
 }

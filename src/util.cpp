@@ -31,8 +31,8 @@ bool isPolygonClosed(double startX, double endX, double startY, double endY){
 }
 
 Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector){
-	double addToEnd = polyVector[0];
-	polyVector.push_back(addToEnd);
+	//double addToEnd = polyVector[0];
+	polyVector.push_back(polyVector[0]);
 	return polyVector;
 }
 

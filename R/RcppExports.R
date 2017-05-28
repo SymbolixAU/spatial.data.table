@@ -25,7 +25,11 @@ rcppIsPolygonClosed <- function(startX, endX, startY, endY) {
     .Call('spatial_data_table_rcppIsPolygonClosed', PACKAGE = 'spatial.data.table', startX, endX, startY, endY)
 }
 
-rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY, debugIsClosed, debugClosePoly) {
-    .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY, debugIsClosed, debugClosePoly)
+rcppPointsInPolygon <- function(pointsId, pointsX, pointsY, vectorX, vectorY) {
+    .Call('spatial_data_table_rcppPointsInPolygon', PACKAGE = 'spatial.data.table', pointsId, pointsX, pointsY, vectorX, vectorY)
+}
+
+rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
+    .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY)
 }
 

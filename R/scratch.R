@@ -589,21 +589,19 @@
 # 		int n = vectorX.size(); // number of rows of the polygon vector
 # 	// compute winding number
 #
-#
-#
 # 	// loop all points in the polygon vector
 # 	for (int i = 0; i < n; i++){   //
 # 		if (vectorY[i] <= pointY){
 # 			if (vectorY[i + 1] > pointY){
 # 				//if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) > 0){
-# 				if ( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[0]) * (vectorY[i + 1] - vectorY[i])) > 0){
+# 				if ( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[i]) * (vectorY[i + 1] - vectorY[i])) > 0){
 # 					++windingNumber;
 # 				}
 # 			}
 # 		}else{
 # 			if (vectorY[i + 1] <= pointY){
 # 				//if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) < 0){
-# 				if( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[0]) * (vectorY[i + 1] - vectorY[i])) < 0){
+# 				if( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[i]) * (vectorY[i + 1] - vectorY[i])) < 0){
 # 					--windingNumber;
 # 				}
 # 			}
@@ -612,32 +610,92 @@
 # 	return windingNumber;
 # }')
 #
-# polyX = c(1.05, 1.05, -89.5, -89.5, 1.05)
-# polyY = c(53.0, 53.5, 53.5, 53.0, 53.0)
+
+## Point in Polygon cpp
+# library(googleway)
+# mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
+#
+#
+# polyX = c(51.5, 51.9, 51.9, 51.5, 51.5)
+# polyY = c(1.05, 1.05, -1.05, -1.05, 1.05)
 #
 # ## roughly Greenwhich
-# pointX = 0
-# pointY = 52.89
+# pointX = c(51.6, 51.2, 52, 51.55)
+# pointY = c(0, -1, 1, 0.5)
 #
-# testResults <- numeric(1000)
-# for(i in seq_along(testResults)){
-# 	testResults[i] <- myWindingNumber(pointX, pointY, polyX, polyY)
-# }
+# df_poly <- data.frame(lat = polyX, lon = polyY, drag = TRUE)
+# df_point <- data.frame(lat = pointX, lon = pointY, colour = "green")
 #
-# sum(testResults != -1)
+# google_map(key = mapKey) %>%
+# 	add_markers(data = df_poly, draggable = "drag") %>%
+# 	add_polylines(data = df_poly, lat = "lat", lon = "lon") %>%
+# 	add_markers(data = df_point, colour = "colour")
 #
-# testResults <- numeric(1000)
-# for(i in seq_along(testResults)){
-# 	testResults[i] <- spatial.data.table::WindingNumber(pointX, pointY, polyX, polyY)
-# }
+# library(data.table)
+# dt_poly <- data.table(df_poly)
+# dt_points <- data.table(df_point)
 #
-# sum(testResults != -1)
-
-# v <- c(1,2,3,4)
-# testClosePolygon(v)
+# dt_poly[, polygonId := 1]
+# dt_poly[, lineId := 1]
+# dt_points[, pointId := .I]
 #
-# testIsClosed(1,1,2,2)
+# ## for each polygon, calculate the winding number
+#
+# dt_poly[, PointsInPolygon(vectorX = lat, vectorY = lon,
+# 													pointsX = dt_points$lat, pointsY = dt_points$lon,
+# 													pointsId = dt_points$pointId)
+# 				, by = .(polygonId, lineId)]
 
 
+# ## multiple polygons
+# dt_poly <- data.table(lat = c(51.5, 51.9,  51.9,  51.5, 51.5, 51.5, 52.1, 52.1, 51.5, 51.5),
+# 											lon = c(1.05, 1.05, -1.05, -1.05, 1.05, 1.05, 1.05, 0, 0, 1.05),
+# 											polygonId = c(rep(1,5), rep(2, 5)),
+# 											lineId = c(rep(1, 5), rep(1, 5)))
+#
+# dt_poly[, info := paste0("lat: ", lat, ", lon: ", lon)]
+# dt_poly[, drag := TRUE]
+#
+# ## roughly Greenwhich
+# dt_point <- data.table(lat = c(51.6, 51.2, 52, 51.55),
+# 											 lon = c(0, -1, 1, 0.5),
+# 											 pointId = 1:4,
+# 											 colour = "green")
+#
+# google_map(key = mapKey) %>%
+# 	add_markers(data = dt_poly, info_window = "info", draggable = "drag") %>%
+# 	add_polylines(data = dt_poly, lat = "lat", lon = "lon", id = "polygonId") %>%
+# 	add_markers(data = dt_point, colour = "colour")
+#
+# dt_poly[, PointsInPolygon(vectorX = lat, vectorY = lon,
+# 													pointsX = dt_points$lat, pointsY = dt_points$lon,
+# 													pointsId = dt_points$pointId)
+# 				, by = .(polygonId, lineId)]
 
 
+## multiple polygons with hole
+# dt_poly <- data.table(lat = c(51.5, 51.9,  51.9,  51.5, 51.5, 51.5,51.6,51.6,51.5,51.5, 51.5, 52.1, 52.1, 51.5, 51.5),
+# 											lon = c(1.05, 1.05, -1.05, -1.05, 1.05, 0.6,0.6,0.4,0.4,0.6, 1.05, 1.05, 0, 0, 1.05),
+# 											polygonId = c(rep(1,5), rep(1, 5), rep(2, 5)),
+# 											lineId = c(rep(1, 5), rep(2, 5), rep(1, 5)),
+# 											hole = FALSE)
+#
+# dt_poly[lineId == 2, hole := TRUE]
+# dt_poly[, info := paste0("lat: ", lat, ", lon: ", lon)]
+# dt_poly[, drag := TRUE]
+#
+# ## roughly Greenwhich
+# dt_point <- data.table(lat = c(51.6, 51.2, 52, 51.55),
+# 											 lon = c(0, -1, 1, 0.5),
+# 											 pointId = 1:4,
+# 											 colour = "green")
+#
+# google_map(key = mapKey) %>%
+# 	add_markers(data = dt_poly, info_window = "info", draggable = "drag") %>%
+# 	add_polylines(data = dt_poly, lat = "lat", lon = "lon", id = "polygonId") %>%
+# 	add_markers(data = dt_point, colour = "colour", info_window = "pointId")
+#
+# dt_poly[, PointsInPolygon(vectorX = lat, vectorY = lon,
+# 													pointsX = dt_points$lat, pointsY = dt_points$lon,
+# 													pointsId = dt_points$pointId)
+# 				, by = .(polygonId, lineId, hole)]
