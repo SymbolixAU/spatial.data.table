@@ -17,3 +17,15 @@ rcppDistanceHaversine <- function(latFrom, lonFrom, latTo, lonTo, earthRadius, t
     .Call('spatial_data_table_rcppDistanceHaversine', PACKAGE = 'spatial.data.table', latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance)
 }
 
+rcppClosePolygon <- function(polyVector) {
+    .Call('spatial_data_table_rcppClosePolygon', PACKAGE = 'spatial.data.table', polyVector)
+}
+
+rcppIsPolygonClosed <- function(startX, endX, startY, endY) {
+    .Call('spatial_data_table_rcppIsPolygonClosed', PACKAGE = 'spatial.data.table', startX, endX, startY, endY)
+}
+
+rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY, debugIsClosed, debugClosePoly) {
+    .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY, debugIsClosed, debugClosePoly)
+}
+

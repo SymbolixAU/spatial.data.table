@@ -567,24 +567,77 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 # filename <- system.file("shape/nc.shp", package="sf")
 # nc <- st_read(filename)
 #
 # st_intersects(nc[1:5,], nc[1:4,])
 #
 # st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
+
+
+
+
+### winding number
+
+# library(Rcpp)
+#
+# cppFunction('double myWindingNumber(double pointX, double pointY,
+# 												 NumericVector vectorX, NumericVector vectorY){
+#
+# 	int windingNumber = 0;  // winding number counter
+#
+# 		int n = vectorX.size(); // number of rows of the polygon vector
+# 	// compute winding number
+#
+#
+#
+# 	// loop all points in the polygon vector
+# 	for (int i = 0; i < n; i++){   //
+# 		if (vectorY[i] <= pointY){
+# 			if (vectorY[i + 1] > pointY){
+# 				//if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) > 0){
+# 				if ( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[0]) * (vectorY[i + 1] - vectorY[i])) > 0){
+# 					++windingNumber;
+# 				}
+# 			}
+# 		}else{
+# 			if (vectorY[i + 1] <= pointY){
+# 				//if (isLeft(vectorX[i], vectorY[i], vectorX[i + 1], vectorY[i + 1], pointX, pointY) < 0){
+# 				if( ((vectorX[i+1] - vectorX[i]) * (pointY - vectorY[i]) - (pointX - vectorX[0]) * (vectorY[i + 1] - vectorY[i])) < 0){
+# 					--windingNumber;
+# 				}
+# 			}
+# 		}
+# 	}
+# 	return windingNumber;
+# }')
+#
+# polyX = c(1.05, 1.05, -89.5, -89.5, 1.05)
+# polyY = c(53.0, 53.5, 53.5, 53.0, 53.0)
+#
+# ## roughly Greenwhich
+# pointX = 0
+# pointY = 52.89
+#
+# testResults <- numeric(1000)
+# for(i in seq_along(testResults)){
+# 	testResults[i] <- myWindingNumber(pointX, pointY, polyX, polyY)
+# }
+#
+# sum(testResults != -1)
+#
+# testResults <- numeric(1000)
+# for(i in seq_along(testResults)){
+# 	testResults[i] <- spatial.data.table::WindingNumber(pointX, pointY, polyX, polyY)
+# }
+#
+# sum(testResults != -1)
+
+# v <- c(1,2,3,4)
+# testClosePolygon(v)
+#
+# testIsClosed(1,1,2,2)
+
 
 
 
