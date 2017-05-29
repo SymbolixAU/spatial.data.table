@@ -171,6 +171,57 @@ dtAntipode <- function(lat, lon) {
 	return(list(antipodeLat(lat), antipodeLon(lon)))
 }
 
+
+#' Dist 2 gc
+#'
+#' Finds the distance of a point to a great-circle path
+#'
+#' Sometimes called 'cross-track' distance
+#'
+#' @param pointLat
+#' @param pointLon
+#' @param latFrom
+#' @param lonFrom
+#' @param latTo
+#' @param lonTo
+#' @param tolerance
+#' @param r
+#'
+#' @export
+dtDist2gc <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
+											tolerance = 1e+9, r = earthsRadius()){
+
+	## TODO:
+	## - specify the distance function to use in the calculationg
+	## - (currently uses haversine)
+
+	rcppDist2gc(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
+							tolerance, r)
+}
+
+#' Along Track Distance
+#'
+#' Calculates the distance along a great-circle to the cross-track point
+#'
+#' @param pointLat
+#' @param pointLon
+#' @param latFrom
+#' @param lonFrom
+#' @param latTo
+#' @param lonTo
+#' @param tolerance
+#' @param r
+#'
+#' @seealso dtDist2gc
+#'
+#' @export
+dtAlongTrackDistance <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
+																 tolerance = 1e+9, r = earthsRadius()){
+
+	rcppAlongTrack(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, r)
+}
+
+
 antipodeLat <- function(lat) return(-lat)
 antipodeLon <- function(lon) return((lon %% 360) - 180)
 

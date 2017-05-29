@@ -31,6 +31,16 @@ double toDegrees(double rad);
  */
 double normaliseLonDeg(double deg);
 
+double distanceHaversine(double latf, double lonf, double latt, double lont,
+                         double tolerance, double earthRadius);
+
+double bearingCalc(double latf, double lonf, double latt, double lont,
+               bool compassBearing);
+
+double crossTrack(double distance, double bearing1, double bearing2, double earthRadius);
+
+double alongTrack(double distance, double xtrack, double earthRadius);
+
 /**
  * Is Left
  *

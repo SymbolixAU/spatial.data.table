@@ -9,4 +9,3 @@ testClosePolygon(v)
 \description{
 tests close polygon
 }
-

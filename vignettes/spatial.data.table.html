@@ -12,7 +12,7 @@
 
 <meta name="author" content="D Cooley" />
 
-<meta name="date" content="2017-05-16" />
+<meta name="date" content="2017-05-29" />
 
 <title>Spatial Data Table</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Spatial Data Table</h1>
 <h4 class="author"><em>D Cooley</em></h4>
-<h4 class="date"><em>2017-05-16</em></h4>
+<h4 class="date"><em>2017-05-29</em></h4>
 
 
 
@@ -100,9 +100,9 @@ dt2 &lt;-<span class="st"> </span><span class="kw">copy</span>(dt)
                                    <span class="kw">matrix</span>(<span class="kw">c</span>(lon2, lat2), <span class="dt">ncol =</span> <span class="dv">2</span>))]  }
 )</code></pre></div>
 <pre><code>## Unit: milliseconds
-##  expr      min       lq     mean   median       uq       max neval
-##   sdt 2.441720 2.510531 2.736995 2.596937 2.660857  9.184005   100
-##   geo 5.111805 5.333007 9.210798 7.062373 7.170756 76.237674   100</code></pre>
+##  expr      min       lq     mean   median       uq      max neval
+##   sdt 1.384379 1.437998 1.663270 1.506200 1.586203  6.59847   100
+##   geo 3.222601 3.675082 6.495825 4.947965 5.504151 71.22127   100</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt1</code></pre></div>
 <pre><code>##        lat1 lon1 lat2 lon2 dtDistance
 ##     1:   21 -172   55  -42   10341893
@@ -137,9 +137,9 @@ dt2 &lt;-<span class="st"> </span><span class="kw">copy</span>(dt)
                                    <span class="kw">matrix</span>(<span class="kw">c</span>(lon2, lat2), <span class="dt">ncol =</span> <span class="dv">2</span>))]  }
 )</code></pre></div>
 <pre><code>## Unit: milliseconds
-##  expr       min        lq      mean    median        uq       max neval
-##   sdt  2.897737  2.932721  3.015455  2.989137  3.058263  4.842699   100
-##   geo 23.235889 23.585978 25.206076 23.933954 25.339271 93.669977   100</code></pre>
+##  expr       min       lq      mean    median        uq       max neval
+##   sdt  1.282025  1.33291  1.463962  1.410521  1.498619  3.470176   100
+##   geo 12.726680 13.25677 14.983274 13.915281 15.321504 85.407118   100</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt1</code></pre></div>
 <pre><code>##        lat1 lon1 lat2 lon2     dtBearing
 ##     1:   21 -172   55  -42  2.610066e+01
@@ -229,7 +229,7 @@ dt_nearest[, polyline :<span class="er">=</span><span class="st"> </span>pl ]
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

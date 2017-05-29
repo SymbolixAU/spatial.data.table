@@ -46,4 +46,3 @@ dtBearing(0, 0, 1, -0.001, compassBearing = TRUE)
 dtBearing(-37,144,-38,145)
 
 }
-

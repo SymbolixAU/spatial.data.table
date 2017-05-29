@@ -19,4 +19,3 @@ WindingNumber(pointX, pointY, polyX, polyY)
 Calculates the winding number for a point and polygon. Returns 0 when the point
 is outside the polygon.
 }
-

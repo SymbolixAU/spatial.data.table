@@ -3,18 +3,114 @@
 using namespace Rcpp;
 
 
+// [[Rcpp::export]]
+NumericVector rcppAlongTrack(NumericVector latFrom, NumericVector lonFrom,
+                             NumericVector latTo, NumericVector lonTo,
+                             NumericVector pointLat, NumericVector pointLon,
+                             double tolerance, double earthRadius){
+
+	int n = latFrom.size();
+	NumericVector distance(n);
+
+	double plat;
+	double plon;
+	double latf;
+	double lonf;
+	double latt;
+	double lont;
+
+	double xtrack;
+	double d;
+	double b1;
+	double b2;
+
+	for(int i = 0; i < n; i++){
+
+		plat = toRadians(pointLat[i]);
+		plon = toRadians(pointLon[i]);
+		latf = toRadians(latFrom[i]);
+		lonf = toRadians(lonFrom[i]);
+		latt = toRadians(latTo[i]);
+		lont = toRadians(lonTo[i]);
+
+		// (angular) distance from start-point (on path) to the point
+		d = distanceHaversine(latf, lonf, plat, plon, tolerance, earthRadius);
+		d = d / earthRadius;
+
+		// initial bearing from start-point (on path) to point
+		b1 = bearingCalc(latf, lonf, plat, plon, true);
+		b1 = toRadians(b1);
+
+		// initial bearing from start-point (on path) to end-point (on path)
+		b2 = bearingCalc(latf, lonf, latt, lont, true);
+		b2 = toRadians(b2);
+
+		xtrack =  crossTrack(d, b1, b2, earthRadius);
+
+		distance[i] = alongTrack(d, xtrack, earthRadius);
+	}
+
+	return distance;
+
+}
 
 
-//double toRadians(double deg);
-//double toDegrees(double rad);
-//double normaliseLonDeg(double deg);
+// [[Rcpp::export]]
+NumericVector rcppDist2gc(NumericVector latFrom, NumericVector lonFrom,
+                          NumericVector latTo, NumericVector lonTo,
+                          NumericVector pointLat, NumericVector pointLon,
+                          double tolerance, double earthRadius){
+
+	int n = latFrom.size();
+	NumericVector distance(n);
+
+	double plat;
+	double plon;
+	double latf;
+	double lonf;
+	double latt;
+	double lont;
+
+	double d;
+	double b1;
+	double b2;
+
+	for(int i = 0; i < n; i++){
+
+		plat = toRadians(pointLat[i]);
+		plon = toRadians(pointLon[i]);
+		latf = toRadians(latFrom[i]);
+		lonf = toRadians(lonFrom[i]);
+		latt = toRadians(latTo[i]);
+		lont = toRadians(lonTo[i]);
+
+		// (angular) distance from start-point (on path) to the point
+		d = distanceHaversine(latf, lonf, plat, plon, tolerance, earthRadius);
+		d = d / earthRadius;
+
+		// initial bearing from start-point (on path) to point
+		b1 = bearingCalc(latf, lonf, plat, plon, true);
+		b1 = toRadians(b1);
+
+		// initial bearing from start-point (on path) to end-point (on path)
+		b2 = bearingCalc(latf, lonf, latt, lont, true);
+		b2 = toRadians(b2);
+
+		//distance[i] = asin( sin(d) * sin(b1 - b2) ) * earthRadius;
+		distance[i] = crossTrack(d, b1, b2, earthRadius);
+	}
+
+	return distance;
+}
+
+
 
 // [[Rcpp::export]]
 Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom,
                            NumericVector distance, NumericVector bearing,
                            double earthRadius){
 
-int n = latFrom.size();
+  int n = latFrom.size();
 	NumericVector destinationLat(n);
 	NumericVector destinationLon(n);
 
@@ -103,11 +199,6 @@ NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
 	double lonf;
 	double lont;
 
-	double x;
-	double y;
-
-	double b;
-
 	for(int i = 0; i < n; i++){
 
 		latf = toRadians(latFrom[i]);
@@ -115,18 +206,7 @@ NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
 		latt = toRadians(latTo[i]);
 		lont = toRadians(lonTo[i]);
 
-		y = sin(lont - lonf) * cos(latt);
-		x = ( cos(latf) * sin(latt) ) - ( sin(latf) * cos(latt) * cos(lont - lonf) );
-
-		if(compassBearing == TRUE){
-			b = (toDegrees(atan2(y, x)) + 360);
-			// % operator is for integers
-			// fmod() is for doubles
-			b = fmod(b, 360);
-		}else{
-			b = toDegrees(atan2(y, x));
-		}
-		bearing[i] = b;
+		bearing[i] = bearingCalc(latf, lonf, latt, lont, compassBearing);
 	}
 
 	return bearing;
@@ -146,10 +226,6 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 	double latt;
 	double lonf;
 	double lont;
-	double dlat;
-	double dlon;
-
-	double d;
 
 	for(int i = 0; i < n; i++){
 
@@ -158,16 +234,7 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 		latt = toRadians(latTo[i]);
 		lont = toRadians(lonTo[i]);
 
-		dlat = latt - latf;
-		dlon = lont - lonf;
-
-		d = (sin(dlat/2) * sin(dlat/2)) + (cos(latf) * cos(latt)) * (sin(dlon/2) * sin(dlon/2));
-		if(d > 1 && d <= tolerance){
-			d = 1;
-		}
-		d = 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
-
-		distance[i] = d;
+		distance[i] = distanceHaversine(latf, lonf, latt, lont, tolerance, earthRadius);
 	}
 
 	return distance;

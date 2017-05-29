@@ -33,4 +33,3 @@ Calculates the antipodal coordiantes for a given pair of coordinates
 }
 
 }
-

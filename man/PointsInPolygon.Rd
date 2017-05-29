@@ -20,4 +20,3 @@ Calculates the winding number (\url{https://en.wikipedia.org/wiki/Winding_number
  ## example
 }
 }
-

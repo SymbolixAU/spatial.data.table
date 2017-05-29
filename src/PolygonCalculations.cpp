@@ -47,20 +47,20 @@ NumericVector rcppPointsInPolygon(NumericVector pointsId,
 	int nPoints = pointsId.size();
 
 	NumericVector pointsInPolygon;
-	NumericVector polygonId;
-	NumericVector lineId;
+//	NumericVector polygonId;
+//	NumericVector lineId;
 
 	//Rcpp::Rcout << "nPoints: " << nPoints << std::endl;
 
-	for (int thisPoint = 0; thisPoint < nPoints; thisPoint++){
+	for (int iPoint = 0; iPoint < nPoints; iPoint++){
 
-		//Rcpp::Rcout << "testing " << pointsId[thisPoint] << std::endl;
+		//Rcpp::Rcout << "testing " << pointsId[iPoint] << std::endl;
 
-		if (rcppWindingNumber(pointsX[thisPoint], pointsY[thisPoint],
+		if (rcppWindingNumber(pointsX[iPoint], pointsY[iPoint],
                         vectorX, vectorY) != 0 ){
 
-			//Rcpp::Rcout << "result: true " << pointsId[thisPoint] << std::endl;
-			pointsInPolygon.push_back(pointsId[thisPoint]);
+			//Rcpp::Rcout << "result: true " << pointsId[iPoint] << std::endl;
+			pointsInPolygon.push_back(pointsId[iPoint]);
 
 			}
 	}

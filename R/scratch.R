@@ -695,7 +695,36 @@
 # 	add_polylines(data = dt_poly, lat = "lat", lon = "lon", id = "polygonId") %>%
 # 	add_markers(data = dt_point, colour = "colour", info_window = "pointId")
 #
-# dt_poly[, PointsInPolygon(vectorX = lat, vectorY = lon,
-# 													pointsX = dt_points$lat, pointsY = dt_points$lon,
-# 													pointsId = dt_points$pointId)
+# dt_poly[, .(pointId = PointsInPolygon(vectorX = lat, vectorY = lon,
+# 													pointsX = dt_point$lat, pointsY = dt_point$lon,
+# 													pointsId = dt_point$pointId))
 # 				, by = .(polygonId, lineId, hole)]
+
+# library(googleway)
+#
+# dt_melbourne <- as.data.table(melbourne)
+#
+# dt_melbourne <- dt_melbourne[, decode_pl(polyline), by = .(polygonId, pathId)]
+#
+# dt_stops <- tram_stops
+# setDT(dt_stops)
+# dt_stops[, id := .I]
+#
+# google_map(key = mapKey) %>%
+# 	add_polygons(data = dt_melbourne, polyline = "polyline", id = "polygonId",
+# 							 pathId = "pathId") %>%
+# 	add_markers(data = dt_stops, lat = "stop_lat", lon = "stop_lon")
+#
+# dt_melbourne[, PointsInPolygon(vectorX = lat,
+# 															 vectorY = lon,
+# 															 pointsX = dt_stops$stop_lat,
+# 															 pointsY = dt_stops$stop_lon,
+# 															 pointsId = dt_stops$id),
+# 						 by = .(polygonId, pathId)]
+
+
+
+
+
+
+
