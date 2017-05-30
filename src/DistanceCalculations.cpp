@@ -236,10 +236,33 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 
 		distance[i] = distanceHaversine(latf, lonf, latt, lont, tolerance, earthRadius);
 	}
-
 	return distance;
-
 }
 
+// [[Rcpp::export]]
+NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom,
+                                 NumericVector latTo, NumericVector lonTo,
+                                 double earthRadius){
+
+	int n = latFrom.size();
+	NumericVector distance(n);
+
+	double latf;
+	double latt;
+	double lonf;
+	double lont;
+
+	for(int i = 0; i < n; i++){
+		latf = toRadians(latFrom[i]);
+		lonf = toRadians(lonFrom[i]);
+		latt = toRadians(latTo[i]);
+		lont = toRadians(lonTo[i]);
+
+		distance[i] = distanceCosine(latf, lonf, latt, lont, earthRadius);
+
+	}
+
+	return distance;
+}
 
 

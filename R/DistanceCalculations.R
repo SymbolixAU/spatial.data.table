@@ -34,6 +34,34 @@ dtHaversine <- function(latFrom, lonFrom,
 	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r, tolerance)
 }
 
+#' dt cosine
+#'
+#' Calculates the Cosine distance between two points
+#'
+#' @param latFrom latitude
+#' @param lonFrom longitude
+#' @param latTo latitude
+#' @param lonTo latitude
+#' @param r radius of earth
+#'
+#'
+#' @return distance in metres
+#' @examples
+#' dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
+#'   lon1 = seq(144, 145, by = 0.1),
+#'   lat2 = seq(-35, -34, by = 0.1),
+#'   lon2 = seq(145, 146, by = 0.1))
+#'
+#' dt[, distance := dtCosine(lat1, lon1, lat2, lon2)]
+#'
+#' @export
+dtCosine <- function(latFrom, lonFrom,
+												latTo, lonTo,
+												r = earthsRadius()){
+
+	rcppDistanceCosine(latFrom, lonFrom, latTo, lonTo, r)
+}
+
 
 #' dt bearing
 #'

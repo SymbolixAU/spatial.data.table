@@ -101,6 +101,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppDistanceCosine
+NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double earthRadius);
+RcppExport SEXP spatial_data_table_rcppDistanceCosine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP earthRadiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type latFrom(latFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type latTo(latToSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonTo(lonToSEXP);
+    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppDistanceCosine(latFrom, lonFrom, latTo, lonTo, earthRadius));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppClosePolygon
 Rcpp::NumericVector rcppClosePolygon(Rcpp::NumericVector polyVector);
 RcppExport SEXP spatial_data_table_rcppClosePolygon(SEXP polyVectorSEXP) {

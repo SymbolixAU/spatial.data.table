@@ -9,12 +9,14 @@ using namespace Rcpp;
 
 // -----------------------------------------------------------------------------
 double toRadians(double deg){
-	return deg * (M_PI / 180);
+	//return deg * (M_PI / 180);
+	return deg * 0.01745329;
 }
 
 // -----------------------------------------------------------------------------
 double toDegrees(double rad){
-	return rad / (M_PI / 180);
+	//return rad / (M_PI / 180);
+	return rad * 57.29578;
 }
 
 // -----------------------------------------------------------------------------
@@ -26,19 +28,25 @@ double normaliseLonDeg(double deg){
 double distanceHaversine(double latf, double lonf, double latt, double lont,
                          double tolerance, double earthRadius){
 	double d;
-	double dlat;
-	double dlon;
+	double dlat = latt - latf;
+	double dlon =  lont - lonf;
 
-	dlat = latt - latf;
-	dlon = lont - lonf;
-
-	d = (sin(dlat/2) * sin(dlat/2)) + (cos(latf) * cos(latt)) * (sin(dlon/2) * sin(dlon/2));
+	d = (sin(dlat * 0.5) * sin(dlat * 0.5)) + (cos(latf) * cos(latt)) * (sin(dlon * 0.5) * sin(dlon * 0.5));
 	if(d > 1 && d <= tolerance){
 		d = 1;
 	}
 	d = 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
 
 	return d;
+}
+
+// -----------------------------------------------------------------------------
+double distanceCosine(double latf, double lonf, double latt, double lont,
+                      double earthRadius){
+
+	double dlon = lont - lonf;
+	return (acos( sin(latf) * sin(latt) + cos(latf) * cos(latt) * cos(dlon) ) * earthRadius);
+
 }
 
 // -----------------------------------------------------------------------------

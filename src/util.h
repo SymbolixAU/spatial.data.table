@@ -34,6 +34,9 @@ double normaliseLonDeg(double deg);
 double distanceHaversine(double latf, double lonf, double latt, double lont,
                          double tolerance, double earthRadius);
 
+double distanceCosine(double latf, double lonf, double latt, double lont,
+                      double earthRadius);
+
 double bearingCalc(double latf, double lonf, double latt, double lont,
                bool compassBearing);
 
