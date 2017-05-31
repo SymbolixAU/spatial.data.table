@@ -8,6 +8,18 @@ dtAlongTrackDistance(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
   tolerance = 1e+09, r = earthsRadius())
 }
 \arguments{
+\item{latFrom}{latitude value for the start of the path}
+
+\item{lonFrom}{longitude value for the sttart of the path}
+
+\item{latTo}{lattitude value for the end of the path}
+
+\item{lonTo}{longitude value for the end of the path}
+
+\item{pointLat}{latitude value for the point}
+
+\item{pointLon}{longitude value for the point}
+
 \item{r}{}
 }
 \description{

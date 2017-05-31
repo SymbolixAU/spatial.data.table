@@ -206,14 +206,28 @@ dtAntipode <- function(lat, lon) {
 #'
 #' Sometimes called 'cross-track' distance
 #'
-#' @param pointLat
-#' @param pointLon
-#' @param latFrom
-#' @param lonFrom
-#' @param latTo
-#' @param lonTo
+#' @param latFrom latitude value for the start of the path
+#' @param lonFrom longitude value for the sttart of the path
+#' @param latTo lattitude value for the end of the path
+#' @param lonTo longitude value for the end of the path
+#' @param pointLat latitude value for the point
+#' @param pointLon longitude value for the point
 #' @param tolerance
 #' @param r
+#'
+#' @examples
+#' dt <- data.table(lat1 = c(0, 0),
+#'                  lon1 = c(0, 0),
+#'                  lat2 = c(20, -20),
+#'                  lon2 = c(0, 0),
+#'                  plat = c(10, -10),
+#'                  plon = c(22, 22))
+#'
+#' dt[, dist := dtDist2gc(lat1, lon1, lat2, lon2, plat, plon)]
+#'
+#' @return distance in metres. The sign of the result indicates if the point
+#' is to the left (negative) or right (positive) of the line when traveling
+#' from `latFrom,lonFrom` to `latTo,lonTo`.
 #'
 #' @export
 dtDist2gc <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
@@ -231,12 +245,12 @@ dtDist2gc <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
 #'
 #' Calculates the distance along a great-circle to the cross-track point
 #'
-#' @param pointLat
-#' @param pointLon
-#' @param latFrom
-#' @param lonFrom
-#' @param latTo
-#' @param lonTo
+#' @param latFrom latitude value for the start of the path
+#' @param lonFrom longitude value for the sttart of the path
+#' @param latTo lattitude value for the end of the path
+#' @param lonTo longitude value for the end of the path
+#' @param pointLat latitude value for the point
+#' @param pointLon longitude value for the point
 #' @param tolerance
 #' @param r
 #'
