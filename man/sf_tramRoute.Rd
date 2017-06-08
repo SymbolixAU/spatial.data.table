@@ -15,3 +15,4 @@ sf_tramRoute
 Simple Features (\code{library(sf)}) object of the route 35 Tram in Melbourne
 }
 \keyword{datasets}
+

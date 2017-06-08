@@ -241,5 +241,24 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 
 }
 
+// [[Rcpp::export]]
+Rcpp::List rcppMinVecToVec(NumericVector vecX1, NumericVector vecY1,
+                           NumericVector vecX2, NumericVector vecY2,
+                           double tolerance, double earthRadius){
+	// calculates the nearest value between two vectors
+	int n = vecX1.size();
+	NumericMatrix nearestPoint(1,1);
+  NumericVector nearestIndex(n);
+  NumericVector nearestValue(n);
+
+	for(int i = 0; i < n; i ++){
+
+		nearestPoint = minPointToVec(vecX1[i], vecY1[i], vecX2, vecY2, tolerance, earthRadius);
+		nearestIndex[i] = nearestPoint(0, 0);
+  	nearestValue[i] = nearestPoint(0, 1);
+
+	}
+return Rcpp::List::create(nearestIndex, nearestValue);
+}
 
 

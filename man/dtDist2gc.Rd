@@ -16,3 +16,4 @@ Finds the distance of a point to a great-circle path
 \details{
 Sometimes called 'cross-track' distance
 }
+

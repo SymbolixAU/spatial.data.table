@@ -724,6 +724,31 @@
 
 
 
+## Nearest points
+
+# dt1 <- data.table(id = rep(1, 6),
+# 									seq1 = 1:6,
+# 									x = c(1,2,3,4,5,6),
+# 									y = c(1,1,2,3,4,5))
+#
+# dt2 <- data.table(id = rep(1, 6),
+# 									seq = 7:12,
+# 									x = c(1,2,3,5,4,6),
+# 									y = c(1,1,2,1,1,1))
+#
+# NearestPoints(dt1$x, dt1$y, dt2$x, dt2$y)
+#
+# dt1[, NearestPoints(x, y, dt2$x, dt2$y), by = id]
+#
+#
+# ### the 'nearest point' needs to return the 'id' of the point that's nearest to dt1 piont
+# ### and it needs to account for the 'group' in both tables too,
+# ### because I want to first match on a lineId...
+# dt1[ dt2, NearestPoints(x, y, i.x, i.y), on ="id"]
+#
+
+
+
 
 
 

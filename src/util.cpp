@@ -71,6 +71,7 @@ double alongTrack(double distance, double xtrack, double earthRadius){
 	return (acos( cos(distance) / cos(xtrack / earthRadius) ) * earthRadius);
 }
 
+
 // -----------------------------------------------------------------------------
 double isLeft(double p0x, double p0y, double p1x, double p1y, double p2x, double p2y){
 	return ((p1x - p0x) * (p2y - p0y) - (p2x - p0x) * (p1y - p0y));
@@ -81,6 +82,7 @@ bool isPolygonClosed(double startX, double endX, double startY, double endY){
 	return (startX == endX && startY == endY);
 }
 
+
 // -----------------------------------------------------------------------------
 Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector){
 	polyVector.push_back(polyVector[0]);
@@ -88,4 +90,21 @@ Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector){
 }
 
 
+Rcpp::NumericMatrix minPointToVec(double x, double y,
+                                  NumericVector vecX, NumericVector vecY,
+                                  double tolerance, double earthRadius){
+	// calculates the nearest value between a point and a vector
+	int n = vecX.size();
+	NumericVector distances(n);
+	NumericMatrix res(1, 2);
+
+	for(int i = 0; i < n; i ++){
+		distances[i] = distanceHaversine(x, y, vecX[i], vecY[i],	tolerance, earthRadius);
+		//Rcpp::Rcout << distances(i) <<  std::endl;
+	}
+	res(0, 0) = which_min(distances) + 1;
+	res(0, 1) = min(distances);
+
+	return res;
+}
 

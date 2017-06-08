@@ -101,6 +101,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppMinVecToVec
+Rcpp::List rcppMinVecToVec(NumericVector vecX1, NumericVector vecY1, NumericVector vecX2, NumericVector vecY2, double tolerance, double earthRadius);
+RcppExport SEXP spatial_data_table_rcppMinVecToVec(SEXP vecX1SEXP, SEXP vecY1SEXP, SEXP vecX2SEXP, SEXP vecY2SEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type vecX1(vecX1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type vecY1(vecY1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type vecX2(vecX2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type vecY2(vecY2SEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppMinVecToVec(vecX1, vecY1, vecX2, vecY2, tolerance, earthRadius));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppClosePolygon
 Rcpp::NumericVector rcppClosePolygon(Rcpp::NumericVector polyVector);
 RcppExport SEXP spatial_data_table_rcppClosePolygon(SEXP polyVectorSEXP) {

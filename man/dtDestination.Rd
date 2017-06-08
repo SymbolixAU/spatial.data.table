@@ -38,3 +38,4 @@ dt <- data.table::data.table(lat = sample(lats, size = n, replace = T),
 dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
 
 }
+

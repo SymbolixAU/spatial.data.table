@@ -226,6 +226,26 @@ antipodeLat <- function(lat) return(-lat)
 antipodeLon <- function(lon) return((lon %% 360) - 180)
 
 
+
+#' Nearest Points
+#'
+#' find nearest points between two vectors
+#'
+#' @param x1
+#' @param y1
+#' @param x2
+#' @param y2
+#' @param tolerance
+#' @param r
+#'
+#' @export
+NearestPoints <- function(x1, y1, x2, y2, tolerance = 1e+9, r = earthsRadius()){
+	## TODO:
+	## needs to work only subsets of data
+	rcppMinVecToVec(x1, y1, x2, y2, tolerance, r)
+}
+
+
 #' Earths Radius
 #'
 #' Returns an approximation of the radius of the earth in metres

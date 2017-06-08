@@ -84,3 +84,7 @@ bool isPolygonClosed(double startX, double endX, double startY, double endY);
  */
 Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector);
 
+Rcpp::NumericMatrix minPointToVec(double x, double y,
+                                  NumericVector vecX, NumericVector vecY,
+                                  double tolerance, double earthRadius);
+

@@ -9,3 +9,4 @@ testIsClosed(x1, x2, y1, y2)
 \description{
 Tests if polygon is closed
 }
+

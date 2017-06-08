@@ -25,6 +25,10 @@ rcppDistanceHaversine <- function(latFrom, lonFrom, latTo, lonTo, earthRadius, t
     .Call('spatial_data_table_rcppDistanceHaversine', PACKAGE = 'spatial.data.table', latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance)
 }
 
+rcppMinVecToVec <- function(vecX1, vecY1, vecX2, vecY2, tolerance, earthRadius) {
+    .Call('spatial_data_table_rcppMinVecToVec', PACKAGE = 'spatial.data.table', vecX1, vecY1, vecX2, vecY2, tolerance, earthRadius)
+}
+
 rcppClosePolygon <- function(polyVector) {
     .Call('spatial_data_table_rcppClosePolygon', PACKAGE = 'spatial.data.table', polyVector)
 }
