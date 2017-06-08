@@ -95,5 +95,44 @@ Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector){
 	return polyVector;
 }
 
+// -----------------------------------------------------------------------------
+/**
+Rcpp::NumericMatrix minPointToVec(double x, double y,
+                                  NumericVector vecX, NumericVector vecY,
+                                  double tolerance, double earthRadius){
+	// calculates the nearest value between a point and a vector
+	int n = vecX.size();
+	NumericVector distances(n);
+	NumericMatrix res(1, 2);
+
+	for(int i = 0; i < n; i ++){
+		distances = distanceHaversine(x, y, vecX[i], vecY[i],	tolerance, earthRadius);
+	}
+	res(0, 0) = which_min(distances) + 1;
+	res(0, 1) = min(distances);
+	return res;
+}
+**/
+
+/**
+ Rcpp::NumericMatrix rcppMinVecToVec(NumericVector vecX1, NumericVector vecY1,
+                                     NumericVector vecX2, NumericVector vecY2,
+double tolerance, double earthRadius){
+// calculates the nearest value between two vectors
+int n = vecX1.size();
+NumericMatrix nearestPoint(1,1);
+NumericMatrix nearestPoints(n, 2);
+
+for(int i = 0; i < n; i ++){
+nearestPoint = minPointToVec(vecX1[i], vecY1[i], vecX2, vecY2, tolerance, earthRadius);
+nearestPoints(i, 0) = nearestPoint(0, 0);
+nearestPoints(i, 1) = nearestPoint(0, 1);
+}
+
+return nearestPoints;
+}
+**/
+
+
 
 

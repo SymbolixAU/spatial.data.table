@@ -87,3 +87,13 @@ bool isPolygonClosed(double startX, double endX, double startY, double endY);
  */
 Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector);
 
+
+/**
+ * minPointToVec
+ *
+ * Finds the nearest value in a vector to a given point (using haversine)
+Rcpp::NumericMatrix minPointToVec(double x, double y,
+                                  NumericVector vecX, NumericVector vecY,
+                                  double tolerance, double earthRadius);
+
+ */

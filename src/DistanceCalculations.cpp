@@ -216,8 +216,8 @@ NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
 
 // [[Rcpp::export]]
 NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom,
-                             NumericVector latTo, NumericVector lonTo,
-                         double earthRadius, double tolerance) {
+                                    NumericVector latTo, NumericVector lonTo,
+                                    double earthRadius, double tolerance) {
 
 	int n = latFrom.size();
 	NumericVector distance(n);
@@ -265,4 +265,21 @@ NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom,
 	return distance;
 }
 
+/**
+Rcpp::NumericMatrix rcppMinVecToVec(NumericVector vecX1, NumericVector vecY1,
+                                NumericVector vecX2, NumericVector vecY2,
+                                double tolerance, double earthRadius){
+	// calculates the nearest value between two vectors
+	int n = vecX1.size();
+	NumericMatrix nearestPoint(1,1);
+	NumericMatrix nearestPoints(n, 2);
 
+	for(int i = 0; i < n; i ++){
+		nearestPoint = minPointToVec(vecX1[i], vecY1[i], vecX2, vecY2, tolerance, earthRadius);
+		nearestPoints(i, 0) = nearestPoint(0, 0);
+		nearestPoints(i, 1) = nearestPoint(0, 1);
+	}
+
+	return nearestPoints;
+}
+**/
