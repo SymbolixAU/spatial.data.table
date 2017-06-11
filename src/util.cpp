@@ -7,6 +7,12 @@ using namespace Rcpp;
 //
 // -------------------------------------------
 
+void vectorCheck(NumericVector v1, NumericVector v2){
+	if(v1.size() != v2.size()){
+		stop("Vector lengths differ");
+	}
+}
+
 // -----------------------------------------------------------------------------
 double toRadians(double deg){
 	//return deg * (M_PI / 180);
@@ -47,6 +53,11 @@ double distanceCosine(double latf, double lonf, double latt, double lont,
 	double dlon = lont - lonf;
 	return (acos( sin(latf) * sin(latt) + cos(latf) * cos(latt) * cos(dlon) ) * earthRadius);
 
+}
+
+// -----------------------------------------------------------------------------
+double distanceEuclidean(double latf, double lonf, double latt, double lont){
+	return sqrt(pow((latt - latf), 2.0) + pow((lont - lonf), 2.0));
 }
 
 // -----------------------------------------------------------------------------

@@ -116,6 +116,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppDistanceEuclidean
+NumericVector rcppDistanceEuclidean(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo);
+RcppExport SEXP spatial_data_table_rcppDistanceEuclidean(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type latFrom(latFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type latTo(latToSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lonTo(lonToSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppDistanceEuclidean(latFrom, lonFrom, latTo, lonTo));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppClosePolygon
 Rcpp::NumericVector rcppClosePolygon(Rcpp::NumericVector polyVector);
 RcppExport SEXP spatial_data_table_rcppClosePolygon(SEXP polyVectorSEXP) {
@@ -167,6 +181,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type vectorX(vectorXSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type vectorY(vectorYSEXP);
     rcpp_result_gen = Rcpp::wrap(rcppWindingNumber(pointX, pointY, vectorX, vectorY));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppSimplifyPolyline
+DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance, double tolerance, double earthRadius);
+RcppExport SEXP spatial_data_table_rcppSimplifyPolyline(SEXP dfSEXP, SEXP distanceToleranceSEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< double >::type distanceTolerance(distanceToleranceSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppSimplifyPolyline(df, distanceTolerance, tolerance, earthRadius));
     return rcpp_result_gen;
 END_RCPP
 }

@@ -1,6 +1,8 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+void vectorCheck(NumericVector v1, NumericVector v2);
+
 /**
  * To Radians
  *
@@ -36,6 +38,8 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 
 double distanceCosine(double latf, double lonf, double latt, double lont,
                       double earthRadius);
+
+double distanceEuclidean(double latf, double lonf, double latt, double lont);
 
 double bearingCalc(double latf, double lonf, double latt, double lont,
                bool compassBearing);

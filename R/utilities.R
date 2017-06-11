@@ -13,6 +13,9 @@ CheckForID <- function(x){
 
 }
 
+#' Find Lat Column
+#'
+#' Attempts to find the column of a data.frame containing the latitude values
 find_lat_column = function(names, msg, stopOnFailure = TRUE) {
 
 	lats = names[grep("^(lat|lats|latitude|latitudes)$", names, ignore.case = TRUE)]
@@ -28,7 +31,9 @@ find_lat_column = function(names, msg, stopOnFailure = TRUE) {
 	list(lat = NA)
 }
 
-
+#' Find Lon Column
+#'
+#' Attempts to find the column of a data.frame containing the longitude values
 find_lon_column = function(names, msg, stopOnFailure = TRUE) {
 
 	lons = names[grep("^(lon|lons|lng|lngs|long|longs|longitude|longitudes)$", names, ignore.case = TRUE)]

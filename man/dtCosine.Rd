@@ -32,3 +32,4 @@ dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
 dt[, distance := dtCosine(lat1, lon1, lat2, lon2)]
 
 }
+

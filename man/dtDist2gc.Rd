@@ -44,3 +44,4 @@ dt <- data.table(lat1 = c(0, 0),
 dt[, dist := dtDist2gc(lat1, lon1, lat2, lon2, plat, plon)]
 
 }
+

@@ -12,3 +12,4 @@ Returns an approximation of the radius of the earth in metres
 \examples{
 earthsRadius()
 }
+

@@ -28,3 +28,4 @@ Calculates the distance along a great-circle to the cross-track point
 \seealso{
 dtDist2gc
 }
+

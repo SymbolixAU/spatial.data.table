@@ -9,6 +9,8 @@ NumericVector rcppAlongTrack(NumericVector latFrom, NumericVector lonFrom,
                              NumericVector pointLat, NumericVector pointLon,
                              double tolerance, double earthRadius){
 
+	vectorCheck(latFrom, latTo);
+
 	int n = latFrom.size();
 	NumericVector distance(n);
 
@@ -61,6 +63,7 @@ NumericVector rcppDist2gc(NumericVector latFrom, NumericVector lonFrom,
                           NumericVector pointLat, NumericVector pointLon,
                           double tolerance, double earthRadius){
 
+	vectorCheck(latFrom, latTo);
 	int n = latFrom.size();
 	NumericVector distance(n);
 
@@ -144,8 +147,9 @@ Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom,
 
 // [[Rcpp::export]]
 Rcpp::List rcppMidpoint(NumericVector latFrom, NumericVector lonFrom,
-                           NumericVector latTo, NumericVector lonTo){
+                        NumericVector latTo, NumericVector lonTo){
 
+	vectorCheck(latFrom, latTo);
 	int n = latFrom.size();
 //	NumericMatrix midpoint(n, 2);
 	NumericVector midpointLat(n);
@@ -191,6 +195,7 @@ NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
                           bool compassBearing){
 
 
+	vectorCheck(latFrom, latTo);
 	int n = latFrom.size();
 	NumericVector bearing(n);
 
@@ -216,11 +221,13 @@ NumericVector rcppBearing(NumericVector latFrom, NumericVector lonFrom,
 
 // [[Rcpp::export]]
 NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom,
-                             NumericVector latTo, NumericVector lonTo,
-                         double earthRadius, double tolerance) {
+                                    NumericVector latTo, NumericVector lonTo,
+                                    double earthRadius, double tolerance) {
 
+	vectorCheck(latFrom, latTo);
 	int n = latFrom.size();
 	NumericVector distance(n);
+
 
 	double latf;
 	double latt;
@@ -244,6 +251,7 @@ NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom,
                                  NumericVector latTo, NumericVector lonTo,
                                  double earthRadius){
 
+	vectorCheck(latFrom, latTo);
 	int n = latFrom.size();
 	NumericVector distance(n);
 
@@ -265,4 +273,17 @@ NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom,
 	return distance;
 }
 
+// [[Rcpp::export]]
+NumericVector rcppDistanceEuclidean(NumericVector latFrom, NumericVector lonFrom,
+                                    NumericVector latTo, NumericVector lonTo){
+	vectorCheck(latFrom, latTo);
 
+	int n = latFrom.size();
+	NumericVector distance(n);
+
+	for (int i = 0; i < n; i++){
+		distance[i] = sqrt(pow((latTo[i] - latFrom[i]), 2.0) + pow((lonTo[i] - lonFrom[i]), 2.0));
+	}
+
+	return distance;
+}

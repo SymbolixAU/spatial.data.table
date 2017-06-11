@@ -723,8 +723,41 @@
 # 						 by = .(polygonId, pathId)]
 
 
+### Simplify polyline
+# pl <- "jnxeFeaxsZ}u@ngDebEyDa}DjU}|@hkCdDlnBsu@zIy}BrV{dA_}C{VauKynBeZ{yBcn@ssDuSqyAt|@qrAvbEycDtcAeyC_Vg~Fsi@utAcuAqjC_e@mnF_oAeeEgfF{xD|Bg|CoCekCo~B_tA}|@seFyX{bEjKwvFqjBm|B`F}oDyaAewHy`AiiBwlAsnElWapDMexDajBuv@u_AiAckE}{CyqDe}@{yB}jFcyCkrAkuC_xEedHygGapXmrHmmQj]ehFarAa`CgqBqLkhCwmEktDujForCucCi_CknE_pEqxLmtBonJdVcuD}zBodFmXegDnb@ohD_v@mjDcxCysH_jCmjCydBkh@}mA}oGoeDy{Le_@s_GmyAi~Ac}FwbEy~BkgMuhAssCugEquAurBvx@u~Cyi@suSkhOswBm{BenA{_NqOegG{uAi|EkbEyhDc|B_gDihB{zKnOmfFltCo|GhJgvEpE}}Cyx@g|@okCkgBa|EwwG_bDutAcfH{uBcdFrK}m@_sAw@avDxCw}Bsf@aaEgSurDkaAkdFezDwwBy~E_nCwk@qdB_gBepBqlC}zA_fAeeCchEcqC_yEga@k}F_uMsj@cnHslJktLagCg|DuqE_l@_tHcvD_uAoWskCusDorEu~DeaEidDogBclAaqBfI}wCpgBitC_m@qhEg_LsbH{kHosCcvE_eE{cBu^g`GggBo`EaxBkaFyE_iGhH{dCykC}}DcxAmfFo~B}jDmnDci@w{A}wAimImf@}lAgdDggCweBuhB}kBgnDhd@knAskE}aB{dD}jAg~Fc|CivDixBqjByz@keDsCkeKj@wmF}yAy`Jnl@mwPjCcmGreAayC}f@krCa{DouCgy@qvDoZ}yIjIsnFxjFqnLtIkkFlsBm`D~k@qhIy\\meDkaAi}CdG{nDcwE}yN{RqvLrjEw}PbOusHcYegG_\\mqH}v@ikCnW_tDbP{aIa}@q{D{mAe_Ckc@uiEkR_mMyl@auBcrC{bA_pAm{D`OonElm@uvAuAgjHa@eqF{dBgiI_cEgmFemEqvHakAgwBoOkyCaeAkmCqk@k~FkfAwfEooAweBijC_eCksGckDqzF_cEaaD}bBah@oxBcqBwqEkxBc|OiyCq_GiaLsyHebIkhNgpG{uCukI{zIq}BuxBchCiNy{GubDgfDanAueCwuEqyAulAwxC}WuzDiwEyhD_}AmhBqxFjr@emIoi@{iJu@ifLa]mfHnfAq_Da`AkbEy^}lAar@rBc`Fac@s`ChYhQd["
+#
+# googleway::decode_pl(pl)
+# SimplifyPolyline(pl, 100000)
+#
+# pl <- googleway::melbourne[1, "polyline"]
+#
+# pl2 <- SimplifyPolyline(polyline = pl, distanceTolerance = 10000)
+#
+# mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = data.frame(polyline = pl), polyline = "polyline")
+#
+# nchar(pl)
+# nchar(pl2)
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = data.frame(polyline = pl2), polyline = "polyline")
+#
 
-
-
-
-
+# dt <- copy(googleway::melbourne)
+# setDT(dt)
+#
+# google_map(key = mapKey) %>%
+# 	add_polygons(data = dt, polyline = "polyline", id = "polygonId", pathId = "pathId", info_window = "polygonId")
+#
+# object.size(dt)
+# hist(dt[, nchar(polyline)])
+#
+# dt[, polyline := SimplifyPolyline(polyline, distanceTolerance = 5000), by = .(polygonId, pathId)]
+#
+# object.size(dt)
+# hist(dt[, nchar(polyline)])
+#
+# google_map(key = mapKey) %>%
+# 	add_polygons(data = dt, polyline = "polyline", id = "polygonId", pathId = "pathId")

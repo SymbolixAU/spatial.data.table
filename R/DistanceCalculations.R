@@ -63,6 +63,22 @@ dtCosine <- function(latFrom, lonFrom,
 }
 
 
+#' dt Euclidean
+#'
+#' Computes the Euclidean distance between two pairs of latitude / longitude coordinates
+#'
+#' @param latFrom latitude from
+#' @param lonFrom longitude from
+#' @param latTo latitude to
+#' @param lonTo longitude to
+#' @return Euclidean distance
+#'
+#' @export
+dtEuclidean <- function(latFrom, lonFrom, latTo, lonTo){
+	rcppDistanceEuclidean(latFrom, lonFrom, latTo, lonTo)
+}
+
+
 #' dt bearing
 #'
 #' Calculates the initial bearing between two pairs of latitude / longitude coordinates

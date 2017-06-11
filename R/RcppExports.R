@@ -29,6 +29,10 @@ rcppDistanceCosine <- function(latFrom, lonFrom, latTo, lonTo, earthRadius) {
     .Call('spatial_data_table_rcppDistanceCosine', PACKAGE = 'spatial.data.table', latFrom, lonFrom, latTo, lonTo, earthRadius)
 }
 
+rcppDistanceEuclidean <- function(latFrom, lonFrom, latTo, lonTo) {
+    .Call('spatial_data_table_rcppDistanceEuclidean', PACKAGE = 'spatial.data.table', latFrom, lonFrom, latTo, lonTo)
+}
+
 rcppClosePolygon <- function(polyVector) {
     .Call('spatial_data_table_rcppClosePolygon', PACKAGE = 'spatial.data.table', polyVector)
 }
@@ -43,5 +47,9 @@ rcppPointsInPolygon <- function(pointsId, pointsX, pointsY, vectorX, vectorY) {
 
 rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
     .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY)
+}
+
+rcppSimplifyPolyline <- function(df, distanceTolerance, tolerance, earthRadius) {
+    .Call('spatial_data_table_rcppSimplifyPolyline', PACKAGE = 'spatial.data.table', df, distanceTolerance, tolerance, earthRadius)
 }
 
