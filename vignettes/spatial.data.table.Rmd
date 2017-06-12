@@ -111,6 +111,62 @@ dt
 ```
 
 
+## Simplifying Polylines
+
+```{r}
+
+dt_melbourne <- copy(googleway::melbourne)
+setDT(dt_melbourne)
+object.size(dt_melbourne)
+
+## first simplification with a 10 metre tolerance
+dt_melbourne[, polyline := SimplifyPolyline(polyline, distanceTolerance = 10, type = "complex"),
+						 by = .(polygonId, pathId)]
+object.size(dt_melbourne)
+```
+
+```
+google_map(key = mapKey) %>%
+  add_polygons(data = dt_melbourne, polyline = "polyline", id = "polygonId")
+```
+![reducedcomplex10](./images/reducedPolylineComplex10.png)
+
+```{r}
+dt_melbourne <- copy(googleway::melbourne)
+setDT(dt_melbourne)
+
+dt_melbourne[, polyline := SimplifyPolyline(polyline, distanceTolerance = 100, type = "complex"),
+						 by = .(polygonId, pathId)]
+
+object.size(dt_melbourne)
+
+```
+
+```
+google_map(key = mapKey) %>%
+  add_polygons(data = dt_melbourne, polyline = "polyline", id = "polygonId")
+```
+![reducedcomplex10](./images/reducedPolylineComplex100.png)
+
+```{r}
+dt_melbourne <- copy(googleway::melbourne)
+setDT(dt_melbourne)
+
+dt_melbourne[, polyline := SimplifyPolyline(polyline, distanceTolerance = 1000, type = "complex"),
+						 by = .(polygonId, pathId)]
+
+object.size(dt_melbourne)
+
+```
+
+```
+google_map(key = mapKey) %>%
+  add_polygons(data = dt_melbourne, polyline = "polyline", id = "polygonId")
+```
+![reducedcomplex10](./images/reducedPolylineComplex1000.png)
+
+
+
 ## Nearest Points
 
 

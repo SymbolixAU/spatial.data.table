@@ -49,6 +49,10 @@ rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
     .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY)
 }
 
+rcppDouglasPeucker <- function(lats, lons, firstIndex, lastIndex, distanceTolerance) {
+    .Call('spatial_data_table_rcppDouglasPeucker', PACKAGE = 'spatial.data.table', lats, lons, firstIndex, lastIndex, distanceTolerance)
+}
+
 rcppSimplifyPolyline <- function(df, distanceTolerance, tolerance, earthRadius) {
     .Call('spatial_data_table_rcppSimplifyPolyline', PACKAGE = 'spatial.data.table', df, distanceTolerance, tolerance, earthRadius)
 }

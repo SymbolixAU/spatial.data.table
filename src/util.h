@@ -48,6 +48,9 @@ double crossTrack(double distance, double bearing1, double bearing2, double eart
 
 double alongTrack(double distance, double xtrack, double earthRadius);
 
+double rcppDist2gc(double latFrom, double lonFrom, double latTo, double lonTo,
+                   double pointLat, double pointLon, double tolerance, double earthRadius);
+
 /**
  * Is Left
  *

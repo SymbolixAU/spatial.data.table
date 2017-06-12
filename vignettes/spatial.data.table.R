@@ -29,6 +29,22 @@ microbenchmark(
 
 dt1
 
+## ----distanceComparison--------------------------------------------------
+n <- 10000
+set.seed(20170511)
+lats <- -90:90
+lons <- -180:180
+dt <- data.table::data.table(lat1 = sample(lats, size = n, replace = T),
+                             lon1 = sample(lons, size = n, replace = T),
+                             lat2 = sample(lats, size = n, replace = T),
+                             lon2 = sample(lons, size = n, replace = T))
+
+dt[, idx := .I]
+dt[, distEuclid := dtEuclidean(lat1, lon1, lat2, lon2)]
+dt[, distHaversine := dtHaversine(lat1, lon1, lat2, lon2)]
+dt[, distCosine := dtCosine(lat1, lon1, lat2, lon2)]
+
+
 ## ----bearing-------------------------------------------------------------
 
 n <- 10000

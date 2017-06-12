@@ -184,6 +184,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppDouglasPeucker
+DataFrame rcppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex, float distanceTolerance);
+RcppExport SEXP spatial_data_table_rcppDouglasPeucker(SEXP latsSEXP, SEXP lonsSEXP, SEXP firstIndexSEXP, SEXP lastIndexSEXP, SEXP distanceToleranceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type lats(latsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lons(lonsSEXP);
+    Rcpp::traits::input_parameter< int >::type firstIndex(firstIndexSEXP);
+    Rcpp::traits::input_parameter< int >::type lastIndex(lastIndexSEXP);
+    Rcpp::traits::input_parameter< float >::type distanceTolerance(distanceToleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppDouglasPeucker(lats, lons, firstIndex, lastIndex, distanceTolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppSimplifyPolyline
 DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance, double tolerance, double earthRadius);
 RcppExport SEXP spatial_data_table_rcppSimplifyPolyline(SEXP dfSEXP, SEXP distanceToleranceSEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {

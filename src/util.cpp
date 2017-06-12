@@ -108,3 +108,40 @@ Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector){
 
 
 
+double rcppDist2gc(double latFrom, double lonFrom, double latTo, double lonTo,
+                   double pointLat, double pointLon, double tolerance, double earthRadius){
+
+	double plat;
+	double plon;
+	double latf;
+	double lonf;
+	double latt;
+	double lont;
+
+	double d;
+	double b1;
+	double b2;
+
+	plat = toRadians(pointLat);
+	plon = toRadians(pointLon);
+	latf = toRadians(latFrom);
+	lonf = toRadians(lonFrom);
+	latt = toRadians(latTo);
+	lont = toRadians(lonTo);
+
+	// (angular) distance from start-point (on path) to the point
+	d = distanceHaversine(latf, lonf, plat, plon, tolerance, earthRadius);
+	d = d / earthRadius;
+
+	// initial bearing from start-point (on path) to point
+	b1 = bearingCalc(latf, lonf, plat, plon, true);
+	b1 = toRadians(b1);
+
+	// initial bearing from start-point (on path) to end-point (on path)
+	b2 = bearingCalc(latf, lonf, latt, lont, true);
+	b2 = toRadians(b2);
+
+	return crossTrack(d, b1, b2, earthRadius);
+}
+
+

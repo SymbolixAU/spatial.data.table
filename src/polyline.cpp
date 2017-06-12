@@ -1,6 +1,77 @@
-#include <Rcpp.h>
+
+//#include <RcppArmadillo.h>
 #include "util.h"
+#include "spdt.h"
+
+//[[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
+using namespace spdt;
+
+
+// Douglas Peucker
+// needs to operate on earth (oblate spheroid)
+// the algorithm will record the indices to keep,
+// then subset the original polyline by those indeces
+// the index array will be created with 0s
+// then can filter out quite easily those that are greater than 0
+
+void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex,
+                       float distanceTolerance, LogicalVector& keepIndex){
+
+	int pathLength = lats.size();
+	int thisIndex = firstIndex;
+	float maxDistance = 0.0;
+	float thisDistance;
+	double startLat = lats[firstIndex];
+	double startLon = lons[firstIndex];
+	double endLat = lats[lastIndex];
+	double endLon = lons[lastIndex];
+
+	if(pathLength < 3){
+		// return points
+	}
+
+	if(lastIndex < firstIndex){
+		// empty
+	}else if(lastIndex == firstIndex){
+		keepIndex[firstIndex] = true;
+	}else{
+		keepIndex[firstIndex] = true;
+
+		for(int i = firstIndex + 1; i < lastIndex; i++){
+			// start & end are the coordinates of the end pionts of the track
+			// lats[i]/lons[i] are the cooridnates of the POINT of interest
+
+			// abs() called as the sign of the distance matters
+			thisDistance = fabs(rcppDist2gc(startLat, startLon, endLat, endLon, lats[i], lons[i],
+	                             distanceTolerance, EARTH_RADIUS));
+
+			if(thisDistance > maxDistance){
+				maxDistance = thisDistance;
+				thisIndex = i;
+			}
+		}
+		if(maxDistance > distanceTolerance){
+			// we've found a point.
+			// Now recurse back into the algorithm to find another
+			keepIndex[thisIndex] = true;
+			cppDouglasPeucker(lats, lons, firstIndex, thisIndex, distanceTolerance, keepIndex);
+			cppDouglasPeucker(lats, lons, thisIndex, lastIndex, distanceTolerance, keepIndex);
+		}
+	}
+}
+
+// [[Rcpp::export]]
+DataFrame rcppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex,
+                      float distanceTolerance){
+	int n = lats.size();
+	LogicalVector keepIndex(n);
+	cppDouglasPeucker(lats, lons, firstIndex, lastIndex, distanceTolerance, keepIndex);
+
+	// keepIndex is now a logical vector of all the indices of the lats/lons to keep
+
+	return DataFrame::create(Named("lat") = lats[keepIndex], Named("lon") = lons[keepIndex]);
+}
 
 
 // [[Rcpp::export]]
@@ -8,8 +79,6 @@ DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance,
                            double tolerance, double earthRadius){
 	// vertex cluster reduction
 
-	// TODO:
-	// - at least keep the first and last points
 
 	int keepCounter = 0;
 	int n = df.nrows() - 1;
@@ -42,18 +111,16 @@ DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance,
 	NumericVector outLat(keepCounter);
 	NumericVector outLon(keepCounter);
 
-	//Rcpp::Rcout << keepCounter << std::endl;
-
 	if(allGone){
-		IntegerVector idx = IntegerVector::create(0, 1);
-		outLat = lats[idx];
-		outLon = lons[idx];
+    outLat[0] = lats[0];
+		outLat[1] = lats[1];
+		outLon[0] = lons[0];
+		outLon[1] = lons[1];
 	}else{
 
 		for (int i = 0; i < keepCounter; i++) {
 			outLat[i] = keepLat[i];
 			outLon[i] = keepLon[i];
-			//Rcpp::Rcout << outLat[i] << std::endl;
 		}
 	}
 

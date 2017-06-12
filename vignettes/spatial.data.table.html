@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8" />
+<meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="D Cooley" />
 
-<meta name="date" content="2017-05-29" />
+<meta name="date" content="2017-06-11" />
 
 <title>Spatial Data Table</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Spatial Data Table</h1>
 <h4 class="author"><em>D Cooley</em></h4>
-<h4 class="date"><em>2017-05-29</em></h4>
+<h4 class="date"><em>2017-06-11</em></h4>
 
 
 
@@ -100,22 +100,86 @@ dt2 &lt;-<span class="st"> </span><span class="kw">copy</span>(dt)
                                    <span class="kw">matrix</span>(<span class="kw">c</span>(lon2, lat2), <span class="dt">ncol =</span> <span class="dv">2</span>))]  }
 )</code></pre></div>
 <pre><code>## Unit: milliseconds
-##  expr      min       lq     mean   median       uq      max neval
-##   sdt 1.384379 1.437998 1.663270 1.506200 1.586203  6.59847   100
-##   geo 3.222601 3.675082 6.495825 4.947965 5.504151 71.22127   100</code></pre>
+##  expr      min       lq      mean    median        uq       max neval
+##   sdt 2.522836 2.780404  3.612132  3.245877  3.796985  10.09004   100
+##   geo 6.754235 9.897789 17.859530 10.920584 13.629040 124.08052   100</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt1</code></pre></div>
 <pre><code>##        lat1 lon1 lat2 lon2 dtDistance
 ##     1:   21 -172   55  -42   10341893
-##     2:   89   55   66   76    2568034
-##     3:  -76  -28   47   64   15103268
-##     4:   56 -118   12   56   12447184
-##     5:   86 -137  -36   16   14420491
+##     2:   89   55   66   76    2568033
+##     3:  -76  -28   47   64   15103266
+##     4:   56 -118   12   56   12447185
+##     5:   86 -137  -36   16   14420492
 ##    ---                               
 ##  9996:  -32 -158   83  -24   14105276
-##  9997:  -52   78  -86  -84    4655348
-##  9998:    1  102   47  -78   14694173
+##  9997:  -52   78  -86  -84    4655350
+##  9998:    1  102   47  -78   14694174
 ##  9999:  -60  -55  -26    4    5825474
-## 10000:   10 -158  -72  126   10603344</code></pre>
+## 10000:   10 -158  -72  126   10603345</code></pre>
+</div>
+<div id="comparison-of-distance-calculations" class="section level2">
+<h2>Comparison of distance calculations</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="dv">10000</span>
+<span class="kw">set.seed</span>(<span class="dv">20170511</span>)
+lats &lt;-<span class="st"> </span>-<span class="dv">90</span>:<span class="dv">90</span>
+lons &lt;-<span class="st"> </span>-<span class="dv">180</span>:<span class="dv">180</span>
+dt &lt;-<span class="st"> </span>data.table::<span class="kw">data.table</span>(<span class="dt">lat1 =</span> <span class="kw">sample</span>(lats, <span class="dt">size =</span> n, <span class="dt">replace =</span> T),
+                             <span class="dt">lon1 =</span> <span class="kw">sample</span>(lons, <span class="dt">size =</span> n, <span class="dt">replace =</span> T),
+                             <span class="dt">lat2 =</span> <span class="kw">sample</span>(lats, <span class="dt">size =</span> n, <span class="dt">replace =</span> T),
+                             <span class="dt">lon2 =</span> <span class="kw">sample</span>(lons, <span class="dt">size =</span> n, <span class="dt">replace =</span> T))
+
+dt[, idx :<span class="er">=</span><span class="st"> </span>.I]</code></pre></div>
+<pre><code>##        lat1 lon1 lat2 lon2   idx
+##     1:   21 -172   55  -42     1
+##     2:   89   55   66   76     2
+##     3:  -76  -28   47   64     3
+##     4:   56 -118   12   56     4
+##     5:   86 -137  -36   16     5
+##    ---                          
+##  9996:  -32 -158   83  -24  9996
+##  9997:  -52   78  -86  -84  9997
+##  9998:    1  102   47  -78  9998
+##  9999:  -60  -55  -26    4  9999
+## 10000:   10 -158  -72  126 10000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt[, distEuclid :<span class="er">=</span><span class="st"> </span><span class="kw">dtEuclidean</span>(lat1, lon1, lat2, lon2)]</code></pre></div>
+<pre><code>##        lat1 lon1 lat2 lon2   idx distEuclid
+##     1:   21 -172   55  -42     1  134.37262
+##     2:   89   55   66   76     2   31.14482
+##     3:  -76  -28   47   64     3  153.60013
+##     4:   56 -118   12   56     4  179.47702
+##     5:   86 -137  -36   16     5  195.68597
+##    ---                                     
+##  9996:  -32 -158   83  -24  9996  176.58143
+##  9997:  -52   78  -86  -84  9997  165.52945
+##  9998:    1  102   47  -78  9998  185.78482
+##  9999:  -60  -55  -26    4  9999   68.09552
+## 10000:   10 -158  -72  126 10000  295.60108</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt[, distHaversine :<span class="er">=</span><span class="st"> </span><span class="kw">dtHaversine</span>(lat1, lon1, lat2, lon2)]</code></pre></div>
+<pre><code>##        lat1 lon1 lat2 lon2   idx distEuclid distHaversine
+##     1:   21 -172   55  -42     1  134.37262      10341893
+##     2:   89   55   66   76     2   31.14482       2568033
+##     3:  -76  -28   47   64     3  153.60013      15103266
+##     4:   56 -118   12   56     4  179.47702      12447185
+##     5:   86 -137  -36   16     5  195.68597      14420492
+##    ---                                                   
+##  9996:  -32 -158   83  -24  9996  176.58143      14105276
+##  9997:  -52   78  -86  -84  9997  165.52945       4655350
+##  9998:    1  102   47  -78  9998  185.78482      14694174
+##  9999:  -60  -55  -26    4  9999   68.09552       5825474
+## 10000:   10 -158  -72  126 10000  295.60108      10603345</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt[, distCosine :<span class="er">=</span><span class="st"> </span><span class="kw">dtCosine</span>(lat1, lon1, lat2, lon2)]</code></pre></div>
+<pre><code>##        lat1 lon1 lat2 lon2   idx distEuclid distHaversine distCosine
+##     1:   21 -172   55  -42     1  134.37262      10341893   10341893
+##     2:   89   55   66   76     2   31.14482       2568033    2568033
+##     3:  -76  -28   47   64     3  153.60013      15103266   15103266
+##     4:   56 -118   12   56     4  179.47702      12447185   12447185
+##     5:   86 -137  -36   16     5  195.68597      14420492   14420492
+##    ---                                                              
+##  9996:  -32 -158   83  -24  9996  176.58143      14105276   14105276
+##  9997:  -52   78  -86  -84  9997  165.52945       4655350    4655350
+##  9998:    1  102   47  -78  9998  185.78482      14694174   14694174
+##  9999:  -60  -55  -26    4  9999   68.09552       5825474    5825474
+## 10000:   10 -158  -72  126 10000  295.60108      10603345   10603345</code></pre>
 </div>
 <div id="bearing" class="section level2">
 <h2>Bearing</h2>
@@ -137,20 +201,20 @@ dt2 &lt;-<span class="st"> </span><span class="kw">copy</span>(dt)
                                    <span class="kw">matrix</span>(<span class="kw">c</span>(lon2, lat2), <span class="dt">ncol =</span> <span class="dv">2</span>))]  }
 )</code></pre></div>
 <pre><code>## Unit: milliseconds
-##  expr       min       lq      mean    median        uq       max neval
-##   sdt  1.282025  1.33291  1.463962  1.410521  1.498619  3.470176   100
-##   geo 12.726680 13.25677 14.983274 13.915281 15.321504 85.407118   100</code></pre>
+##  expr       min        lq      mean    median        uq       max neval
+##   sdt  2.277944  2.520228  3.277953  2.863803  3.311743  11.14802   100
+##   geo 23.786916 26.995042 32.703081 28.558878 30.631279 163.06950   100</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt1</code></pre></div>
 <pre><code>##        lat1 lon1 lat2 lon2     dtBearing
-##     1:   21 -172   55  -42  2.610066e+01
+##     1:   21 -172   55  -42  2.610068e+01
 ##     2:   89   55   66   76  1.581615e+02
-##     3:  -76  -28   47   64  7.728122e+01
-##     4:   56 -118   12   56  6.322859e+00
-##     5:   86 -137  -36   16  2.844239e+01
+##     3:  -76  -28   47   64  7.728120e+01
+##     4:   56 -118   12   56  6.322886e+00
+##     5:   86 -137  -36   16  2.844242e+01
 ##    ---                                  
-##  9996:  -32 -158   83  -24  6.278030e+00
+##  9996:  -32 -158   83  -24  6.278043e+00
 ##  9997:  -52   78  -86  -84 -1.781474e+02
-##  9998:    1  102   47  -78 -6.439370e-15
+##  9998:    1  102   47  -78 -2.385041e-05
 ##  9999:  -60  -55  -26    4  7.672887e+01
 ## 10000:   10 -158  -72  126 -1.624762e+02</code></pre>
 </div>
@@ -165,20 +229,32 @@ dt &lt;-<span class="st"> </span>data.table::<span class="kw">data.table</span>(
                              <span class="dt">lat2 =</span> <span class="kw">sample</span>(lats, <span class="dt">size =</span> n, <span class="dt">replace =</span> T),
                              <span class="dt">lon2 =</span> <span class="kw">sample</span>(lons, <span class="dt">size =</span> n, <span class="dt">replace =</span> T))
 
-dt[, <span class="kw">c</span>(<span class="st">&quot;midLat&quot;</span>, <span class="st">&quot;midLon&quot;</span>) :<span class="er">=</span><span class="st"> </span><span class="kw">dtMidpoint</span>(lat1, lon1, lat2, lon2)] 
-dt</code></pre></div>
+dt[, <span class="kw">c</span>(<span class="st">&quot;midLat&quot;</span>, <span class="st">&quot;midLon&quot;</span>) :<span class="er">=</span><span class="st"> </span><span class="kw">dtMidpoint</span>(lat1, lon1, lat2, lon2)] </code></pre></div>
 <pre><code>##        lat1 lon1 lat2 lon2    midLat     midLon
-##     1:   21 -172   55  -42  58.71023 -134.12349
-##     2:   89   55   66   76  77.53177   75.15296
-##     3:  -76  -28   47   64 -18.46358   44.25426
-##     4:   56 -118   12   56  67.66393   48.11442
-##     5:   86 -137  -36   16  28.73039   13.57198
+##     1:   21 -172   55  -42  58.71022 -134.12346
+##     2:   89   55   66   76  77.53176   75.15294
+##     3:  -76  -28   47   64 -18.46358   44.25424
+##     4:   56 -118   12   56  67.66393   48.11438
+##     5:   86 -137  -36   16  28.73040   13.57197
 ##    ---                                         
-##  9996:  -32 -158   83  -24  31.05043 -151.44902
-##  9997:  -52   78  -86  -84 -72.88747   75.75280
-##  9998:    1  102   47  -78  67.00000  102.00000
-##  9999:  -60  -55  -26    4 -46.60747  -16.33706
-## 10000:   10 -158  -72  126 -35.22140 -173.80055</code></pre>
+##  9996:  -32 -158   83  -24  31.05043 -151.44899
+##  9997:  -52   78  -86  -84 -72.88748   75.75278
+##  9998:    1  102   47  -78  67.00000  101.99993
+##  9999:  -60  -55  -26    4 -46.60746  -16.33706
+## 10000:   10 -158  -72  126 -35.22140 -173.80054</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt</code></pre></div>
+<pre><code>##        lat1 lon1 lat2 lon2    midLat     midLon
+##     1:   21 -172   55  -42  58.71022 -134.12346
+##     2:   89   55   66   76  77.53176   75.15294
+##     3:  -76  -28   47   64 -18.46358   44.25424
+##     4:   56 -118   12   56  67.66393   48.11438
+##     5:   86 -137  -36   16  28.73040   13.57197
+##    ---                                         
+##  9996:  -32 -158   83  -24  31.05043 -151.44899
+##  9997:  -52   78  -86  -84 -72.88748   75.75278
+##  9998:    1  102   47  -78  67.00000  101.99993
+##  9999:  -60  -55  -26    4 -46.60746  -16.33706
+## 10000:   10 -158  -72  126 -35.22140 -173.80054</code></pre>
 </div>
 <div id="nearest-points" class="section level2">
 <h2>Nearest Points</h2>
@@ -208,10 +284,167 @@ pl &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv"
 })
 
 
-dt_nearest[, polyline :<span class="er">=</span><span class="st"> </span>pl ]
-
-
-<span class="co"># mapKey &lt;- symbolix.utils::mapKey()</span>
+dt_nearest[, polyline :<span class="er">=</span><span class="st"> </span>pl ]</code></pre></div>
+<pre><code>##     shape_pt_lat.x shape_pt_lon.x shape_pt_sequence key.x stop_id
+##  1:       -37.8091       144.9730                26     1   17880
+##  2:       -37.8091       144.9730                26     1   17892
+##  3:       -37.8079       144.9732                25     1   17893
+##  4:       -37.8075       144.9709                20     1   18010
+##  5:       -37.8082       144.9686                18     1   18011
+##  6:       -37.8097       144.9636                16     1   18030
+##  7:       -37.8104       144.9611                15     1   18031
+##  8:       -37.8111       144.9587                14     1   18032
+##  9:       -37.8118       144.9562                13     1   18033
+## 10:       -37.8132       144.9512                11     1   18035
+## 11:       -37.8138       144.9405                55     1   18037
+## 12:       -37.8145       144.9387                 1     1   18038
+## 13:       -37.8133       144.9415                 2     1   18039
+## 14:       -37.8146       144.9464                10     1   18040
+## 15:       -37.8132       144.9512                11     1   18041
+## 16:       -37.8125       144.9537                12     1   18042
+## 17:       -37.8118       144.9562                13     1   18043
+## 18:       -37.8111       144.9587                14     1   18044
+## 19:       -37.8104       144.9611                15     1   18045
+## 20:       -37.8097       144.9636                16     1   18046
+## 21:       -37.8089       144.9661                17     1   18047
+## 22:       -37.8082       144.9686                18     1   18048
+## 23:       -37.8077       144.9703                19     1   18049
+## 24:       -37.8079       144.9728                24     1   18050
+## 25:       -37.8145       144.9448                 8     1   18052
+## 26:       -37.8185       144.9465                53     1   18053
+## 27:       -37.8219       144.9477                49     1   18054
+## 28:       -37.8217       144.9516                42     1   18055
+## 29:       -37.8216       144.9532                39     1   18056
+## 30:       -37.8192       144.9613                35     1   18087
+## 31:       -37.8181       144.9653                34     1   18089
+## 32:       -37.8174       144.9677                33     1   18090
+## 33:       -37.8167       144.9701                32     1   18091
+## 34:       -37.8153       144.9749                29     1   18092
+## 35:       -37.8155       144.9742                30     1   18105
+## 36:       -37.8162       144.9718                31     1   18173
+## 37:       -37.8167       144.9701                32     1   18174
+## 38:       -37.8174       144.9677                33     1   18175
+## 39:       -37.8181       144.9653                34     1   18176
+## 40:       -37.8192       144.9613                35     1   18178
+## 41:       -37.8216       144.9532                39     1   18179
+## 42:       -37.8220       144.9509                43     1   18180
+## 43:       -37.8219       144.9477                49     1   18181
+## 44:       -37.8185       144.9465                53     1   18182
+## 45:       -37.8145       144.9448                 8     1   18183
+## 46:       -37.8115       144.9731                28     1   20979
+## 47:       -37.8146       144.9464                10     1   20981
+## 48:       -37.8210       144.9554                38     1   21231
+## 49:       -37.8210       144.9554                38     1   21232
+## 50:       -37.8203       144.9577                36     1   21233
+## 51:       -37.8203       144.9577                36     1   21234
+##     shape_pt_lat.x shape_pt_lon.x shape_pt_sequence key.x stop_id
+##                                                 stop_name stop_lat.y
+##  1:                   10-Albert St/Nicholson St (Fitzroy)   -37.8090
+##  2:            10-Albert St/Nicholson St (East Melbourne)   -37.8094
+##  3:         11-Victoria Pde/Nicholson St (East Melbourne)   -37.8083
+##  4:            9-La Trobe St/Victoria St (Melbourne City)   -37.8076
+##  5:          8-Exhibition St/La Trobe St (Melbourne City)   -37.8081
+##  6:            6-Swanston St/La Trobe St (Melbourne City)   -37.8095
+##  7:           5-Elizabeth St/La Trobe St (Melbourne City)   -37.8103
+##  8:               4-Queen St/La Trobe St (Melbourne City)   -37.8110
+##  9:             3-William St/La Trobe St (Melbourne City)   -37.8117
+## 10:             1-Spencer St/La Trobe St (Melbourne City)   -37.8131
+## 11:             D10-NewQuay Prom/Docklands Dr (Docklands)   -37.8138
+## 12:      D11-Waterfront City/434 Docklands Dr (Docklands)   -37.8145
+## 13:             D10-NewQuay Prom/Docklands Dr (Docklands)   -37.8133
+## 14:             D1-Etihad Stadium/La Trobe St (Docklands)   -37.8146
+## 15:           119-Spencer St/La Trobe St (Melbourne City)   -37.8132
+## 16:                2-King St/La Trobe St (Melbourne City)   -37.8125
+## 17:             3-William St/La Trobe St (Melbourne City)   -37.8118
+## 18:               4-Queen St/La Trobe St (Melbourne City)   -37.8111
+## 19:           5-Elizabeth St/La Trobe St (Melbourne City)   -37.8104
+## 20:            6-Swanston St/La Trobe St (Melbourne City)   -37.8096
+## 21:             7-Russell St/La Trobe St (Melbourne City)   -37.8089
+## 22:          8-Exhibition St/La Trobe St (Melbourne City)   -37.8082
+## 23:            9-Victoria St/La Trobe St (Melbourne City)   -37.8077
+## 24:                10-Nicholson St/Victoria Pde (Carlton)   -37.8078
+## 25:               D2-Central Pier/Harbour Esp (Docklands)   -37.8144
+## 26:                  D3-Bourke St/Harbour Esp (Docklands)   -37.8177
+## 27:             D4-Docklands Park/Harbour Esp (Docklands)   -37.8213
+## 28:             D5-South Wharf/Wurundjeri Way (Docklands)   -37.8218
+## 29:   D6-Flinders Street West/637 Flinders St (Docklands)   -37.8214
+## 30:              3-Market St/Flinders St (Melbourne City)   -37.8192
+## 31:           4-Elizabeth St/Flinders St (Melbourne City)   -37.8182
+## 32:            5-Swanston St/Flinders St (Melbourne City)   -37.8175
+## 33:             6-Russell St/Flinders St (Melbourne City)   -37.8165
+## 34:              8-Spring St/Flinders St (Melbourne City)   -37.8153
+## 35:              8-Spring St/Flinders St (Melbourne City)   -37.8155
+## 36:          7-Exhibition St/Flinders St (Melbourne City)   -37.8162
+## 37:             6-Russell St/Flinders St (Melbourne City)   -37.8167
+## 38:            5-Swanston St/Flinders St (Melbourne City)   -37.8176
+## 39:           4-Elizabeth St/Flinders St (Melbourne City)   -37.8181
+## 40:              3-Market St/Flinders St (Melbourne City)   -37.8193
+## 41: D6-Victoria Police Centre/637 Flinders St (Southbank)   -37.8217
+## 42:             D5-South Wharf/Wurundjeri Way (Docklands)   -37.8220
+## 43:             D4-Docklands Park/Harbour Esp (Docklands)   -37.8219
+## 44:                  D3-Bourke St/Harbour Esp (Docklands)   -37.8177
+## 45:               D2-Central Pier/Harbour Esp (Docklands)   -37.8145
+## 46:                0-Bourke St/Spring St (Melbourne City)   -37.8115
+## 47:             D1-Etihad Stadium/La Trobe St (Docklands)   -37.8146
+## 48:             1-Spencer St/Flinders St (Melbourne City)   -37.8209
+## 49:             1-Spencer St/Flinders St (Melbourne City)   -37.8210
+## 50:     2-Melbourne Aquarium/Flinders St (Melbourne City)   -37.8203
+## 51:     2-Melbourne Aquarium/Flinders St (Melbourne City)   -37.8202
+##                                                 stop_name stop_lat.y
+##     stop_lon.y idx  distance       polyline
+##  1:   144.9731   1 14.186976   zqweFg`zsZUQ
+##  2:   144.9729   2 34.534503  zqweFg`zsZx@R
+##  3:   144.9731   3 45.388061  hjweFoazsZpAT
+##  4:   144.9709   4 11.131947   xgweFcsysZT?
+##  5:   144.9690   5 36.899201  flweFwdysZSoA
+##  6:   144.9641   6 49.288976 ruweFoexsZg@cB
+##  7:   144.9616   7 45.360810  ~yweFyuwsZSeB
+##  8:   144.9591   8 36.897883  j~weF{fwsZSoA
+##  9:   144.9567   9 45.360002  vbxeFgwvsZScB
+## 10:   144.9517  10 45.359193  nkxeF_xusZSaB
+## 11:   144.9405  11  0.000000   foxeFaussZ??
+## 12:   144.9386  12  8.794238   rsxeF{issZ?R
+## 13:   144.9415  13  0.000000   blxeFi{ssZ??
+## 14:   144.9464  14  0.000000   ftxeF_ztsZ??
+## 15:   144.9511  15  8.794393   nkxeF_xusZ?R
+## 16:   144.9537  16  0.000000   bgxeFsgvsZ??
+## 17:   144.9562  17  0.000000   vbxeFgwvsZ??
+## 18:   144.9587  18  0.000000   j~weF{fwsZ??
+## 19:   144.9611  19  0.000000   ~yweFyuwsZ??
+## 20:   144.9636  20 11.131947   ruweFoexsZS?
+## 21:   144.9661  21  0.000000   rpweFcuxsZ??
+## 22:   144.9685  22  8.794988   flweFwdysZ?R
+## 23:   144.9703  23  0.000000   `iweFkoysZ??
+## 24:   144.9728  24 11.131947   hjweF__zsZQ?
+## 25:   144.9450  25 20.815262  rsxeF}otsZSi@
+## 26:   144.9461  26 95.750684 rlyeFqztsZ_DlA
+## 27:   144.9476  27 67.368041  zazeFcbusZwBR
+## 28:   144.9513  28 28.632693  r`zeFozusZRz@
+## 29:   144.9537  29 49.282652 |_zeFodvsZg@cB
+## 30:   144.9613  30  0.000000   ~pyeFcwwsZ??
+## 31:   144.9647  31 53.924347  bjyeFcpxsZPvB
+## 32:   144.9670  32 62.555653  veyeFc_ysZRjC
+## 33:   144.9709  33 73.790724 hayeFcnysZe@_D
+## 34:   144.9746  34 26.382427  rxxeFclzsZ?z@
+## 35:   144.9742  35  0.000000   zyxeFwgzsZ??
+## 36:   144.9718  36  0.000000   f~xeFwxysZ??
+## 37:   144.9702  37  8.793976   hayeFcnysZ?S
+## 38:   144.9672  38 49.284778 veyeFc_ysZf@bB
+## 39:   144.9653  39  0.000000   bjyeFcpxsZ??
+## 40:   144.9614  40 14.186223   ~pyeFcwwsZRS
+## 41:   144.9532  41 11.131947   |_zeFodvsZT?
+## 42:   144.9509  42  0.000000   nbzeFavusZ??
+## 43:   144.9476  43  8.793356   zazeFcbusZ?R
+## 44:   144.9461  44 95.750684 rlyeFqztsZ_DlA
+## 45:   144.9446  45 17.588476  rsxeF}otsZ?d@
+## 46:   144.9731  46  0.000000   z`xeFy`zsZ??
+## 47:   144.9467  47 26.382678  ftxeF_ztsZ?{@
+## 48:   144.9556  48 20.813954  f|yeFgrvsZSg@
+## 49:   144.9554  49  0.000000   f|yeFgrvsZ??
+## 50:   144.9577  50  0.000000   zwyeFq`wsZ??
+## 51:   144.9580  51 28.633187  zwyeFq`wsZS}@
+##     stop_lon.y idx  distance       polyline</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># mapKey &lt;- symbolix.utils::mapKey()</span>
 
 <span class="co"># google_map(key = mapKey) %&gt;%</span>
 <span class="co">#   #add_circles(data = dt_route, lat = &quot;shape_pt_lat&quot;, lon = &quot;shape_pt_lon&quot;, fill_colour = &quot;#FF00FF&quot;, stroke_weight = 0) %&gt;%</span>

@@ -4,14 +4,27 @@
 \alias{SimplifyPolyline}
 \title{Simplify Polyline}
 \usage{
-SimplifyPolyline(polyline, distanceTolerance = 1000)
+SimplifyPolyline(polyline, distanceTolerance = 1000, type = c("simple",
+  "complex"))
 }
 \arguments{
 \item{polyline}{encoded string of a polyline}
 
 \item{distanceTolerance}{in metres}
+
+\item{type}{the type of algorithm used to simplify the polyline. One of 'simple' or 'complex'. See Details}
 }
 \description{
 simplifies a polyline using a vector-clustering algorithm
+}
+\details{
+This method computes the haversine distance between sequential sets of coordiantes,
+and if they fall within the \code{distancetolerance} value the coordinates are discarded
+
+
+The 'simple' \code{type} uses simple vector clustering to simplify the polyline,
+which tests sequential coordinates to see if they fall within the \code{distanceTolerance}.
+
+The 'complex' \code{type} uses the recursive Douglas Peucker algorithm to simplify the polyline.
 }
 
