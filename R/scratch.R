@@ -761,50 +761,50 @@
 #
 # google_map(key = mapKey) %>%
 # 	add_polygons(data = dt, polyline = "polyline", id = "polygonId", pathId = "pathId")
-
-pl <- dt[1, polyline]
-simplePl <- SimplifyPolyline(polyline = pl, 10000, type = "complex")
-
-google_map(key = mapKey) %>%
-	add_polylines(data = data.frame(poly = pl), polyline = "poly")
-
-
-google_map(key = mapKey) %>%
-	add_polylines(data = data.frame(poly = simplePl), polyline = "poly")
-
-dt_melbourne <- copy(googleway::melbourne)
-setDT(dt_melbourne)
-
-dt_melbourne[, reduced_pl_complex_10 := SimplifyPolyline(polyline, 10, type = "complex"),
-						 by = .(polygonId, pathId)]
-
-dt_melbourne[, reduced_pl_complex_100 := SimplifyPolyline(polyline, 100, type = "complex"),
-						 by = .(polygonId, pathId)]
-
-dt_melbourne[, reduced_pl_complex_1000 := SimplifyPolyline(polyline, 1000, type = "complex"),
-						 by = .(polygonId, pathId)]
-
-dt_melbourne[, reduced_pl_complex_10000 := SimplifyPolyline(polyline, 10000, type = "complex"),
-						 by = .(polygonId, pathId)]
-
-
-dt_melbourne[, reduced_pl_simple_10 := SimplifyPolyline(polyline, 10, type = "simple"),
-						 by = .(polygonId, pathId)]
-
-dt_melbourne[, reduced_pl_simple_100 := SimplifyPolyline(polyline, 100, type = "simple"),
-						 by = .(polygonId, pathId)]
-
-dt_melbourne[, reduced_pl_simple_1000 := SimplifyPolyline(polyline, 1000, type = "simple"),
-						 by = .(polygonId, pathId)]
-
-dt_melbourne[, reduced_pl_simple_10000 := SimplifyPolyline(polyline, 10000, type = "simple"),
-						 by = .(polygonId, pathId)]
-
-google_map(key = mapKey, data = dt_melbourne) %>%
-	# add_polygons(polyline = "reduced_pl_simple_10") %>%
-	# add_polygons(polyline = "reduced_pl_simple_100") %>%
-	add_polygons(polyline = "reduced_pl_simple_1000")
-	# add_polygons(polyline = "reduced_pl_simple_10000")
+#
+# pl <- dt[1, polyline]
+# simplePl <- SimplifyPolyline(polyline = pl, 10000, type = "complex")
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = data.frame(poly = pl), polyline = "poly")
+#
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = data.frame(poly = simplePl), polyline = "poly")
+#
+# dt_melbourne <- copy(googleway::melbourne)
+# setDT(dt_melbourne)
+#
+# dt_melbourne[, reduced_pl_complex_10 := SimplifyPolyline(polyline, 10, type = "complex"),
+# 						 by = .(polygonId, pathId)]
+#
+# dt_melbourne[, reduced_pl_complex_100 := SimplifyPolyline(polyline, 100, type = "complex"),
+# 						 by = .(polygonId, pathId)]
+#
+# dt_melbourne[, reduced_pl_complex_1000 := SimplifyPolyline(polyline, 1000, type = "complex"),
+# 						 by = .(polygonId, pathId)]
+#
+# dt_melbourne[, reduced_pl_complex_10000 := SimplifyPolyline(polyline, 10000, type = "complex"),
+# 						 by = .(polygonId, pathId)]
+#
+#
+# dt_melbourne[, reduced_pl_simple_10 := SimplifyPolyline(polyline, 10, type = "simple"),
+# 						 by = .(polygonId, pathId)]
+#
+# dt_melbourne[, reduced_pl_simple_100 := SimplifyPolyline(polyline, 100, type = "simple"),
+# 						 by = .(polygonId, pathId)]
+#
+# dt_melbourne[, reduced_pl_simple_1000 := SimplifyPolyline(polyline, 1000, type = "simple"),
+# 						 by = .(polygonId, pathId)]
+#
+# dt_melbourne[, reduced_pl_simple_10000 := SimplifyPolyline(polyline, 10000, type = "simple"),
+# 						 by = .(polygonId, pathId)]
+#
+# google_map(key = mapKey, data = dt_melbourne) %>%
+# 	# add_polygons(polyline = "reduced_pl_simple_10") %>%
+# 	# add_polygons(polyline = "reduced_pl_simple_100") %>%
+# 	add_polygons(polyline = "reduced_pl_simple_1000")
+# 	# add_polygons(polyline = "reduced_pl_simple_10000")
 
 
 
