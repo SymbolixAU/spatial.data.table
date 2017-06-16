@@ -185,24 +185,24 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcppDouglasPeucker
-std::string rcppDouglasPeucker(std::string polyline, double distanceTolerance);
+Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distanceTolerance);
 RcppExport SEXP spatial_data_table_rcppDouglasPeucker(SEXP polylineSEXP, SEXP distanceToleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type polyline(polylineSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type polyline(polylineSEXP);
     Rcpp::traits::input_parameter< double >::type distanceTolerance(distanceToleranceSEXP);
     rcpp_result_gen = Rcpp::wrap(rcppDouglasPeucker(polyline, distanceTolerance));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcppSimplifyPolyline
-DataFrame rcppSimplifyPolyline(std::string polyline, double distanceTolerance, double tolerance, double earthRadius);
+Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance, double tolerance, double earthRadius);
 RcppExport SEXP spatial_data_table_rcppSimplifyPolyline(SEXP polylineSEXP, SEXP distanceToleranceSEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type polyline(polylineSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type polyline(polylineSEXP);
     Rcpp::traits::input_parameter< double >::type distanceTolerance(distanceToleranceSEXP);
     Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
     Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);

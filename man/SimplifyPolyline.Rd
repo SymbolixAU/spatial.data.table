@@ -4,7 +4,7 @@
 \alias{SimplifyPolyline}
 \title{Simplify Polyline}
 \usage{
-SimplifyPolyline(polyline, distanceTolerance = 1000, type = c("simple",
+SimplifyPolyline(polyline, distanceTolerance = 100, type = c("simple",
   "complex"))
 }
 \arguments{

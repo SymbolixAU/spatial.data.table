@@ -16,21 +16,12 @@
 #' @param type the type of algorithm used to simplify the polyline. One of 'simple' or 'complex'. See Details
 #' @param distanceTolerance in metres
 #' @export
-SimplifyPolyline <- function(polyline, distanceTolerance = 1000, type = c("simple", "complex")){
+SimplifyPolyline <- function(polyline, distanceTolerance = 100, type = c("simple", "complex")){
 
-	# if(!is.null(polyline) & (!is.null(lat) | !is.null(lon)))
-	# 	stop("Please provide either an encoded polyline, or columns of lat/lon values")
-
-	## df <- googleway::decode_pl(polyline)
-
-	# if(type == "simple"){
-	# 	df <- rcppSimplifyPolyline(df, distanceTolerance, 1e+9, earthsRadius())
-	# }else if(type == "complex"){
-	# 	df <- rcppDouglasPeucker(df[, 'lat'], df[, 'lon'], 1, nrow(df), distanceTolerance)
-	# }
-
-	rcppDouglasPeucker(polyline, distanceTolerance)
-
-	##return(googleway::encode_pl(df[, 'lat'], df[, 'lon']))
+  if(type == "simple"){
+  	return(rcppSimplifyPolyline(polyline, distanceTolerance, 1e+9, earthsRadius()))
+  }else{
+		return(rcppDouglasPeucker(polyline, distanceTolerance))
+  }
 
 }

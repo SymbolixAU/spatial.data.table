@@ -44,7 +44,7 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 
 		for(int i = firstIndex + 1; i < lastIndex; i++){
 
-			// start & end are the coordinates of the end pionts of the track
+  		// start & end are the coordinates of the end pionts of the track
 			// lats[i]/lons[i] are the cooridnates of the POINT of interest
 
 			// abs() called as the sign of the distance matters
@@ -67,87 +67,111 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 }
 
 // [[Rcpp::export]]
-std::string rcppDouglasPeucker(std::string polyline, double distanceTolerance){
+Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distanceTolerance){
 //DataFrame rcppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex,
 //                      float distanceTolerance){
 
-	DataFrame df = rcpp_decode_pl(polyline);
-	NumericVector lats = df["lat"];
-	NumericVector lons = df["lon"];
-	int firstIndex = 1;
-	int lastIndex = df.nrow();
+  int nPolylines = polyline.size();
+	Rcpp::StringVector resultPolylines(nPolylines);
 
-	int n = lats.size();
-	LogicalVector keepIndex(n);
 
-	Rcpp::Rcout << "lats: " << lats.size() << std::endl;
-	Rcpp::Rcout << "lons: " << lons.size() << std::endl;
+	for (int i = 0; i < nPolylines; i++){
 
-	Rcpp::Rcout << "firstIndex: " << firstIndex << std::endl;
-	Rcpp::Rcout << "lastIndex: " << lastIndex << std::endl;
+		DataFrame df = rcpp_decode_pl(Rcpp::as< std::string >(polyline[i]) );
 
-	cppDouglasPeucker(lats, lons, firstIndex, lastIndex, distanceTolerance, keepIndex);
+		NumericVector lats = df["lat"];
+		NumericVector lons = df["lon"];
+
+		int firstIndex = 1;
+		int lastIndex = df.nrow();
+
+		int n = lats.size();
+		LogicalVector keepIndex(n);
+
+//		Rcpp::Rcout << "keep lats: " << sum(keepIndex) << std::endl;
+//
+//		Rcpp::Rcout << "lats: " << lats.size() << std::endl;
+//		Rcpp::Rcout << "lons: " << lons.size() << std::endl;
+//
+//		Rcpp::Rcout << "firstIndex: " << firstIndex << std::endl;
+//		Rcpp::Rcout << "lastIndex: " << lastIndex << std::endl;
+
+		cppDouglasPeucker(lats, lons, firstIndex, lastIndex, distanceTolerance, keepIndex);
+
+		int keep = sum(keepIndex);
+		resultPolylines[i] = rcpp_encode_pl(lats[keepIndex], lons[keepIndex], keep);
+
+	}
 
 	// keepIndex is now a logical vector of all the indices of the lats/lons to keep
 	//return DataFrame::create(Named("lat") = lats[keepIndex], Named("lon") = lons[keepIndex]);
-	return rcpp_encode_pl(lats[keepIndex], lons[keepIndex], lats.size());
+	return resultPolylines;
 }
 
 
 // [[Rcpp::export]]
-DataFrame rcppSimplifyPolyline(std::string polyline, double distanceTolerance,
+Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance,
                                double tolerance, double earthRadius){
 // DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance,
 //                            double tolerance, double earthRadius){
 
 	// vertex cluster reduction
-  DataFrame df = rcpp_decode_pl(polyline);
+	int nPolylines = polyline.size();
+	Rcpp::StringVector resultPolylines(nPolylines);
 
-	int keepCounter = 0;
-	int n = df.nrows() - 1;
-	bool allGone = false;
+	for(int j = 0; j < nPolylines; j++){
 
-	NumericVector lats = df["lat"];
-	NumericVector lons = df["lon"];
+		DataFrame df = rcpp_decode_pl(Rcpp::as< std::string >(polyline[j]) );
 
-	// I'm pre-allocating the length - then will only return those that are kept
-	NumericVector keepLat(n);
-	NumericVector keepLon(n);
+		int keepCounter = 0;
+		int n = df.nrows() - 1;
+		bool allGone = false;
 
-	// loop over the data.frame points
-	// only 'keep' those that are outside the tolerance range
-	for (int i = 0; i < n; i++){
+		NumericVector lats = df["lat"];
+		NumericVector lons = df["lon"];
 
-		if(distanceHaversine(lats[i], lons[i], lats[i + 1], lons[i + 1], tolerance, earthRadius) > distanceTolerance){
-			keepLat[keepCounter] = lats[i];
-			keepLon[keepCounter] = lons[i];
-			keepCounter++;
+		// I'm pre-allocating the length - then will only return those that are kept
+		NumericVector keepLat(n);
+		NumericVector keepLon(n);
+
+		// loop over the data.frame points
+		// only 'keep' those that are outside the tolerance range
+		for (int i = 0; i < n; i++){
+
+			if(distanceHaversine(lats[i], lons[i], lats[i + 1], lons[i + 1], tolerance, earthRadius) > distanceTolerance){
+				keepLat[keepCounter] = lats[i];
+				keepLon[keepCounter] = lons[i];
+				keepCounter++;
+			}
 		}
-	}
 
-	// if nothing has been kept; at least keep the first and last
-	if(keepCounter == 0){
-		allGone = true;
-		keepCounter = 2;
-	}
-
-	NumericVector outLat(keepCounter);
-	NumericVector outLon(keepCounter);
-
-	if(allGone){
-    outLat[0] = lats[0];
-		outLat[1] = lats[1];
-		outLon[0] = lons[0];
-		outLon[1] = lons[1];
-	}else{
-
-		for (int i = 0; i < keepCounter; i++) {
-			outLat[i] = keepLat[i];
-			outLon[i] = keepLon[i];
+		// if nothing has been kept; at least keep the first and last
+		if(keepCounter == 0){
+			allGone = true;
+			keepCounter = 2;
 		}
+
+		NumericVector outLat(keepCounter);
+		NumericVector outLon(keepCounter);
+
+		if(allGone){
+	    outLat[0] = lats[0];
+			outLat[1] = lats[1];
+			outLon[0] = lons[0];
+			outLon[1] = lons[1];
+		}else{
+
+			for (int i = 0; i < keepCounter; i++) {
+				outLat[i] = keepLat[i];
+				outLon[i] = keepLon[i];
+			}
+		}
+
+		resultPolylines[j] = rcpp_encode_pl(outLat, outLon, keepCounter);
 	}
 
-	return DataFrame::create(Named("lat") = outLat, Named("lon") = outLon);
+	return resultPolylines;
+	//return DataFrame::create(Named("lat") = outLat, Named("lon") = outLon);
 }
 
 
