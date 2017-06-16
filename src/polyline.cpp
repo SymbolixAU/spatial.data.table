@@ -7,6 +7,10 @@
 using namespace Rcpp;
 using namespace spdt;
 
+DataFrame rcpp_decode_pl( std::string encoded );
+Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
+                            Rcpp::NumericVector longitude,
+                            int num_coords);
 
 // Douglas Peucker
 // needs to operate on earth (oblate spheroid)
@@ -39,6 +43,7 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 		keepIndex[firstIndex] = true;
 
 		for(int i = firstIndex + 1; i < lastIndex; i++){
+
 			// start & end are the coordinates of the end pionts of the track
 			// lats[i]/lons[i] are the cooridnates of the POINT of interest
 
@@ -62,23 +67,41 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 }
 
 // [[Rcpp::export]]
-DataFrame rcppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex,
-                      float distanceTolerance){
+std::string rcppDouglasPeucker(std::string polyline, double distanceTolerance){
+//DataFrame rcppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex,
+//                      float distanceTolerance){
+
+	DataFrame df = rcpp_decode_pl(polyline);
+	NumericVector lats = df["lat"];
+	NumericVector lons = df["lon"];
+	int firstIndex = 1;
+	int lastIndex = df.nrow();
+
 	int n = lats.size();
 	LogicalVector keepIndex(n);
+
+	Rcpp::Rcout << "lats: " << lats.size() << std::endl;
+	Rcpp::Rcout << "lons: " << lons.size() << std::endl;
+
+	Rcpp::Rcout << "firstIndex: " << firstIndex << std::endl;
+	Rcpp::Rcout << "lastIndex: " << lastIndex << std::endl;
+
 	cppDouglasPeucker(lats, lons, firstIndex, lastIndex, distanceTolerance, keepIndex);
 
 	// keepIndex is now a logical vector of all the indices of the lats/lons to keep
-
-	return DataFrame::create(Named("lat") = lats[keepIndex], Named("lon") = lons[keepIndex]);
+	//return DataFrame::create(Named("lat") = lats[keepIndex], Named("lon") = lons[keepIndex]);
+	return rcpp_encode_pl(lats[keepIndex], lons[keepIndex], lats.size());
 }
 
 
 // [[Rcpp::export]]
-DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance,
-                           double tolerance, double earthRadius){
-	// vertex cluster reduction
+DataFrame rcppSimplifyPolyline(std::string polyline, double distanceTolerance,
+                               double tolerance, double earthRadius){
+// DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance,
+//                            double tolerance, double earthRadius){
 
+	// vertex cluster reduction
+  DataFrame df = rcpp_decode_pl(polyline);
 
 	int keepCounter = 0;
 	int n = df.nrows() - 1;

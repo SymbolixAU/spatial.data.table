@@ -772,8 +772,13 @@
 # google_map(key = mapKey) %>%
 # 	add_polylines(data = data.frame(poly = simplePl), polyline = "poly")
 #
-# dt_melbourne <- copy(googleway::melbourne)
+# dt_melbourne <- copy(googleway::melbourne[1:2, ])
 # setDT(dt_melbourne)
+# nchar(dt_melbourne[, polyline])
+#
+# dt_melbourne[, simplified := SimplifyPolyline(polyline, 1000, type = "complex")]
+# nchar(dt_melbourne[, simplified])
+#
 #
 # dt_melbourne[, reduced_pl_complex_10 := SimplifyPolyline(polyline, 10, type = "complex"),
 # 						 by = .(polygonId, pathId)]

@@ -21,14 +21,16 @@ SimplifyPolyline <- function(polyline, distanceTolerance = 1000, type = c("simpl
 	# if(!is.null(polyline) & (!is.null(lat) | !is.null(lon)))
 	# 	stop("Please provide either an encoded polyline, or columns of lat/lon values")
 
-	df <- googleway::decode_pl(polyline)
+	## df <- googleway::decode_pl(polyline)
 
-	if(type == "simple"){
-		df <- rcppSimplifyPolyline(df, distanceTolerance, 1e+9, earthsRadius())
-	}else if(type == "complex"){
-		df <- rcppDouglasPeucker(df[, 'lat'], df[, 'lon'], 1, nrow(df), distanceTolerance)
-	}
+	# if(type == "simple"){
+	# 	df <- rcppSimplifyPolyline(df, distanceTolerance, 1e+9, earthsRadius())
+	# }else if(type == "complex"){
+	# 	df <- rcppDouglasPeucker(df[, 'lat'], df[, 'lon'], 1, nrow(df), distanceTolerance)
+	# }
 
-	return(googleway::encode_pl(df[, 'lat'], df[, 'lon']))
+	rcppDouglasPeucker(polyline, distanceTolerance)
+
+	##return(googleway::encode_pl(df[, 'lat'], df[, 'lon']))
 
 }

@@ -49,11 +49,19 @@ rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
     .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY)
 }
 
-rcppDouglasPeucker <- function(lats, lons, firstIndex, lastIndex, distanceTolerance) {
-    .Call('spatial_data_table_rcppDouglasPeucker', PACKAGE = 'spatial.data.table', lats, lons, firstIndex, lastIndex, distanceTolerance)
+rcppDouglasPeucker <- function(polyline, distanceTolerance) {
+    .Call('spatial_data_table_rcppDouglasPeucker', PACKAGE = 'spatial.data.table', polyline, distanceTolerance)
 }
 
-rcppSimplifyPolyline <- function(df, distanceTolerance, tolerance, earthRadius) {
-    .Call('spatial_data_table_rcppSimplifyPolyline', PACKAGE = 'spatial.data.table', df, distanceTolerance, tolerance, earthRadius)
+rcppSimplifyPolyline <- function(polyline, distanceTolerance, tolerance, earthRadius) {
+    .Call('spatial_data_table_rcppSimplifyPolyline', PACKAGE = 'spatial.data.table', polyline, distanceTolerance, tolerance, earthRadius)
+}
+
+rcpp_decode_pl <- function(encoded) {
+    .Call('spatial_data_table_rcpp_decode_pl', PACKAGE = 'spatial.data.table', encoded)
+}
+
+rcpp_encode_pl <- function(latitude, longitude, num_coords) {
+    .Call('spatial_data_table_rcpp_encode_pl', PACKAGE = 'spatial.data.table', latitude, longitude, num_coords)
 }
 
