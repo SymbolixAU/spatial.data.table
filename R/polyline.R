@@ -14,11 +14,34 @@
 #'
 #' @param polyline encoded string of a polyline
 #' @param type the type of algorithm used to simplify the polyline. One of 'simple' or 'complex'. See Details
-#' @param distanceTolerance in metres
+#' @param distanceTolerance in metres. For \code{simple}, sequential points within this
+#' distance are dropped. For \code{complex}, it is the distance away from each line
+#' segment that determins if a point is kept (outside the distance is kept)
+#'
+#' @examples
+#' \dontrun{
+#'
+#' library(googleway)
+#'
+#' dt_melbourne <- copy(googleway::melbourne)
+#' setDT(dt_melbourne)
+#' dt_melbourne[, dpSimple := SimplifyPolyline(polyline, 100, type = "complex")]
+#' dt_melbourne[, Simple := SimplifyPolyline(polyline, 15000, type = "simple")]
+#'
+#' object.size(dt_melbourne$polyline)
+#' object.size(dt_melbourne$dpSimple)
+#' object.size(dt_melbourne$Simple)
+#'
+#' }
+#'
+#'
+#'
+#'
 #' @export
 SimplifyPolyline <- function(polyline, distanceTolerance = 100, type = c("simple", "complex")){
 
   if(type == "simple"){
+  	## the 'simple' method uses dtDist2gc, which requires another tolerance an earth radius
   	return(rcppSimplifyPolyline(polyline, distanceTolerance, 1e+9, earthsRadius()))
   }else{
 		return(rcppDouglasPeucker(polyline, distanceTolerance))
