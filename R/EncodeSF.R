@@ -1,6 +1,18 @@
 #' Encode Simple Feature
 #'
-#' Converts coordinates from feature objects (\code{sf}) into encoded polylines
+#' Converts coordinates from simple-feature objects (\code{sf}) into encoded polylines
+#'
+#' @param sf simple-feature object (from \code{library(sf)})
+#'
+#' @examples
+#' library(sf)
+#' library(magrittr)
+#'
+#' sf_poly <- st_as_sfc(c("POLYGON((-80.190 25.774, -66.118 18.466, -64.757 32.321))",
+#'                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339))")) %>%
+#'           st_sf()
+#'
+#' EncodeSF(sf_poly)
 #'
 #' @export
 EncodeSF <- function(sf){

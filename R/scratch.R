@@ -327,12 +327,17 @@
 ## Encode SF
 # library(sf)
 # library(magrittr)
-# polys <- st_as_sfc(c("POLYGON((0 0 , 0 1 , 1 1 , 1 0, 0 0))",
-# 										 "POLYGON((0 0 , 0 2 , 2 2 , 2 0, 0 0 ))",
-# 										 "POLYGON((0 0 , 0 -1 , -1 -1 , -1 0, 0 0))")) %>%
+#
+# sf_poly <- st_as_sfc(c("POLYGON((-80.190 25.774, -66.118 18.466, -64.757 32.321))",
+# 											 "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339))")) %>%
 # 	st_sf()
 #
-# EncodeSF(polys)
+# df <- EncodeSF(sf_poly)
+
+# library(googleway)
+#
+# google_map(key = read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")) %>%
+# 	add_polygons(data = df, polyline = "polyline")
 
 ### Antipodes
 # library(geosphere)
