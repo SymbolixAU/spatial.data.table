@@ -86,11 +86,20 @@
 #'
 #' }
 #' @export
-spToDT <- function(sp) UseMethod("spToDT")
+spToDT <- function(sp) {
+	UseMethod("spToDT")
+
+}
+
+.spatial.data.table <- function(dt){
+	setattr(dt, "class", c("spatial.data.table", "data.table", "data.frame"))
+	return(dt)
+}
 
 #' @export
 spToDT.Line <- function(sp){
-	return(data.table::data.table(coords = slot(sp, "coords")))
+	dt = data.table::data.table(coords = slot(sp, "coords"))
+	return(.spatial.data.table(dt))
 }
 
 #' @export

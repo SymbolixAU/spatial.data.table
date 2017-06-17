@@ -787,12 +787,3 @@
 # 	add_polygons(polyline = "simplified2")
 
 
-
-
-
-
-
-
-
-
-
