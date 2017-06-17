@@ -14,8 +14,7 @@ LazyData: true
 Imports:
     data.table (>= 1.10.0),
     sf,
-    Rcpp,
-    googleway (>= 2.0.0)
+    Rcpp
 Depends:
     data.table (>= 1.10.0)
 Suggests:

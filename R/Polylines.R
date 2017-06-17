@@ -33,7 +33,7 @@ encodePolyline.sfc_LINESTRING <- function(geom){
 
 		pl <- sapply(1:length(geom), function(x){
 			m <- unlist(geom[[x]])
-			googleway::encode_pl(m[,2],m[,1])
+			encode_pl(m[,2],m[,1])
 		})
 
 		return(data.table::data.table(.id = 1:length(geom),
@@ -46,7 +46,7 @@ encodePolyline.sfc_POLYGON <- function(geom){
 		lapply(geom, function(x){
 				data.table::data.table(
 					polyline = sapply(x, function(y){
-						googleway::encode_pl(y[,2],y[,1])
+						encode_pl(y[,2],y[,1])
 						})
 				)
 		}), idcol = T
@@ -64,7 +64,7 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom){
 
 				lapply(x, function(y){
 					pl <- sapply(y, function(z){
-						googleway::encode_pl(z[,2], z[,1])
+						encode_pl(z[,2], z[,1])
 					})
 					lineId <- seq_along(pl)
 					hole = lineId > 1
