@@ -323,6 +323,17 @@
 # 							 pointColumns = c("id", "coords.V1", "coords.V2"))
 
 
+
+## Encode SF
+# library(sf)
+# library(magrittr)
+# polys <- st_as_sfc(c("POLYGON((0 0 , 0 1 , 1 1 , 1 0, 0 0))",
+# 										 "POLYGON((0 0 , 0 2 , 2 2 , 2 0, 0 0 ))",
+# 										 "POLYGON((0 0 , 0 -1 , -1 -1 , -1 0, 0 0))")) %>%
+# 	st_sf()
+#
+# EncodeSF(polys)
+
 ### Antipodes
 # library(geosphere)
 # LA <- c(-118.40, 33.95)
