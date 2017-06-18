@@ -52,6 +52,7 @@ encodePolyline.sfc_LINESTRING <- function(geom){
 																	polyline = pl))
 }
 
+#' @export
 encodePolyline.sfc_POLYGON <- function(geom){
 
 	data.table::rbindlist(

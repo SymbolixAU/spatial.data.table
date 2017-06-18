@@ -1,16 +1,107 @@
-
-//#include <RcppArmadillo.h>
-#include "util.h"
+#include <Rcpp.h>
 #include "spdt.h"
 
-//[[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
-using namespace spdt;
 
-DataFrame rcpp_decode_pl( std::string encoded );
+// ------------------------------------------------------
+// C++ implementation of the google api polyline decoder
+// https://developers.google.com/maps/documentation/utilities/polylineutility
+//
+// This code is adapted from an Open Frameworks implementation
+// and used in this package with the permission of the author
+// https://github.com/paulobarcelos/ofxGooglePolyline
+//
+// ------------------------------------------------------
+
+// [[Rcpp::export]]
+DataFrame rcpp_decode_pl(std::string encoded){
+	int len = encoded.size();
+	int index = 0;
+	float lat = 0;
+	float lng = 0;
+
+	NumericVector pointsLat;
+	NumericVector pointsLon;
+
+	while (index < len){
+		char b;
+		int shift = 0;
+		int result = 0;
+		do {
+			b = encoded.at(index++) - 63;
+			result |= (b & 0x1f) << shift;
+			shift += 5;
+		} while (b >= 0x20);
+		float dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+		lat += dlat;
+
+		shift = 0;
+		result = 0;
+		do {
+			b = encoded.at(index++) - 63;
+			result |= (b & 0x1f) << shift;
+			shift += 5;
+		} while (b >= 0x20);
+		float dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+		lng += dlng;
+
+		pointsLat.push_back(lat * (float)1e-5);
+		pointsLon.push_back(lng * (float)1e-5);
+	}
+
+	return DataFrame::create(Named("lat") = pointsLat, Named("lon") = pointsLon);
+}
+
+Rcpp::String EncodeNumber(int num){
+
+	std::string out_str;
+
+	while(num >= 0x20){
+		out_str += (char)(0x20 | (int)(num & 0x1f)) + 63;
+		num >>= 5;
+	}
+
+	out_str += char(num + 63);
+	return out_str;
+}
+
+Rcpp::String EncodeSignedNumber(int num){
+
+	int sgn_num = num << 1;
+
+	if (sgn_num < 0) {
+		sgn_num = ~sgn_num;
+	}
+
+	return EncodeNumber(sgn_num);
+}
+
+// [[Rcpp::export]]
 Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
                             Rcpp::NumericVector longitude,
-                            int num_coords);
+                            int num_coords){
+	int plat = 0;
+	int plon = 0;
+	String output_str;
+
+	for(int i = 0; i < num_coords; i++){
+		int late5 = latitude[i] * 1e5;
+		int lone5 = longitude[i] * 1e5;
+
+		output_str += EncodeSignedNumber(late5 - plat);
+		output_str += EncodeSignedNumber(lone5 - plon);
+
+		plat = late5;
+		plon = lone5;
+	}
+	return output_str;
+}
+
+
+//DataFrame rcpp_decode_pl( std::string encoded );
+//Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
+//                            Rcpp::NumericVector longitude,
+//                            int num_coords);
 
 // Douglas Peucker
 // needs to operate on earth (oblate spheroid)
@@ -49,7 +140,7 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 
 			// abs() called as the sign of the distance matters
 			thisDistance = fabs(rcppDist2gc(startLat, startLon, endLat, endLon, lats[i], lons[i],
-	                             distanceTolerance, EARTH_RADIUS));
+	                             distanceTolerance, spdt::EARTH_RADIUS));
 
 			if(thisDistance > maxDistance){
 				maxDistance = thisDistance;
@@ -68,8 +159,6 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 
 // [[Rcpp::export]]
 Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distanceTolerance){
-//DataFrame rcppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, int lastIndex,
-//                      float distanceTolerance){
 
   int nPolylines = polyline.size();
 	Rcpp::StringVector resultPolylines(nPolylines);
@@ -88,14 +177,6 @@ Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distan
 		int n = lats.size();
 		LogicalVector keepIndex(n);
 
-//		Rcpp::Rcout << "keep lats: " << sum(keepIndex) << std::endl;
-//
-//		Rcpp::Rcout << "lats: " << lats.size() << std::endl;
-//		Rcpp::Rcout << "lons: " << lons.size() << std::endl;
-//
-//		Rcpp::Rcout << "firstIndex: " << firstIndex << std::endl;
-//		Rcpp::Rcout << "lastIndex: " << lastIndex << std::endl;
-
 		cppDouglasPeucker(lats, lons, firstIndex, lastIndex, distanceTolerance, keepIndex);
 
 		int keep = sum(keepIndex);
@@ -104,7 +185,6 @@ Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distan
 	}
 
 	// keepIndex is now a logical vector of all the indices of the lats/lons to keep
-	//return DataFrame::create(Named("lat") = lats[keepIndex], Named("lon") = lons[keepIndex]);
 	return resultPolylines;
 }
 
@@ -112,8 +192,6 @@ Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distan
 // [[Rcpp::export]]
 Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance,
                                double tolerance, double earthRadius){
-// DataFrame rcppSimplifyPolyline(DataFrame df, double distanceTolerance,
-//                            double tolerance, double earthRadius){
 
 	// vertex cluster reduction
 	int nPolylines = polyline.size();
@@ -171,9 +249,7 @@ Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double dist
 	}
 
 	return resultPolylines;
-	//return DataFrame::create(Named("lat") = outLat, Named("lon") = outLon);
 }
-
 
 
 

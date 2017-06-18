@@ -33,14 +33,6 @@ rcppDistanceEuclidean <- function(latFrom, lonFrom, latTo, lonTo) {
     .Call('spatial_data_table_rcppDistanceEuclidean', PACKAGE = 'spatial.data.table', latFrom, lonFrom, latTo, lonTo)
 }
 
-rcppClosePolygon <- function(polyVector) {
-    .Call('spatial_data_table_rcppClosePolygon', PACKAGE = 'spatial.data.table', polyVector)
-}
-
-rcppIsPolygonClosed <- function(startX, endX, startY, endY) {
-    .Call('spatial_data_table_rcppIsPolygonClosed', PACKAGE = 'spatial.data.table', startX, endX, startY, endY)
-}
-
 rcppPointsInPolygon <- function(pointsId, pointsX, pointsY, vectorX, vectorY) {
     .Call('spatial_data_table_rcppPointsInPolygon', PACKAGE = 'spatial.data.table', pointsId, pointsX, pointsY, vectorX, vectorY)
 }
@@ -49,19 +41,19 @@ rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
     .Call('spatial_data_table_rcppWindingNumber', PACKAGE = 'spatial.data.table', pointX, pointY, vectorX, vectorY)
 }
 
-rcppDouglasPeucker <- function(polyline, distanceTolerance) {
-    .Call('spatial_data_table_rcppDouglasPeucker', PACKAGE = 'spatial.data.table', polyline, distanceTolerance)
-}
-
-rcppSimplifyPolyline <- function(polyline, distanceTolerance, tolerance, earthRadius) {
-    .Call('spatial_data_table_rcppSimplifyPolyline', PACKAGE = 'spatial.data.table', polyline, distanceTolerance, tolerance, earthRadius)
-}
-
 rcpp_decode_pl <- function(encoded) {
     .Call('spatial_data_table_rcpp_decode_pl', PACKAGE = 'spatial.data.table', encoded)
 }
 
 rcpp_encode_pl <- function(latitude, longitude, num_coords) {
     .Call('spatial_data_table_rcpp_encode_pl', PACKAGE = 'spatial.data.table', latitude, longitude, num_coords)
+}
+
+rcppDouglasPeucker <- function(polyline, distanceTolerance) {
+    .Call('spatial_data_table_rcppDouglasPeucker', PACKAGE = 'spatial.data.table', polyline, distanceTolerance)
+}
+
+rcppSimplifyPolyline <- function(polyline, distanceTolerance, tolerance, earthRadius) {
+    .Call('spatial_data_table_rcppSimplifyPolyline', PACKAGE = 'spatial.data.table', polyline, distanceTolerance, tolerance, earthRadius)
 }
 

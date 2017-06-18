@@ -15,7 +15,6 @@
 #'
 #' The tolerance value is used in `ifelse(a > 1 & a <= tolerance, 1, a)`
 #'
-#'
 #' @return distance in metres
 #' @examples
 #' dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
@@ -72,6 +71,14 @@ dtCosine <- function(latFrom, lonFrom,
 #' @param latTo latitude to
 #' @param lonTo longitude to
 #' @return Euclidean distance
+#'
+#' @examples
+#' dt <- data.table(lat1 = seq(-38, -37, by = 0.1),
+#'   lon1 = seq(144, 145, by = 0.1),
+#'   lat2 = seq(-35, -34, by = 0.1),
+#'   lon2 = seq(145, 146, by = 0.1))
+#'
+#' dt[, distance := dtEuclidean(lat1, lon1, lat2, lon2)]
 #'
 #' @export
 dtEuclidean <- function(latFrom, lonFrom, latTo, lonTo){

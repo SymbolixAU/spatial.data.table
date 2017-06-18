@@ -130,31 +130,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcppClosePolygon
-Rcpp::NumericVector rcppClosePolygon(Rcpp::NumericVector polyVector);
-RcppExport SEXP spatial_data_table_rcppClosePolygon(SEXP polyVectorSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type polyVector(polyVectorSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppClosePolygon(polyVector));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcppIsPolygonClosed
-bool rcppIsPolygonClosed(double startX, double endX, double startY, double endY);
-RcppExport SEXP spatial_data_table_rcppIsPolygonClosed(SEXP startXSEXP, SEXP endXSEXP, SEXP startYSEXP, SEXP endYSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type startX(startXSEXP);
-    Rcpp::traits::input_parameter< double >::type endX(endXSEXP);
-    Rcpp::traits::input_parameter< double >::type startY(startYSEXP);
-    Rcpp::traits::input_parameter< double >::type endY(endYSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppIsPolygonClosed(startX, endX, startY, endY));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcppPointsInPolygon
 NumericVector rcppPointsInPolygon(NumericVector pointsId, NumericVector pointsX, NumericVector pointsY, NumericVector vectorX, NumericVector vectorY);
 RcppExport SEXP spatial_data_table_rcppPointsInPolygon(SEXP pointsIdSEXP, SEXP pointsXSEXP, SEXP pointsYSEXP, SEXP vectorXSEXP, SEXP vectorYSEXP) {
@@ -184,6 +159,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_decode_pl
+DataFrame rcpp_decode_pl(std::string encoded);
+RcppExport SEXP spatial_data_table_rcpp_decode_pl(SEXP encodedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type encoded(encodedSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_decode_pl(encoded));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_encode_pl
+Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude, Rcpp::NumericVector longitude, int num_coords);
+RcppExport SEXP spatial_data_table_rcpp_encode_pl(SEXP latitudeSEXP, SEXP longitudeSEXP, SEXP num_coordsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type latitude(latitudeSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type longitude(longitudeSEXP);
+    Rcpp::traits::input_parameter< int >::type num_coords(num_coordsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_encode_pl(latitude, longitude, num_coords));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppDouglasPeucker
 Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distanceTolerance);
 RcppExport SEXP spatial_data_table_rcppDouglasPeucker(SEXP polylineSEXP, SEXP distanceToleranceSEXP) {
@@ -207,30 +206,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
     Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
     rcpp_result_gen = Rcpp::wrap(rcppSimplifyPolyline(polyline, distanceTolerance, tolerance, earthRadius));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpp_decode_pl
-DataFrame rcpp_decode_pl(std::string encoded);
-RcppExport SEXP spatial_data_table_rcpp_decode_pl(SEXP encodedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type encoded(encodedSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_decode_pl(encoded));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpp_encode_pl
-Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude, Rcpp::NumericVector longitude, int num_coords);
-RcppExport SEXP spatial_data_table_rcpp_encode_pl(SEXP latitudeSEXP, SEXP longitudeSEXP, SEXP num_coordsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type latitude(latitudeSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type longitude(longitudeSEXP);
-    Rcpp::traits::input_parameter< int >::type num_coords(num_coordsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_encode_pl(latitude, longitude, num_coords));
     return rcpp_result_gen;
 END_RCPP
 }
