@@ -11,11 +11,11 @@ void vectorCheck(NumericVector v1, NumericVector v2){
 }
 
 double toRadians(double deg){
-	return deg * 0.01745329;
+	return deg * spdt::DEGREE;
 }
 
 double toDegrees(double rad){
-	return rad * 57.29578;
+	return rad * spdt::RADIAN;
 }
 
 double normaliseLonDeg(double deg){
